@@ -1,0 +1,2 @@
+# Ensure that binary files do not have CR/LF converted and then lost.
+*.a -text
