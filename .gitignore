@@ -1,0 +1,3 @@
+# Ignore Pythonic output files.
+/*.pyc
+__pycache__/
