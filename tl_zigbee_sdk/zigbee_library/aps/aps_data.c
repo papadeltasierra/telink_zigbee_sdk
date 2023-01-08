@@ -1,3 +1,50 @@
+#include "tl_common.h"
+#include "../../zigbee/aps/aps_api.h"
+#include "../../zigbee/common/includes/zb_buffer.h"
+
+// How do we spot these?
+typedef u8 byte;
+typedef unsigned int uint;
+
+// ?? How do we handle this?
+
+// This is almost certainly a set of 4-byte values.
+union   {
+  u8 _b[48];
+  struct {
+    unsigned long _0_4_;
+    unsigned long _4_4_;
+    unsigned long _8_4_;
+    unsigned long _12_4_;
+    unsigned long _16_4_;
+    unsigned long _20_4_;
+    unsigned long _24_4_;
+    unsigned long _28_4_;
+    unsigned long _32_4_;
+    unsigned long _36_4_;
+    unsigned long _40_4_;
+    unsigned long _44_4_;
+  };
+} g_apsDataFragmentTransWin;
+
+// g_apsDataFragmentTransWin_t g_apsDataFragmentTransWin;
+
+union g_apsDataFragmentRcvWin_t {
+  u8 _b[90];
+  struct {
+    unsigned long _0_4_;
+    unsigned long _4_4_;
+    unsigned long _[18];
+    unsigned short _80_2_;
+    u8 _b[8];
+  };
+} g_apsDataFragmentRcvWin;
+// g_apsDataFragmentRcvWin_t g_apsDataFragmentRcvWin;
+
+// Prototypes for functions that are not exported.
+static void apsTxEventPost(void);
+
+
 // WARNING: Unknown calling convention -- yet parameter storage is locked
 void apsAckPeriodic(void)
 
@@ -55,7 +102,7 @@ void apsDataFragmentRcvWinClear(void)
   byte *pbVar4;
   int iVar5;
 
-  if (g_apsDataFragmentRcvWin[89] != '\0')
+  if (g_apsDataFragmentRcvWin._b[89] != '\0')
   {
     if (g_apsDataFragmentRcvWin._0_4_ != 0)
     {
@@ -66,7 +113,7 @@ void apsDataFragmentRcvWinClear(void)
     iVar5 = 0;
     do
     {
-      if (((g_apsDataFragmentRcvWin[iVar5 * 0x24 + 0x2b] & 0x7f) != 0) &&
+      if (((g_apsDataFragmentRcvWin._b[iVar5 * 0x24 + 0x2b] & 0x7f) != 0) &&
           (uVar1 = (uint)*pbVar4, uVar1 != 0))
       {
         uVar2 = 0;
@@ -96,20 +143,20 @@ void apsDataFragmentReSend(void)
   int iVar1;
   uint uVar2;
 
-  if ((g_apsDataFragmentTransWin[47] != '\0') &&
-      (iVar1 = 0x2e, g_apsDataFragmentTransWin[46] != '\0'))
+  if ((g_apsDataFragmentTransWin._b[47] != '\0') &&
+      (iVar1 = 0x2e, g_apsDataFragmentTransWin._b[46] != '\0'))
   {
     uVar2 = 0;
-    if (g_apsDataFragmentTransWin[45] == 0xff)
+    if (g_apsDataFragmentTransWin._b[45] == 0xff)
     {
     LAB_00021d38:
-      g_apsDataFragmentTransWin[iVar1] = (char)uVar2;
+      g_apsDataFragmentTransWin._b[iVar1] = (char)uVar2;
     }
     else
     {
       do
       {
-        if (((int)(uint)g_apsDataFragmentTransWin[45] >> uVar2 & 1U) == 0)
+        if (((int)(uint)g_apsDataFragmentTransWin._b[45] >> uVar2 & 1U) == 0)
         {
           iVar1 = *(int *)(g_apsDataFragmentTransWin + uVar2 * 4);
           *(byte *)(iVar1 + 0x12) = *(byte *)(iVar1 + 0x12) & 0xf;
@@ -117,7 +164,7 @@ void apsDataFragmentReSend(void)
           *(u8 *)(iVar1 + 0x13) = APS_MAX_FRAME_RETRIES;
           apsTxEventPost();
           iVar1 = 0x2d;
-          uVar2 = 1 << uVar2 | (uint)g_apsDataFragmentTransWin[45];
+          uVar2 = 1 << uVar2 | (uint)g_apsDataFragmentTransWin._b[45];
           goto LAB_00021d38;
         }
         uVar2 = uVar2 + 1;
@@ -140,21 +187,21 @@ undefined4 apsDataFragmentRequest(void)
   undefined4 uVar4;
 
   uVar4 = 0x39;
-  if (((g_apsDataFragmentTransWin[47] == '\0') && (g_apsDataFragmentTransWin._32_4_ == (u8 *)0x0)) && (dest = ev_buf_allocate(0x1f), dest != (u8 *)0x0))
+  if (((g_apsDataFragmentTransWin._b[47] == '\0') && (g_apsDataFragmentTransWin._32_4_ == (u8 *)0x0)) && (dest = ev_buf_allocate(0x1f), dest != (u8 *)0x0))
   {
     memset(dest, 0, 0x1f);
     memcpy(dest, in_r0, 0x1f);
     uVar1 = aps_ib.aps_fragment_payload_size;
-    g_apsDataFragmentTransWin[47] = '\x01';
-    g_apsDataFragmentTransWin[46] = 0;
-    g_apsDataFragmentTransWin[45] = 0xff;
+    g_apsDataFragmentTransWin._b[47] = '\x01';
+    g_apsDataFragmentTransWin._b[46] = 0;
+    g_apsDataFragmentTransWin._b[45] = 0xff;
     g_apsDataFragmentTransWin._32_4_ = dest;
     g_apsDataFragmentTransWin._36_4_ = in_r1;
     g_apsDataFragmentTransWin._40_2_ = in_r2;
     iVar3 = FUNAAAAB();
     cVar2 = FUN_00001624(in_r2, uVar1);
-    g_apsDataFragmentTransWin[42] = ('\x01' - (iVar3 == 0)) + cVar2;
-    g_apsDataFragmentTransWin[43] = 0;
+    g_apsDataFragmentTransWin._b[42] = ('\x01' - (iVar3 == 0)) + cVar2;
+    g_apsDataFragmentTransWin._b[43] = 0;
     tl_zbTaskPost(aps_data_fragment, (void *)0x0);
     uVar4 = 0;
   }
@@ -296,17 +343,17 @@ void apsRcvingWindowHandling(void)
             *(undefined *)((int)in_r0 + iVar3 + 1) = 0;
             *(undefined *)((int)in_r0 + iVar3 + 2) = 0;
             *(undefined *)((int)in_r0 + iVar3 + 3) = 0;
-            g_apsDataFragmentRcvWin[86] = g_apsDataFragmentRcvWin[86] + 1;
+            g_apsDataFragmentRcvWin._b[86] = g_apsDataFragmentRcvWin._b[86] + 1;
           }
           uVar4 = uVar4 + 1 & 0xff;
         } while (uVar4 < *(byte *)((int)in_r0 + 0x20));
       }
       memset(in_r0, 0, 0x24);
-      if (g_apsDataFragmentRcvWin[85] < g_apsDataFragmentRcvWin[86])
+      if (g_apsDataFragmentRcvWin._b[85] < g_apsDataFragmentRcvWin._b[86])
       {
         sys_exceptionPost(0x1dc, 'R');
       }
-      if (g_apsDataFragmentRcvWin[86] == g_apsDataFragmentRcvWin[85])
+      if (g_apsDataFragmentRcvWin._b[86] == g_apsDataFragmentRcvWin._b[85])
       {
         tl_zbTaskPost(af_aps_data_fragment_entry, out);
         apsDataFragmentRcvWinClear();
@@ -354,7 +401,7 @@ undefined4 apsTxDataSendStart(void)
   return uVar1;
 }
 // WARNING: Unknown calling convention -- yet parameter storage is locked
-void apsTxEventPost(void)
+static void apsTxEventPost(void)
 
 {
   byte bVar1;
@@ -1078,8 +1125,8 @@ void aps_data_request(void)
         {
           *(u8 *)(iVar10 + 0x16) = uVar1;
           *(u8 *)(iVar10 + 0x17) = uVar2;
-          *(int *)(g_apsDataFragmentTransWin + (uint)g_apsDataFragmentTransWin[44] * 4) = iVar10;
-          g_apsDataFragmentTransWin[44] = g_apsDataFragmentTransWin[44] + 1;
+          *(int *)(g_apsDataFragmentTransWin + (uint)g_apsDataFragmentTransWin._b[44] * 4) = iVar10;
+          g_apsDataFragmentTransWin._b[44] = g_apsDataFragmentTransWin._b[44] + 1;
         }
         apsTxEventPost();
         if (!bVar5)
@@ -1156,6 +1203,19 @@ int aps_duplicate_check(void)
   if (iVar1 == 0)
   {
     uVar5 = (uint)local_16;
+
+    // The following union explains what field_0x13 is.
+    //
+    //   union {git status
+    //           struct {
+    //                   u8 used:1;
+    //                   u8 aps_dup_clock:3;
+    //                   u8 bind:1;
+    //                   u8 resv:3;
+    //           };
+    //           u8 field_0x13;
+    //   };
+    // } tl_zb_addr_map_entry_t;
     if ((g_nwkAddrMap.addrMap[uVar5].field_0x13 & 0xe) != 0)
     {
       uVar3 = (uint)g_nwkAddrMap.addrMap[uVar5].aps_dup_cnt;
@@ -1416,13 +1476,13 @@ void aps_txCacheConfirm(void)
         uStack_30 = uStack_30 & 0xffff0000 | (uint)(ushort)uStack_30;
         uStack_28 = uStack_28 & 0xffff | (uint) * (ushort *)(puVar1 + 6) << 0x10;
         aps_conf();
-        if (g_apsDataFragmentTransWin[47] != '\0')
+        if (g_apsDataFragmentTransWin._b[47] != '\0')
         {
           if (g_apsDataFragmentTransWin._32_4_ != (u8 *)0x0)
           {
             ev_buf_free(g_apsDataFragmentTransWin._32_4_);
           }
-          if (g_apsDataFragmentTransWin[44] != '\0')
+          if (g_apsDataFragmentTransWin._b[44] != '\0')
           {
             uVar4 = 0;
             do
@@ -1456,9 +1516,9 @@ void aps_txCacheConfirm(void)
         T_DBG_fgmtCnf._2_1_ = T_DBG_fgmtCnf._2_1_ + '\x01';
         return;
       }
-      if (aps_ib.aps_max_window_size <= g_apsDataFragmentTransWin[44])
+      if (aps_ib.aps_max_window_size <= g_apsDataFragmentTransWin._b[44])
       {
-        if (g_apsDataFragmentTransWin[44] != 0)
+        if (g_apsDataFragmentTransWin._b[44] != 0)
         {
           uVar4 = 0;
           do
@@ -1476,15 +1536,15 @@ void aps_txCacheConfirm(void)
           } while (uVar4 < (g_apsDataFragmentTransWin._44_4_ & 0xff));
         }
         g_apsDataFragmentTransWin._44_4_ = g_apsDataFragmentTransWin._44_4_ & 0xff000000 | 0xff00;
-        g_apsDataFragmentTransWin[46] = '\0';
+        g_apsDataFragmentTransWin._b[46] = '\0';
       }
       T_DBG_fgmtCnf._3_1_ = T_DBG_fgmtCnf._3_1_ + '\x01';
     }
-    if (g_apsDataFragmentTransWin[46] == '\0')
+    if (g_apsDataFragmentTransWin._b[46] == '\0')
     {
       g_apsDataFragmentTransWin._40_4_ =
           g_apsDataFragmentTransWin._40_4_ & 0xffffff |
-          (uint)(byte)(g_apsDataFragmentTransWin[43] + 1) << 0x18;
+          (uint)(byte)(g_apsDataFragmentTransWin._b[43] + 1) << 0x18;
     }
     t_ms = 100;
     if (aps_ib.aps_interframe_delay != 0)
