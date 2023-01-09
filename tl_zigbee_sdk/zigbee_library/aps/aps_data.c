@@ -60,6 +60,20 @@ void apsAckPeriodic(void)
     iVar3 = 0;
     do
     {
+      // This explains 'field_0x12' below which is a compiler generated field
+      // for handling the various bitfields described below.
+      //   union {
+      //           struct {
+      //                   u8      used:1;
+      //                   u8      addrReqNeed:1;
+      //                   u8      ackNeed:1;
+      //                   u8      interPAN:1;
+      //                   u8      state:4;
+      //           };
+      //           u8  field_0x12;
+      //   };
+      // ...
+      // }aps_tx_cache_list_t;
       while (((int)((uint)(byte)aps_txCache_tbl[iVar3].field_0x12 << 0x1f) >> 0x1f) * -0x1000000 !=
              0)
       {

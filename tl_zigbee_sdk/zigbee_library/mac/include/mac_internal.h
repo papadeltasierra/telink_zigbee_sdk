@@ -36,7 +36,33 @@
  * These two drop reasons are used by the library code but not defined mac_phy.c.
  */
 #define RF_DROP_REASON_INVALID_FRAME_LENGTH         0x09
-#define RF_DROP_REASON_0A					        0x0a
+#define RF_DROP_REASON_0A
+
+/**
+ *  @brief IEEE 802.15.4 Frame Control Field: Destination addressing modes
+ * PDS:
+ */
+#define MAC_FCF_DST_ADDR_MODE_NONE      0x0000
+#define MAC_FCF_DST_ADDR_MODE_SHORT     0x0800
+#define MAC_FCF_DST_ADDR_MODE_LONG      0x0C00
+
+/**
+ *  @brief  IEEE 802.15.4 Frame Control Field: Source addressing modes
+ * PDS:
+ */
+#define MAC_FCF_SRC_ADDR_MODE_NONE      0x0000
+#define MAC_FCF_SRC_ADDR_MODE_SHORT     0x8000
+#define MAC_FCF_SRC_ADDR_MODE_LONG      0xC000
+
+/**
+ *  @brief  MAC layer status values for 'tl_zb_mac_ctx_t'
+ */
+#define TL_ZM_MAC_CTX_STATUS_0 			0
+#define TL_ZM_MAC_CTX_STATUS_1 			1
+#define TL_ZM_MAC_CTX_STATUS_2 			2
+#define TL_ZM_MAC_CTX_STATUS_3 			3
+#define TL_ZM_MAC_CTX_STATUS_4 			4
+#define TL_ZM_MAC_CTX_STATUS_5 			5
 
 /**********************************************************************
  * LOCAL TYPEDEFS
@@ -54,3 +80,19 @@ struct {
 	u8 _[3];						// Unknown
 	u8 ieeePldLength;				// Payload length (V above)
 } tl_rf_hdr_t;
+
+/**********************************************************************
+ * **CHECK**
+ * Definition of an internal structure used to represent a MAC header.
+ */
+struct {
+    u16 frameCtrl;                      // 0
+    u8 infElPresent;                    // 2
+    u8 srcIeeeAddrMode;                 // 3
+    u8 framePending;                    // 4
+    u8 seqNum;                          // 5
+    u16 destPAN;                        // 6
+    extAddr_t destAddr;                 // 8
+    u16 destPanAgain;                   // 16
+    extAddr_t srcAddr;                  // 18
+} tl_mac_hdr_t;
