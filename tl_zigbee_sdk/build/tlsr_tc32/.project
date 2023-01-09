@@ -78,6 +78,7 @@
 		<nature>org.eclipse.cdt.core.cnature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+		<nature>com.telink.tc32eclipse.core.TC32nature</nature>
 	</natures>
 	<linkedResources>
 		<link>
@@ -109,6 +110,16 @@
 			<name>zigbee</name>
 			<type>2</type>
 			<locationURI>PARENT-2-PROJECT_LOC/zigbee</locationURI>
+		</link>
+		<link>
+			<name>zigbee_library</name>
+			<type>2</type>
+			<location>C:/Users/PDS/git/telink_zigbee_sdk/tl_zigbee_sdk/zigbee_library</location>
+		</link>
+		<link>
+			<name>apps/CloudSMETS</name>
+			<type>2</type>
+			<location>C:/Users/PDS/git/telink_zigbee_sdk/tl_zigbee_sdk/apps/CloudSMETS</location>
 		</link>
 		<link>
 			<name>apps/bootLoader</name>
