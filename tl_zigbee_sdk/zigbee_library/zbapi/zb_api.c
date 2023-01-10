@@ -48,6 +48,22 @@ bool zb_isDeviceFactoryNew(void)
 bool zb_isDeviceJoinedNwk(void)
 
 {
+  // This explains compiler field '_45_1_'
+  //  union {
+  //    struct {
+  //      u8  is_factory_new:1;	/*!< Device is factory new */
+	//      u8  permit_join:1; 		/*!< True if permit join is in progress */
+	//      u8  joined:1;      		/*!< Non-zero if we are joined into the network */
+	//      u8  router_started:1; 	/*!< not used */
+	//      u8  is_tc:1;            /*!< True if we are Trust Center */
+	//      u8  joined_pro:1;
+	//      u8	panIdConflict:1;	/*!< if we find panID conflict */
+	//      u8	joinAccept:1;
+  //    },
+  //    u8 _45_1_;
+  //  };
+  // ...
+  // }nwk_ctx_t;
   return SUB41(((uint)g_zbNwkCtx._45_1_ << 0x1d) >> 0x1f, 0);
 }
 u8 zb_nlmeLeaveReq(nlme_leave_req_t *pLeaveReq)
@@ -184,4 +200,48 @@ void zb_zdoSendParentAnnce(void)
 {
   zdo_apsParentAnnceTimerStart();
   return;
+}
+
+zdo_status_t
+zb_mgmtPermitJoinReq(u16 dstNwkAddr, u8 permitJoinDuration, u8 tcSignificance, u8 *seqNo, zdo_callback indCb)
+
+{
+  zdo_status_t zVar1;
+  undefined4 local_34;
+  undefined4 uStack_30;
+  uint uStack_2c;
+  undefined4 uStack_28;
+  undefined4 uStack_24;
+  zdo_callback p_Stack_20;
+  u8 local_1c;
+  u8 local_18;
+  u8 uStack_17;
+
+  if (g_zbInfo.nwkNib.nwkAddr == dstNwkAddr)
+  {
+    zVar1 = zdo_nlmePermitJoinReq(permitJoinDuration);
+  }
+  else
+  {
+    if ((dstNwkAddr & 0xfff8) == 0xfff8)
+    {
+      zdo_nlmePermitJoinReq(permitJoinDuration);
+      p_Stack_20 = ll_reset;
+    }
+    else
+    {
+      p_Stack_20 = indCb;
+    }
+    uStack_24 = 0x36;
+    uStack_2c = (uint)dstNwkAddr;
+    local_1c = '\0';
+    uStack_28 = 0;
+    uStack_30 = 0;
+    local_34 = 0;
+    local_18 = permitJoinDuration;
+    uStack_17 = tcSignificance;
+    zVar1 = zdp_data_send(&local_18, 3, &local_34);
+    *seqNo = local_1c;
+  }
+  return zVar1;
 }

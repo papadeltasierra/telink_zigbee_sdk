@@ -241,7 +241,7 @@ u8 tl_zbNeighborTableChildEDNumGet(void)
     {
       if (((bVar1 & 0xe) == 4) && (((bVar1 & 0x70) == 0x50 || ((bVar1 & 0x70) == 0x10))))
       {
-        g_zb_neighborTbl.childrenNum = g_zb_neighborTbl.childrenNum + '\x01';
+        g_zb_neighborTbl.childrenNum = g_zb_neighborTbl.childrenNum + 1;
       }
       pnVar2 = pnVar2->activeNext;
       if (pnVar2 == (nebTbl_t *)0x0)

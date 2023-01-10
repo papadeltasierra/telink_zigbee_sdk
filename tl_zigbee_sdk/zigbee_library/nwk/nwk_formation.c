@@ -207,6 +207,7 @@ void nwk_formationStartCnfHandler(void)
   nwk_nlmeNwkFormationCn();
   return;
 }
+
 // WARNING: Unknown calling convention -- yet parameter storage is locked
 void tl_zbNwkBeaconPayloadUpdate(void)
 
@@ -215,32 +216,76 @@ void tl_zbNwkBeaconPayloadUpdate(void)
   int iVar2;
   int iVar3;
 
-  memset(&g_zbInfo.macPib.beaconPayload, 0, 0xf);
-  g_zbInfo.macPib.beaconPayload._1_1_ = g_zbInfo.nwkNib.stackProfile & 0xf | 0x20;
-  g_zbInfo.macPib.beaconPayload._2_1_ =
-      g_zbInfo.macPib.beaconPayload._2_1_ & 0x87 | (byte)((g_zbInfo.nwkNib.depth & 0xf) << 3);
+  // memset(&g_zbInfo.macPib.beaconPayload, 0, 0xf);
+  memset(&g_zbInfo.macPib.beaconPayload, 0, sizeof(zb_mac_beacon_payload_t));
+
+  /*
+   * Following explains the bitfield changes.
+   *
+   * union {
+   *   structure {
+   *     u8:4 stack_profile;
+   *     u8:4 profile_version;
+   *   },
+   *   u8 _1_1_;
+   * }
+   */
+  // g_zbInfo.macPib.beaconPayload._1_1_ = g_zbInfo.nwkNib.stackProfile & 0xf | 0x20;
+  g_zbInfo.macPib.beaconPayload.profile_version = 2;
+
+  /*
+   * Following explains the bitfield changes.
+   *
+   * union {
+   *   structure {
+   *     u8:1 long_uptime;
+   *     u8:1 tc_connectivity;
+   *     u8:1 router_capacity;
+   *     u8:4 device_depth;
+   *     u8:1 end_device_capacity;
+   *   },
+   *   u8 _2_1_;
+   * }
+   */
+  // g_zbInfo.macPib.beaconPayload._2_1_ =
+  //     g_zbInfo.macPib.beaconPayload._2_1_ & 0x87 | (byte)((g_zbInfo.nwkNib.depth & 0xf) << 3);
+  g_zbInfo.macPib.beaconPayload.device_depth = 0xf;
   memcpy(g_zbInfo.macPib.beaconPayload.extended_panid, g_zbInfo.nwkNib.extPANId, 8);
   memset(g_zbInfo.macPib.beaconPayload.txoffset, 0xff, 3);
   g_zbInfo.macPib.beaconPayload.nwk_update_id = g_zbInfo.nwkNib.updateId;
-  g_zbInfo.macPib.beaconPayload._2_1_ = g_zbInfo.macPib.beaconPayload._2_1_ | 0x7f;
+
+  // **** WARNING ****
+  // Suspect that this might be a bug and we might actually want to set this to
+  // zeros.  If not a bug, what is the code below doing where it sets the long_uptime?
+  // g_zbInfo.macPib.beaconPayload._2_1_ = g_zbInfo.macPib.beaconPayload._2_1_ | 0x7f;
+  g_zbInfo.macPib.beaconPayload.device_depth = 0xf
+  g_zbInfo.macPib.beaconPayload.router_capacity = 1;
+  g_zbInfo.macPib.beaconPayload.tc_conectivity = 1;
+  g_zbInfo.macPib.beaconPayload.long_uptime = 1;
+
   bVar1 = tl_zbNeighborTableChildEDNumGet();
   if (TL_ZB_CHILD_TABLE_SIZE <= bVar1)
   {
-    g_zbInfo.macPib.beaconPayload._2_1_ = g_zbInfo.macPib.beaconPayload._2_1_ & 0x7f;
+    // g_zbInfo.macPib.beaconPayload._2_1_ = g_zbInfo.macPib.beaconPayload._2_1_ & 0x7f;
+    g_zbInfo.macPib.beaconPayload.end_device_capacity = 0;
   }
   if (LONG_UPTIME_THRESHOLD <= g_secondCnt)
   {
-    g_zbInfo.macPib.beaconPayload._2_1_ = g_zbInfo.macPib.beaconPayload._2_1_ | 1;
+    // g_zbInfo.macPib.beaconPayload._2_1_ = g_zbInfo.macPib.beaconPayload._2_1_ | 1;
+    g_zbInfo.macPib.beaconPayload.long_uptime = 1;
   }
   iVar2 = nwkRoutingTabEntryDstActiveGet();
   iVar3 = nwkVaildNeighborToFwd();
   if ((iVar3 != 0) || (iVar2 != 0))
   {
-    g_zbInfo.macPib.beaconPayload._2_1_ = g_zbInfo.macPib.beaconPayload._2_1_ | 2;
+    // g_zbInfo.macPib.beaconPayload._2_1_ = g_zbInfo.macPib.beaconPayload._2_1_ | 2;
+    g_zbInfo.macPib.beaconPayload.tc_connectivity = 1;
   }
-  g_zbInfo.macPib.beaconPayloadLen = '\x0f';
+  // g_zbInfo.macPib.beaconPayloadLen = '\x0f';
+  g_zbInfo.macPib.beaconPayloadLen = sizeof(zb_mac_beacon_payload_t);
   return;
 }
+
 void tl_zbNwkNlmeNetworkFormationRequestHandler(void *arg)
 
 {

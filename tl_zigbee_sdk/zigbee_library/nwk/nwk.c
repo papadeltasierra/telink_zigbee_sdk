@@ -805,45 +805,50 @@ LAB_000153c2:
   zb_buf_free(in_r0);
   return;
 }
-void tl_zbNwkTaskProc(void)
 
+// WARNING: Unknown calling convention -- yet parameter storage is locked
+// Perhaps "tl_zbNwkTaskRun()" might be a good name?  Or "start listening" or similar.
+byte FUNBBBBJ(void)
+
+{
+  code *in_r3;
+
+  (*in_r3)();
+  return g_zbNwkCtx._45_1_ & 1;
+}
+
+void tl_zbNwkTaskProc(void)
 {
   tl_zb_task_t *ptVar1;
   int iVar2;
-  undefined1 *puVar3;
+  g_zbNwkEventTbl_t *pgVar3;
   tl_zb_task_t tStack_20;
 
-  ptVar1 = tl_zbTaskQPop('\x03', &tStack_20);
-  if ((ptVar1 != (tl_zb_task_t *)0x0) && (iVar2 = 0, tStack_20.data != (void *)0x0))
-  {
-    puVar3 = g_zbNwkEventFromHighTbl;
-    do
-    {
-      if ((*puVar3 == *(char *)((int)tStack_20.data + 0xc0)) &&
-          (*(int *)(g_zbNwkEventFromHighTbl + iVar2 * 5 + 1) != 0))
-      {
+  ptVar1 = tl_zbTaskQPop(nwkFromHighTblQueue,&tStack_20);
+  if ((ptVar1 != (tl_zb_task_t *)0x0) && (iVar2 = 0, tStack_20.data != (void *)0x0)) {
+    pgVar3 = &g_zbNwkEventFromHighTbl;
+    do {
+      if ((pgVar3->_8 == *(u8 *)((int)tStack_20.data + 0xc0)) &&
+         ((&g_zbNwkEventFromHighTbl)[iVar2]._32 != 0)) {
         FUNBBBBJ();
         break;
       }
       iVar2 = iVar2 + 1;
-      puVar3 = puVar3 + 5;
+      pgVar3 = pgVar3 + 1;
     } while (iVar2 != 0xb);
   }
-  ptVar1 = tl_zbTaskQPop('\x01', &tStack_20);
-  if ((ptVar1 != (tl_zb_task_t *)0x0) && (tStack_20.data != (void *)0x0))
-  {
-    puVar3 = g_zbNwkEventFromMacTbl;
+  ptVar1 = tl_zbTaskQPop(nwkFromMacTblQueue,&tStack_20);
+  if ((ptVar1 != (tl_zb_task_t *)0x0) && (tStack_20.data != (void *)0x0)) {
+    pgVar3 = &g_zbNwkEventFromMacTbl;
     iVar2 = 0;
-    do
-    {
-      if ((*puVar3 == *(char *)((int)tStack_20.data + 0xc0)) &&
-          (*(int *)(g_zbNwkEventFromMacTbl + iVar2 * 5 + 1) != 0))
-      {
+    do {
+      if ((pgVar3->_8 == *(u8 *)((int)tStack_20.data + 0xc0)) &&
+         ((&g_zbNwkEventFromMacTbl)[iVar2]._32 != 0)) {
         FUNBBBBJ();
         return;
       }
       iVar2 = iVar2 + 1;
-      puVar3 = puVar3 + 5;
+      pgVar3 = pgVar3 + 1;
     } while (iVar2 != 0xc);
   }
   return;

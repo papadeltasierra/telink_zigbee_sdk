@@ -1,3 +1,5 @@
+#incluide <zdo_internal.h>
+
 // WARNING: Unknown calling convention -- yet parameter storage is locked
 undefined4 zdo_auth_check_timer_cb(void)
 
@@ -167,32 +169,34 @@ undefined4 zdo_nlmeNwkDiscReq(void)
   }
   return uVar1;
 }
-// WARNING: Unknown calling convention -- yet parameter storage is locked
-u8 zdo_nlmePermitJoinCnf(void)
+
+void zdo_nlmePermitJoinCnf(void *arg)
 
 {
-  u8 uVar1;
-  zb_buf_t *in_r0;
-
-  uVar1 = zb_buf_free(in_r0);
-  return uVar1;
+  zb_buf_free((zb_buf_t *)arg);
+  return;
 }
-undefined4 zdo_nlmePermitJoinReq(undefined param_1)
+
+undefined4 zdo_nlmePermitJoinReq(u8 permitDuration)
 
 {
-  undefined *arg;
+  u8 *arg;
   undefined4 uVar1;
 
   arg = (undefined *)c1();
   uVar1 = 0x8a;
   if (arg != (undefined *)0x0)
   {
-    *arg = param_1;
-    tl_zbPrimitivePost('\x03', 'w', arg);
+    *arg = permitDuration;
+    // 'w' is 0x77
+    // Arguments are: LayerQ, primitive, argument.
+    // tl_zbPrimitivePost(0x03, 0x77, arg);
+    tl_zbPrimitivePost(tl_zb_taskList_t.nwkFromHighTblQueue, 0x77, arg);
     uVar1 = 0;
   }
   return uVar1;
 }
+
 // WARNING: Unknown calling convention -- yet parameter storage is locked
 u8 zdo_nlme_direct_join_confirm(void)
 
