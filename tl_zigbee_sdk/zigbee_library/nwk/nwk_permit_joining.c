@@ -7,8 +7,10 @@ undefined4 nwk_permitJoinTimeout(void)
   permitJoinTimerEvt = 0;
   return 0xfffffffe;
 }
-void tl_zbNwkNlmePermitJoiningRequestHandler(void *arg)
 
+
+// QUESTION: Is arg actually a task buffer with the value in the first data byte?
+void tl_zbNwkNlmePermitJoiningRequestHandler(void *arg)
 {
   /*
    * This explains the g_zbNwkCtx change.
@@ -65,6 +67,7 @@ void tl_zbNwkNlmePermitJoiningRequestHandler(void *arg)
   }
   else
   {
+    // QUESTION: What is special about 0xc2?
     *(undefined *)arg = 0xc2;
     tl_zbTaskPost(zdo_nlmePermitJoinCnf, arg);
   }

@@ -25,14 +25,15 @@ enum {
  */
 typedef (void *)(*tl_zbEventHandler_t)(void *);
 struct {
-    u8 event;
+    u8 primitive;
     tl_zbEventHandler_t eventHandler;
 } g_zbNwkEventTbl_t;
 
+// These tables are almost certainly different for the end-device library.
+
 // The IDs below are the Network layer primitive id e.g. NWK_NLME_LEAVE_REQ
 
-#define ZB_NWK_EVENT_FROM_HIGH_TBL_SIZE     11
-g_zbNwkEventTbl_t g_zbNwkEventFromHighTbl[ZB_NWK_EVENT_FROM_HIGH_TBL_SIZE] =
+g_zbNwkEventTbl_t g_zbNwkEventFromHighTbl[] =
 {
     { 0x70, tl_zbNwkNldeDataRequestHandler },
     { 0x73, tl_zbNwkNlmeNwkDiscRequestHandler },
@@ -46,11 +47,12 @@ g_zbNwkEventTbl_t g_zbNwkEventFromHighTbl[ZB_NWK_EVENT_FROM_HIGH_TBL_SIZE] =
     { 0x85, tl_zbNwkNlmeResetRequestHandler },
     { 0x8f, tl_zbNwkNlmeRouteDiscRequestHandler }
 };
+#define ZB_NWK_EVENT_FROM_HIGH_TBL_SIZE \
+    (sizeof(g_zbNwkEventFromHighTbl)/sizeof(g_zbNwkEventTbl_t))
 
 // The IDs below are the MAC primitive IDs e.g. MAC_MLME_POLL_IND
 
-#define ZB_NWK_EVENT_FROM_MAC_TBL_SIZE      12
-g_zbNwkEventTbl_t g_zbNwkEventFromMacTbl[ZB_NWK_EVENT_FROM_MAC_TBL_SIZE] =
+g_zbNwkEventTbl_t g_zbNwkEventFromMacTbl[] =
 {
     { 0x41, tl_zbMacMcpsDataConfirmHandler },
     { 0x42, tl_zbMacMcpsDataIndicationHandler },
@@ -65,3 +67,6 @@ g_zbNwkEventTbl_t g_zbNwkEventFromMacTbl[ZB_NWK_EVENT_FROM_MAC_TBL_SIZE] =
     { 0x5c, tl_zbMacMlmeSyncLossIndicationHandler },
     { 0x63, tl_zbMacMlmePollIndicationHandler}
 };
+
+#define ZB_NWK_EVENT_FROM_MAC_TBL_SIZE \
+    (sizeof(g_zbNwkEventFromMacTbl)/sizeof(g_zbNwkEventTbl_t))

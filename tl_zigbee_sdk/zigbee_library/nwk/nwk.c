@@ -828,28 +828,28 @@ void tl_zbNwkTaskProc(void)
   if ((ptVar1 != (tl_zb_task_t *)0x0) && (iVar2 = 0, tStack_20.data != (void *)0x0)) {
     pgVar3 = &g_zbNwkEventFromHighTbl;
     do {
-      if ((pgVar3->_8 == *(u8 *)((int)tStack_20.data + 0xc0)) &&
-         ((&g_zbNwkEventFromHighTbl)[iVar2]._32 != 0)) {
-        FUNBBBBJ();
+      if ((pgVar3->primitive == *(u8 *)((int)tStack_20.data + 0xc0)) &&
+         ((g_zbNwkEventFromHighTbl[iVar2].eventHandler != NULL)) {
+        g_zbNwkEventFromHighTbl[iVar2].eventHandler(tStack_20.data);
         break;
       }
       iVar2 = iVar2 + 1;
       pgVar3 = pgVar3 + 1;
-    } while (iVar2 != 0xb);
+    } while (iVar2 != ZB_NWK_EVENT_FROM_HIGH_TBL_SIZE);
   }
   ptVar1 = tl_zbTaskQPop(nwkFromMacTblQueue,&tStack_20);
   if ((ptVar1 != (tl_zb_task_t *)0x0) && (tStack_20.data != (void *)0x0)) {
     pgVar3 = &g_zbNwkEventFromMacTbl;
     iVar2 = 0;
     do {
-      if ((pgVar3->_8 == *(u8 *)((int)tStack_20.data + 0xc0)) &&
-         ((&g_zbNwkEventFromMacTbl)[iVar2]._32 != 0)) {
-        FUNBBBBJ();
+      if ((pgVar3->primitive == *(u8 *)((int)tStack_20.data + 0xc0)) &&
+         ((g_zbNwkEventFromMacTbl[iVar2].eventHandle != NULL)) {
+        g_zbNwkEventFromMacTbl[iVar2].eventHandler(tStack_20.data);
         return;
       }
       iVar2 = iVar2 + 1;
       pgVar3 = pgVar3 + 1;
-    } while (iVar2 != 0xc);
+    } while (iVar2 != ZB_NWK_EVENT_FROM_MAC_TBL_SIZE);
   }
   return;
 }

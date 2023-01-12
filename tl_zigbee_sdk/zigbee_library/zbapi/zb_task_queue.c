@@ -89,7 +89,7 @@ void tl_zbTaskProcedure(void)
   zdo_ssInfoUpdate();
   return;
 }
-u8 tl_zbTaskQPush(u8 idx, tl_zb_task_t *task)
+u8 tl_zbTaskQPush(tl_zb_taskList_e idx, tl_zb_task_t *task)
 
 {
   byte bVar1;
@@ -97,19 +97,19 @@ u8 tl_zbTaskQPush(u8 idx, tl_zb_task_t *task)
   void *pvVar3;
   u32 en;
   int iVar4;
-  undefined1 *puVar5;
+  tl_zb_task_t *ptVar5;
 
   en = drv_disable_irq();
   if (idx == 0)
   {
-    if (0x1f < (int)((uint)taskQ_user[256] - (uint)taskQ_user[257]))
+    if (0x1f < (int)((uint)taskQ_user.wptr - (uint)taskQ_user.rptr))
     {
     LAB_00000fe6:
       drv_restore_irq(en);
       return '\x01';
     }
-    puVar5 = taskQ_user + (taskQ_user[256] & 0x1f) * 8;
-    taskQ_user[256] = taskQ_user[256] + 1;
+    ptVar5 = taskQ_user.evt + (taskQ_user.wptr & 0x1f);
+    taskQ_user.wptr = taskQ_user.wptr + '\x01';
   }
   else
   {
@@ -117,19 +117,25 @@ u8 tl_zbTaskQPush(u8 idx, tl_zb_task_t *task)
     bVar1 = g_zbTaskQ[iVar4 + 0x80];
     if (0xf < (int)((uint)bVar1 - (uint)(byte)g_zbTaskQ[iVar4 + 0x81]))
       goto LAB_00000fe6;
-    puVar5 = g_zbTaskQ + (bVar1 & 0xf) * 8 + iVar4;
+    ptVar5 = (tl_zb_task_t *)(g_zbTaskQ + (bVar1 & 0xf) * 8 + iVar4);
     g_zbTaskQ[iVar4 + 0x80] = bVar1 + 1;
   }
+  /*
   pvVar2 = task->tlCb;
-  *puVar5 = (char)pvVar2;
-  puVar5[1] = (char)((uint)pvVar2 >> 8);
-  puVar5[2] = (char)((uint)pvVar2 >> 0x10);
-  puVar5[3] = (char)((uint)pvVar2 >> 0x18);
+  *(char *)&ptVar5->tlCb = (char)pvVar2;
+  *(char *)((int)&ptVar5->tlCb + 1) = (char)((uint)pvVar2 >> 8);
+  *(char *)((int)&ptVar5->tlCb + 2) = (char)((uint)pvVar2 >> 0x10);
+  *(char *)((int)&ptVar5->tlCb + 3) = (char)((uint)pvVar2 >> 0x18);
   pvVar3 = task->data;
-  puVar5[4] = (char)pvVar3;
-  puVar5[5] = (char)((uint)pvVar3 >> 8);
-  puVar5[6] = (char)((uint)pvVar3 >> 0x10);
-  puVar5[7] = (char)((uint)pvVar3 >> 0x18);
+  *(char *)&ptVar5->data = (char)pvVar3;
+  *(char *)((int)&ptVar5->data + 1) = (char)((uint)pvVar3 >> 8);
+  *(char *)((int)&ptVar5->data + 2) = (char)((uint)pvVar3 >> 0x10);
+  *(char *)((int)&ptVar5->data + 3) = (char)((uint)pvVar3 >> 0x18);
+  */
+  // Copy the task onto the queue.
+  ptVar5->tlCb = pvVar2->tlCb;
+  ptVar5->data = pvVar2->data;
+
   iVar4 = buf_type_get(task->data);
   if ((iVar4 == 0) && (-1 < (int)((uint) * (byte *)((int)task->data + 0xc3) << 0x1f)))
   {
@@ -141,6 +147,7 @@ u8 tl_zbTaskQPush(u8 idx, tl_zb_task_t *task)
   drv_restore_irq(en);
   return '\0';
 }
+
 u8 tl_zbUserTaskQNum(void)
 
 {

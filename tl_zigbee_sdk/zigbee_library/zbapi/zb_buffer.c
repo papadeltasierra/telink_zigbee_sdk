@@ -10,6 +10,7 @@ bool is_zb_buf(void *p)
   }
   return (bool)bVar1;
 }
+
 void tl_zbBufferInit(void)
 
 {
@@ -64,6 +65,7 @@ void zb_buf_clear(zb_buf_t *p)
   drv_restore_irq(en);
   return;
 }
+
 u8 zb_buf_free(zb_buf_t *buf)
 
 {
