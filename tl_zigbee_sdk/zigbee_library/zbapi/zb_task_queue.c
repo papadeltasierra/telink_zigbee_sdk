@@ -43,17 +43,17 @@ u8 tl_zbPrimitivePost(u8 layerQ, u8 primitive, void *arg)
   }
   return uVar1;
 }
-u8 tl_zbTaskPost(tl_zb_callback_t func, void *arg)
+gsrv_t tl_zbTaskPost(tl_zb_callback_t func, void *arg)
 
 {
-  u8 uVar1;
+  gsrv_e status;
   int iVar2;
   tl_zb_task_t local_14;
 
   local_14.tlCb = func;
   local_14.data = arg;
-  uVar1 = tl_zbTaskQPush('\0', &local_14);
-  if (uVar1 != '\0')
+  status = tl_zbTaskQPush('\0', &local_14);
+  if (status != SUCCESS)
   {
     iVar2 = buf_type_get(arg);
     if (iVar2 == 0)
@@ -71,7 +71,7 @@ u8 tl_zbTaskPost(tl_zb_callback_t func, void *arg)
       sys_exceptionPost(0xc9, '\x05');
     }
   }
-  return uVar1;
+  return status;
 }
 void tl_zbTaskProcedure(void)
 
@@ -89,10 +89,10 @@ void tl_zbTaskProcedure(void)
   zdo_ssInfoUpdate();
   return;
 }
-u8 tl_zbTaskQPush(tl_zb_taskList_e idx, tl_zb_task_t *task)
 
+gsrv_e tl_zbTaskQPush(tl_zb_taskList_e idx, tl_zb_task_t *task)
 {
-  byte bVar1;
+  byte wptr;
   tl_zb_callback_t pvVar2;
   void *pvVar3;
   u32 en;
@@ -106,19 +106,42 @@ u8 tl_zbTaskQPush(tl_zb_taskList_e idx, tl_zb_task_t *task)
     {
     LAB_00000fe6:
       drv_restore_irq(en);
-      return '\x01';
+      return FAILURE;
     }
+    // Task queue size is 32 so 0x00 to 0x1f inclusive.
     ptVar5 = taskQ_user.evt + (taskQ_user.wptr & 0x1f);
-    taskQ_user.wptr = taskQ_user.wptr + '\x01';
+    taskQ_user.wptr++;
   }
   else
   {
+    /*
+    // Note that we handled the main user queue specially above.
+    // The other queues sit on something sized 0x84 = 128 + 4.
     iVar4 = (idx - 1) * 0x84;
     bVar1 = g_zbTaskQ[iVar4 + 0x80];
     if (0xf < (int)((uint)bVar1 - (uint)(byte)g_zbTaskQ[iVar4 + 0x81]))
       goto LAB_00000fe6;
     ptVar5 = (tl_zb_task_t *)(g_zbTaskQ + (bVar1 & 0xf) * 8 + iVar4);
     g_zbTaskQ[iVar4 + 0x80] = bVar1 + 1;
+    */
+    iVar4 = idx - 1;
+    wptr = g_zbTaskQ[iVar4].wptr;
+    /*
+     * Consider the possible wptr, rptr values.
+     *
+     * 1. wptr > rptr and both positive.  Writing towards end of the buffer
+     *    if (wptr - rptr) is 0xf, the next write will cause a wrap.
+     * 2. wptr has wrapped and rptr > wptr.  Again, if the next write to wptr
+     *    will be rptr, then we are about to wrap.
+     */
+    if (0xf < (int)((uint)wptr - (uint)g_zbTaskQ[iVar4].rptr)) {
+       // Queue is full!
+       goto LAB_00000fe6;
+    }
+
+    // Queue size is 16 so 0x00 to 0x0f
+    ptVar5 = g_zbTaskQ[iVar4].evt + (wptr & 0xf);
+    g_zbTaskQ[iVar4].wptr = wptr + 1;
   }
   /*
   pvVar2 = task->tlCb;
@@ -145,18 +168,17 @@ u8 tl_zbTaskQPush(tl_zb_taskList_e idx, tl_zb_task_t *task)
     sys_exceptionPost(0x80, '\x13');
   }
   drv_restore_irq(en);
-  return '\0';
+  return SUCCESS
 }
 
 u8 tl_zbUserTaskQNum(void)
-
 {
-  return taskQ_user[256] - taskQ_user[257];
+  return taskQ_user.wptr - taskQ_user.rptr;
 }
-void zb_sched_init(void)
 
+void zb_sched_init(void)
 {
-  memset(taskQ_user, 0, 0x102);
-  memset(g_zbTaskQ, 0, 0x294);
+  memset(taskQ_user, 0, sizeof(taskQ_user));
+  memset(g_zbTaskQ, 0, sizeof(g_zbTaskQ));
   return;
 }

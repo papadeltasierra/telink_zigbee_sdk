@@ -448,9 +448,11 @@ void zb_macDataRecvHander(u8 *rxBuf, u8 *macPld, u8 len, u8 ackPkt, u32 timestam
     buf->buf[9] = len + 0xfd;
     rf_busyFlag = rf_busyFlag & 0xfe;
     bVar1 = tl_zbUserTaskQNum();
+
+    // Really want a variable for this to indicate what we are using it for.
     if (bVar1 < 0x1b)
     {
-      // Passing maybe 30 bytes extra before the
+      // There is space to post the buffer so post it.
       tl_zbTaskPost(mac_rxDataParse, buf);
       return;
     }

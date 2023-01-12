@@ -24720,11 +24720,7 @@ status_t sampleGW_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *c
   }
   return sVar1;
 }
-u8 firmwareCheckWithUID(void)
 
-{
-  return '\0';
-}
 void main(void)
 
 {

@@ -14,10 +14,10 @@
  * LOCAL TYPEDEFS
  */
 enum {
-    mainQueue,
-    nwkFromMacTblQueue,
-    nwkTaskQueue,
-    nwkFromHighTblQueue
+    MAIN_QUEUE,
+    NWK_FROM_MAC_TBL_QUEUE,
+    NWK_TASK_QUEUE,
+    NWK_FROM_HIGH_TBL_QUEUE
 } tl_zb_taskList_e;
 
 /**********************************************************************
