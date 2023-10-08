@@ -1,0 +1,23 @@
+Timestamp,TimeDelta,AddrMode,DevAddr,PacketInformation,CommandId,Status,Description
+22-12-26 17:10:22:377396,0,,,55 00 40 00 02 42 00 00 aa ,ZBHCI_CMD_NODES_JOINED_GET_REQ,,start_idx: 0x0
+22-12-26 17:10:40:364331,17.986935,0x02,0xcccc,55 01 41 00 05 47 02 cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_OFF,,dst_addr_mode: 0x2(short) dst_addr:0xcccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:10:59:002875,18.638544,0x02,0xcccc,55 01 40 00 05 46 02 cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_ON,,dst_addr_mode: 0x2(short) dst_addr:0xcccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:11:04:563374,5.560499,0x02,0xcccc,55 01 42 00 05 44 02 cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x2(short) dst_addr:0xcccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:11:53:895387,49.332013,0x00,0xcccccccccccccccc,55 01 42 00 0b 4b 03 cc cc cc cc cc cc cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x3(ieee) dst_addr:0xcccccccccccccccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:12:00:209384,6.313997,0x00,0xfffe,55 01 42 00 02 8d 00 cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x0(bound) src_ep: 0xcc
+22-12-26 17:13:06:972132,66.762748,0x00,0xfffe,55 01 42 00 02 8d 00 cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x0(bound) src_ep: 0xcc
+22-12-26 17:13:12:211766,5.239634,0x00,0xcccccccccccccccc,55 01 42 00 0b 4b 03 cc cc cc cc cc cc cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x3(ieee) dst_addr:0xcccccccccccccccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:13:18:281590,6.069824,0x00,0xcccccccccccccccc,55 01 42 00 0b 4b 03 cc cc cc cc cc cc cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x3(ieee) dst_addr:0xcccccccccccccccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:13:27:360258,9.078668,0x00,0xcccccccccccccccc,55 01 42 00 0b 4b 03 cc cc cc cc cc cc cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x3(ieee) dst_addr:0xcccccccccccccccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:16:02:247521,154.887263,0x00,0x1122334455667788,55 01 42 00 0b c3 03 11 22 33 44 55 66 77 88 cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x3(ieee) dst_addr:0x1122334455667788 src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:16:09:100982,6.853461,0x00,0xcccccccccccccccc,55 01 42 00 0b 4b 03 cc cc cc cc cc cc cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x3(ieee) dst_addr:0xcccccccccccccccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:16:13:613722,4.51274,0x00,0xcccccccccccccccc,55 01 42 00 0b 4b 03 cc cc cc cc cc cc cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x3(ieee) dst_addr:0xcccccccccccccccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:16:20:646708,7.032986,0x00,0x1122334455667788,55 01 42 00 0b c3 03 11 22 33 44 55 66 77 88 cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x3(ieee) dst_addr:0x1122334455667788 src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:18:28:400941,127.754233,0x00,0x1122334455667788,55 01 42 00 0b c7 07 11 22 33 44 55 66 77 88 cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x7(ieee_no_ack) dst_addr:0x1122334455667788 src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:18:48:385687,19.984746,0x02,0xcccc,55 01 42 00 05 44 02 cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x2(short) dst_addr:0xcccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:19:41:669787,53.2841,0x02,0xcccc,55 01 42 00 05 44 02 cc cc cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x2(short) dst_addr:0xcccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:20:13:325232,31.655445,0x02,0x1122,55 01 42 00 05 77 02 11 22 cc cc aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x2(short) dst_addr:0x1122 src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:21:23:257561,69.932329,0x02,0x1122,55 01 42 00 05 00 02 11 22 33 44 aa ,ZBHCI_CMD_ZCL_ONOFF_TOGGLE,,dst_addr_mode: 0x2(short) dst_addr:0x1122 src_ep: 0x33 dst_ep: 0x44
+22-12-26 17:27:43:609628,380.352067,0x00,0x1122334455667788,55 01 30 00 0d b7 03 11 22 33 44 55 66 77 88 cc cc cc cc aa ,ZBHCI_CMD_ZCL_IDENTIFY,,dst_addr_mode: 0x3(ieee) dst_addr:0x1122334455667788 src_ep: 0xcc dst_ep: 0xcc identify_time: 0xcccc(s)
+22-12-26 17:27:47:719949,4.110321,0x02,0xcccc,55 01 31 00 05 37 02 cc cc cc cc aa ,ZBHCI_CMD_ZCL_IDENTIFY_QUERY,,dst_addr_mode: 0x2(short) dst_addr:0xcccc src_ep: 0xcc dst_ep: 0xcc
+22-12-26 17:28:00:597280,12.877331,0x00,0x1122334455667788,55 01 31 00 0b b0 03 11 22 33 44 55 66 77 88 cc cc aa ,ZBHCI_CMD_ZCL_IDENTIFY_QUERY,,dst_addr_mode: 0x3(ieee) dst_addr:0x1122334455667788 src_ep: 0xcc dst_ep: 0xcc

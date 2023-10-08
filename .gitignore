@@ -1,3 +1,7 @@
 # Ignore Pythonic output files.
 /*.pyc
+**/.metadata
 __pycache__/
+tl_zigbee_sdk/build/tlsr_tc32
+!tl_zigbee_sdk/build/tlsr_tc32/.cproject
+!tl_zigbee_sdk/build/tlsr_tc32/.project
