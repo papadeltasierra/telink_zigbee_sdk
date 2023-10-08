@@ -30,3 +30,4 @@ __pycache__/
 
 # Ignore Zigbee Gateway Controller tool logging files
 Tools/ZGC_NEW/zgc_tool_src/userdata/
+__pycache__/

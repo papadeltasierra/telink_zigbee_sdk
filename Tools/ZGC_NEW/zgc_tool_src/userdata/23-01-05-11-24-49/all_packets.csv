@@ -1,0 +1,3 @@
+Timestamp,TimeDelta,AddrMode,DevAddr,PacketInformation,CommandId,Status,Description
+23-01-05 11:24:49:376747,0,,,55 00 40 00 02 42 00 00 aa ,ZBHCI_CMD_NODES_JOINED_GET_REQ,,start_idx: 0x0
+23-01-05 11:25:06:266952,16.890205,,,55 00 07 00 01 11 17 aa ,ZBHCI_CMD_BDB_CHANNEL_SET,,channel: 23
