@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash
 echo "*****************************************************"
 echo "this is post build!! current configure is :$1"
 if [[ $2 = tc32 ]]; then

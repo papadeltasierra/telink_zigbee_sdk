@@ -44,7 +44,7 @@ extern "C" {
 #define USB_PRINTF_MODE         		0
 
 /* HCI interface */
-#define	ZBHCI_UART						0
+#define	ZBHCI_UART						1
 
 /* RGB or CCT */
 #define COLOR_RGB_SUPPORT				0

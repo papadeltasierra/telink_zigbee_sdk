@@ -727,7 +727,7 @@ static void zbhci_bindCmdHandler(void *arg){
 	ev_buf_free(arg);
 }
 
-
+#ifdef ZCL_ON_OFF
 s32 node_toggle_unicast_test(void *arg){
 	u32 mode = (u32)arg;
 
@@ -783,7 +783,9 @@ s32 node_toggle_unicast_test(void *arg){
 
 	return 0;
 }
+#endif
 
+#ifdef ZCL_ON_OFF
 s32 node_toggle_broadcast_test(void *arg){
 	//u32 onOff = (u32)arg;
 	static u32 onOff = 0;
@@ -808,6 +810,7 @@ s32 node_toggle_broadcast_test(void *arg){
 	onOff ^= 1;
 	return 0;
 }
+#endif
 
 
 s32 rxtx_performance_test(void *arg){
@@ -860,7 +863,10 @@ s32 zbhci_nodeManageCmdHandler(void *arg){
 	zbhci_cmdHandler_t *cmdInfo = arg;
 	u16 cmdID = cmdInfo->cmdId;
 	u8 *p = cmdInfo->payload;
+#if ZB_COORDINATOR_ROLE
+	// !!PDS: this is a patch to existing code!!!!
 	u8 len = 0;
+#endif
 
 	if(cmdID == ZBHCI_CMD_NODES_JOINED_GET_REQ){
 #if ZB_COORDINATOR_ROLE
@@ -908,6 +914,7 @@ s32 zbhci_nodeManageCmdHandler(void *arg){
 			ev_buf_free((u8 *)rsp);
 		}
 #endif
+#ifdef ZCL_ON_OFF
 	}else if(cmdID == ZBHCI_CMD_NODES_TOGLE_TEST_REQ){
 #if ZB_COORDINATOR_ROLE
 		u32 mode = *p;
@@ -923,6 +930,7 @@ s32 zbhci_nodeManageCmdHandler(void *arg){
 				g_nodeTestTimer = TL_ZB_TIMER_SCHEDULE(node_toggle_broadcast_test, NULL, (u32)interval * 10);
 			}
 		}
+#endif
 #endif
 	}else if(cmdID == ZBHCI_CMD_TXRX_PERFORMANCE_TEST_REQ){
 #if AF_TEST_ENABLE
@@ -1010,6 +1018,7 @@ s32 zbhci_nodeManageCmdHandler(void *arg){
 	return -1;
 }
 
+#ifdef ZCL_OTA
 void hci_send_ota_start_rsponse(u8 status){
 	u8 array[16] = {0};
 	u8 *pBuf = array;
@@ -1128,6 +1137,8 @@ void zbhci_uartOTAHandle(void *arg){
 	}
 	ev_buf_free(arg);
 }
+#endif
+
 void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 	u8 ret[4] = {0,0,0,0};
 	u8 seqNum = 0;//pdu tx seq num
@@ -1197,6 +1208,7 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 				TL_SCHEDULE_TASK(zbhci_clusterBasicHandle, cmdInfo);
 				break;
 
+#ifdef ZCL_GROUP
 			case ZBHCI_CMD_ZCL_GROUP_ADD:
 			case ZBHCI_CMD_ZCL_GROUP_VIEW:
 			case ZBHCI_CMD_ZCL_GROUP_GET_MEMBERSHIP:
@@ -1205,18 +1217,22 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 			case ZBHCI_CMD_ZCL_GROUP_ADD_IF_IDENTIFY:
 				TL_SCHEDULE_TASK(zbhci_clusterGroupHandle, cmdInfo);
 				break;
+#endif
 
 			case ZBHCI_CMD_ZCL_IDENTIFY:
 			case ZBHCI_CMD_ZCL_IDENTIFY_QUERY:
 				TL_SCHEDULE_TASK(zbhci_zclIdentifyCmdHandle, cmdInfo);
 				break;
 
+#ifdef ZCL_ON_OFF
 			case ZBHCI_CMD_ZCL_ONOFF_ON:
 			case ZBHCI_CMD_ZCL_ONOFF_OFF:
 			case ZBHCI_CMD_ZCL_ONOFF_TOGGLE:
 				TL_SCHEDULE_TASK(zbhci_zclOnoffCmdHandle, cmdInfo);
 				break;
+#endif
 
+#ifdef ZCL_LEVEL_CTRL
 			case ZBHCI_CMD_ZCL_LEVEL_MOVE2LEVEL:
 			case ZBHCI_CMD_ZCL_LEVEL_MOVE:
 			case ZBHCI_CMD_ZCL_LEVEL_STEP:
@@ -1227,7 +1243,10 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 			case ZBHCI_CMD_ZCL_LEVEL_STOP_WITHONOFF:
 				TL_SCHEDULE_TASK(zbhci_zclLevelCtrlCmdHandle, cmdInfo);
 				break;
+#endif
 
+//PDS
+#ifdef ZCL_SCENE
 			case ZBHCI_CMD_ZCL_SCENE_ADD:
 			case ZBHCI_CMD_ZCL_SCENE_VIEW:
 			case ZBHCI_CMD_ZCL_SCENE_REMOVE:
@@ -1237,14 +1256,18 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 			case ZBHCI_CMD_ZCL_SCENE_GET_MEMBERSHIP:
 				TL_SCHEDULE_TASK(zbhci_clusterSceneHandle, cmdInfo);
 				break;
+#endif
 
+#ifdef ZCL_LIGHT_COLOR_CONTROL
             case ZBHCI_CMD_ZCL_COLOR_MOVE2HUE:
             case ZBHCI_CMD_ZCL_COLOR_MOVE2COLOR:
             case ZBHCI_CMD_ZCL_COLOR_MOVE2SAT:
             case ZBHCI_CMD_ZCL_COLOR_MOVE2TEMP:
                 TL_SCHEDULE_TASK(zbhci_zclColorCtrlCmdHandle, cmdInfo);
 				break;
+#endif
 
+#ifdef ZCL_OTA
 			case ZBHCI_CMD_ZCL_OTA_IMAGE_NOTIFY:
 				TL_SCHEDULE_TASK(zbhci_clusterOTAHandle, cmdInfo);
 				break;
@@ -1253,6 +1276,7 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 			case ZBHCI_CMD_OTA_BLOCK_RESPONSE:
 				TL_SCHEDULE_TASK(zbhci_uartOTAHandle, cmdInfo);
 				break;
+#endif
 
 			default:
 				ev_buf_free((u8*)cmdInfo);

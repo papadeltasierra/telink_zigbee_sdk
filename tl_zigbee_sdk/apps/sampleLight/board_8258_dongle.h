@@ -257,8 +257,14 @@ extern "C" {
 
 // UART
 #if ZBHCI_UART
+#if 0
+//PDS: LilyGo
 	#define UART_TX_PIN         	UART_TX_PD7
 	#define UART_RX_PIN         	UART_RX_PA0
+#else
+	#define UART_TX_PIN         	UART_TX_PC2
+	#define UART_RX_PIN         	UART_RX_PC3
+#endif
 
 	#define UART_PIN_CFG()			uart_gpio_set(UART_TX_PIN, UART_RX_PIN);// uart tx/rx pin set
 #endif

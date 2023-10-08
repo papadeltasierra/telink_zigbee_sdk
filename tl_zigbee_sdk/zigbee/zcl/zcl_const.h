@@ -35,7 +35,7 @@
 /** @addtogroup  ZCL_Module ZCL
  *  @{
  */
- 
+
 /** @addtogroup  ZCL_Constant ZCL Constants
  *  @{
  */
@@ -133,6 +133,9 @@
 #define ZCL_CLUSTER_PI_MULTISTATE_VALUE_BACNET_EXT        0x0613
 #define ZCL_CLUSTER_PI_11073_PROTOCOL_TUNNEL              0x0614
 
+// See ZigBee Cluster Library
+//
+
 // Smart Energy Clusters
 #define ZCL_CLUSTER_SE_PRICE                              0x0700
 #define ZCL_CLUSTER_SE_Demand_RSP_AND_LOAD_CONTROL        0x0701
@@ -141,6 +144,15 @@
 #define ZCL_CLUSTER_SE_SE_TUNNELING                       0x0704
 #define ZCL_CLUSTER_SE_PREPAYMENT                         0x0705
 #define ZCL_CLUSTER_GEN_KEY_ESTABLISHMENT                 0x0800
+
+/*
+ * !!PDS: Missing smart Energy Clusters...
+ * 0x0707 - Calendar
+ * 0x0708 - Device Management
+ * 0x0709 - Events
+ * 0x070B - Sub-GHz
+ * 0x0b01 - Meter Identification.
+ */
 
 // Light Link cluster
 #define ZCL_CLUSTER_TOUCHLINK_COMMISSIONING               0x1000

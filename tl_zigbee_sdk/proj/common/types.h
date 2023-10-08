@@ -166,7 +166,7 @@ typedef struct {
 // There is no way to directly recognise whether a typedef is defined
 // http://stackoverflow.com/questions/3517174/how-to-check-if-a-datatype-is-defined-with-typedef
 #ifdef __GNUC__
-typedef	u16	wchar_t;		
+typedef	u16	wchar_t;
 #endif
 
 #ifndef WIN32
@@ -180,6 +180,24 @@ typedef u32 size_t;
 #define U15_MAX ((u16)0x7fff)
 #define U7_MAX  ((u8)0x7f)
 
+/*
+ * Enumeration to aid code reading and help Ghidra.
+ */
+enum {
+    SUCCESS,
+    FAILURE,
+    INVALIDPARAMETER,
+    INVALID_TASK,
+    MSG_BUFFER_NOT_AVAIL,
+    INVALID_MSG_POINTER,
+    INVALID_EVENT_ID,
+    INVALID_INTERRUPT_ID,
+    NO_TIMER_AVAIL,
+    NV_ITEM_UNINIT,
+    NV_OPER_FAILED,
+    INVALID_MEM_SIZE,
+    NV_BAD_ITEM_LEN
+} gsrv_t;
 
 /*** Generic Status Return Values ***/
 #define SUCCESS                   0x00

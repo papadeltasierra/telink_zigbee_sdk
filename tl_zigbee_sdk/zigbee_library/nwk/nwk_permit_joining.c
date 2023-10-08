@@ -2,8 +2,26 @@
 undefined4 nwk_permitJoinTimeout(void)
 
 {
-  g_zbInfo.macPib.associationPermit = '\0';
-  g_zbNwkCtx._45_1_ = g_zbNwkCtx._45_1_ & 0xfd;
+  g_zbInfo.macPib.associationPermit = 0;
+
+  /*
+  union {
+    structure {
+	    u8  is_factory_new:1;	  !< Device is factory new
+	    u8  permit_join:1; 		  !< True if permit join is in progress
+	    u8  joined:1;      		  !< Non-zero if we are joined into the network
+	    u8  router_started:1; 	!< not used
+	    u8  is_tc:1;            !< True if we are Trust Center
+    	u8  joined_pro:1;
+	    u8	panIdConflict:1;	  !< if we find panID conflict
+	    u8	joinAccept:1;
+    },
+    u8 _45_1_;
+  }
+  */
+  // 0xfd == 0b11111101
+  // g_zbNwkCtx._45_1_ = g_zbNwkCtx._45_1_ & 0xfd;
+  g_zbNwkCtx.permit_join = 0;
   permitJoinTimerEvt = 0;
   return 0xfffffffe;
 }

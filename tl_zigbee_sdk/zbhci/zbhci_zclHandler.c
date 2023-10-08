@@ -105,6 +105,7 @@ void zbhci_zclIdentifyCmdHandle(void *arg){ //u16 cmdId, u8 *pCmd){
 }
 
 
+#ifdef ZCL_ON_OFF
 /*
  * zbhci_zclOnoffCmdHandle
  *
@@ -134,8 +135,10 @@ void zbhci_zclOnoffCmdHandle(void *arg){ //(u8 *p, u8 *seqNum){
 
 	ev_buf_free(arg);
 }
+#endif
 
 
+#ifdef ZCL_LEVEL_CTRL
 /*
  * zbhci_zclLevelCtrlCmdHandle
  *
@@ -234,7 +237,9 @@ void zbhci_zclLevelCtrlCmdHandle(void *arg){ //(u8 *p, u8 *seqNum){
 
 	ev_buf_free(arg);
 }
+#endif
 
+#ifdef ZCL_LIGHT_COLOR_CONTROL
 //color
 void zbhci_zclColorCtrlCmdHandle(void *arg){ //(u8 *p, u8 *seqNum){
 	zbhci_cmdHandler_t *cmdInfo = arg;
@@ -255,7 +260,7 @@ void zbhci_zclColorCtrlCmdHandle(void *arg){ //(u8 *p, u8 *seqNum){
 			u8 direction = ptr[1];
 			u16 transTime;
 			COPY_BUFFERTOU16_BE(transTime, &ptr[2]);
-			
+
 			zcl_colorCtrlMoveToHueCmd_t move2Hue;
 			move2Hue.hue = hue;
 			move2Hue.direction = direction;
@@ -268,8 +273,8 @@ void zbhci_zclColorCtrlCmdHandle(void *arg){ //(u8 *p, u8 *seqNum){
 
 		case ZBHCI_CMD_ZCL_COLOR_MOVE2COLOR:
 		{
-			u16 colorX; 
-            u16 colorY; 
+			u16 colorX;
+            u16 colorY;
             u16 transTime;
 
             COPY_BUFFERTOU16_BE(colorX, &ptr[0]);
@@ -303,7 +308,7 @@ void zbhci_zclColorCtrlCmdHandle(void *arg){ //(u8 *p, u8 *seqNum){
 
 		case ZBHCI_CMD_ZCL_COLOR_MOVE2TEMP:
 		{
-			u16 colorTemperature; 
+			u16 colorTemperature;
             u16 transTime;
 
             COPY_BUFFERTOU16_BE(colorTemperature, &ptr[0]);
@@ -324,7 +329,9 @@ void zbhci_zclColorCtrlCmdHandle(void *arg){ //(u8 *p, u8 *seqNum){
 	ev_buf_free(arg);
 }
 //end
+#endif
 
+#ifdef ZCL_GROUP
 /*
  * zbhci_clusterGroupHandle
  *
@@ -384,8 +391,10 @@ void zbhci_clusterGroupHandle(void *arg){ //u16 cmdId, u8 *pCmd){
 
 	ev_buf_free(arg);
 }
+#endif
 
-
+//PDS
+#ifdef ZCL_SCENE
 /*
  * zbhci_clusterSceneHandle
  *
@@ -505,7 +514,9 @@ void zbhci_clusterSceneHandle(void *arg){ //u16 cmdId, u8 *pCmd){
 
 	ev_buf_free(arg);
 }
+#endif
 
+#ifdef ZCL_OTA
 void cust_ota_start_req(epInfo_t *dstEpInfo,u8 srcEp,u8 **payload)
 {
 //	u32 image_length;
@@ -550,6 +561,7 @@ void zbhci_clusterOTAHandle(void *arg){ //u16 cmdId, u8 *pCmd){
 
 	ev_buf_free(arg);
 }
+#endif
 
 volatile status_t basic_status = 0;
 void zbhci_clusterBasicHandle(void *arg){

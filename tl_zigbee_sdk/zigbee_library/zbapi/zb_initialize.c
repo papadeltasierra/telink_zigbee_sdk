@@ -31,27 +31,29 @@ void zb_info_save(void *arg)
   nv_flashWriteNew('\x01', 0, '\x01', 0xc0, (u8 *)&g_zbInfo);
   return;
 }
+
 void zb_init(void)
 
 {
-  u8 uVar1;
+  bool_e uVar1;
+  nv_sts_t nVar1;
 
   uVar1 = nv_facrotyNewRstFlagCheck();
-  if (uVar1 != '\0')
+  if (uVar1 != FALSE)
   {
     nv_resetToFactoryNew();
   }
-  uVar1 = zb_info_load();
-  if (uVar1 == '\0')
+  nVar1 = zb_info_load();
+  if (nVar1 == NV_SUCC)
   {
-    tl_zbMacInit('\0');
-    tl_zbNwkInit('\0');
+    tl_zbMacInit(FALSE);
+    tl_zbNwkInit(FALSE);
     aps_init();
   }
   else
   {
-    tl_zbMacInit('\x01');
-    tl_zbNwkInit('\x01');
+    tl_zbMacInit(TRUE);
+    tl_zbNwkInit(TRUE);
     aps_init();
     zb_nwkKeySet();
     ss_zdoUseKey(0);
@@ -61,6 +63,7 @@ void zb_init(void)
   zdo_init();
   return;
 }
+
 void zb_nwkKeySet(void)
 
 {

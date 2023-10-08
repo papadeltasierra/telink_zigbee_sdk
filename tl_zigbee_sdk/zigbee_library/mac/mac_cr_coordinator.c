@@ -2,7 +2,20 @@
 void tl_zbMacBeaconRequestCb(void)
 
 {
-  if ((((byte)g_zbInfo.nwkNib.capabilityInfo & 2) != 0) &&
+  /*
+  typedef struct{
+	  u8	altPanCoord: 	1;
+	  u8	devType: 		1;
+	  u8	powerSrc: 		1;
+	  u8	rcvOnWhenIdle: 	1;
+	  u8  reserved:		2;
+	  u8	secuCapability: 1;
+	  u8	allocAddr: 		1;
+  }capability_info_t;
+  */
+  // if ((((byte)g_zbInfo.nwkNib.capabilityInfo & 2) != 0) &&
+  // Value '1' indicates a router/coordinator.
+  if (((g_zbInfo.nwkNib.capabilityInfo.devType) &&
       (g_zbInfo.macPib.beaconPayloadLen != '\0'))
   {
     tl_zbNwkBeaconPayloadUpdate();
@@ -11,15 +24,15 @@ void tl_zbMacBeaconRequestCb(void)
   }
   return;
 }
-undefined4 tl_zbMacMlmeBeaconCmdSend(byte *param_1)
 
+undefined4 tl_zbMacMlmeBeaconCmdSend(byte *param_1)
 {
   u8 *p;
   u8 uVar1;
   void *dest;
-  byte *pbVar2;
-  u32 uVar3;
-  byte bVar4;
+  zb_rfpkt_beacon_t *pbVar2;
+  u32 uVar2;
+  byte bVar3;
   undefined4 uStack_28;
   undefined4 uStack_24;
   undefined2 local_20;
@@ -27,42 +40,66 @@ undefined4 tl_zbMacMlmeBeaconCmdSend(byte *param_1)
   uStack_24 = 0;
   local_20 = 0;
   uStack_28 = (uint)g_zbInfo.macPib.panId;
-  bVar4 = *param_1;
-  if (bVar4 == 3)
-  {
-    memcpy((void *)((int)&uStack_28 + 2), g_zbInfo.macPib.extAddress, 8);
+  bVar3 = *param_1;
+
+  // Somehow "3" means long address format.  ADDR_MODE_EXT?
+  if (bVar3 == 3) {
+    memcpy((void *)((int)&uStack_28 + 2),g_zbInfo.macPib.extAddress,8);
   }
-  else
-  {
-    memcpy((void *)((int)&uStack_28 + 2), &g_zbInfo.macPib.shortAddress, 2);
+  else {
+    memcpy((void *)((int)&uStack_28 + 2),&g_zbInfo.macPib.shortAddress,2);
   }
-  uVar1 = tl_zbMacHdrSize((ushort)param_1[2] << 4 | (ushort)bVar4 << 0xe);
+  uVar1 = tl_zbMacHdrSize((ushort)param_1[2] << 4 | (ushort)bVar3 << 0xe);
   p = g_zbMacCtx.txRawDataBuf;
-  if (-1 < (int)((uint)g_zbMacCtx.txRawDataBuf[0xc3] << 0x1c))
-  {
-    bVar4 = uVar1 + g_zbInfo.macPib.beaconPayloadLen + '\x04';
+  if (-1 < (int)((uint)g_zbMacCtx.txRawDataBuf[0xc3] << 0x1c)) {
+    bVar3 = uVar1 + g_zbInfo.macPib.beaconPayloadLen + '\x04';
     g_zbMacCtx.txRawDataBuf[0xc3] = g_zbMacCtx.txRawDataBuf[0xc3] | 8;
-    dest = tl_bufInitalloc((zb_buf_t *)p, bVar4);
+    dest = tl_bufInitalloc((zb_buf_t *)p,bVar3);
     *p = (u8)dest;
     p[1] = (u8)((uint)dest >> 8);
     p[2] = (u8)((uint)dest >> 0x10);
     p[3] = (u8)((uint)dest >> 0x18);
-    p[4] = bVar4;
-    memset(dest, 0, (uint)bVar4);
-    pbVar2 = (byte *)tl_zbMacHdrBuilder();
-    *pbVar2 = param_1[4] & 0xf | param_1[5] << 4;
-    bVar4 = g_zbInfo.macPib.associationPermit << 7 | 0xf | (byte)((param_1[3] & 1) << 4);
-    pbVar2[1] = bVar4;
-    if (aps_ib.aps_designated_coordinator == '\x01')
-    {
-      pbVar2[1] = bVar4 | 0x40;
+    p[4] = bVar3;
+    memset(dest,0,(uint)bVar3);
+    pbVar2 = (zb_rfpkt_beacon_t *)tl_zbMacHdrBuilder();
+
+    /*
+    typedef struct{
+	    u8 beaconOrder:4;
+	    u8 superframeOrder:4;
+	    u8 finalCapSlot:4;
+	    u8 batteryLifeExtension:1;
+	    u8 resv:1;
+	    u8 panCoordinator:1;
+	    u8 associatePermit:1;
+    }zb_superframe_spec_t;
+    */
+    // (byte *)&pbVar2->superFrameSpec = param_1[4] & 0xf | param_1[5] << 4;
+    // finalCapSlot = param_1[4] && 0xf
+    // batteryLifeExtension set by param_1[3] & 1
+    // associatepermit set by associationPermit.
+    // bVar3 = g_zbInfo.macPib.associationPermit << 7 | 0xf | (byte)((param_1[3] & 1) << 4);
+    // (pbVar2->superFrameSpec).field_0x1 = bVar3;
+    pbVar2->superFrameSpec.finalCapSlot = 0xf;
+    pbVar2->superFrameSpec.batteryLifeExtension = param_1[3];
+    pbVar2->superFrameSpec.associatePermit = g_zbInfo.macPib.associationPermit;
+
+    if (aps_ib.aps_designated_coordinator == '\x01') {
+      // panCoordinator.
+      // (pbVar2->superFrameSpec).field_0x1 = bVar3 | 0x40;
+      pbVar2->superFrameSpec.panCoordinator = 1;
     }
-    memcpy(pbVar2 + 4, &g_zbInfo.macPib.beaconPayload, (uint)g_zbInfo.macPib.beaconPayloadLen);
-    uVar3 = drv_u32Rand();
-    ev_timer_taskPost(tl_zbMacPacketDelaySend, (void *)0x0, (uVar3 & 0x14) + 1);
+
+    // N.B. Beacon payload starts at GTS and includes the Zigbee beacon payload later.
+    memcpy((pbVar2->gts).desc,&g_zbInfo.macPib.beaconPayload,(uint)g_zbInfo.macPib.beaconPayloadLen);
+
+    // Randomising sending for 1, 5, 9, 13 (ms?).
+    uVar2 = drv_u32Rand();
+    ev_timer_taskPost(tl_zbMacPacketDelaySend,(void *)0x0,(uVar2 & 0x14) + 1);
   }
   return 0;
 }
+
 void tl_zbMacMlmeBeaconSendConfirm(undefined4 param_1, char param_2)
 
 {

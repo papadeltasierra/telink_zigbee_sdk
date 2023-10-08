@@ -36,14 +36,19 @@ sys_diagnostics_t g_sysDiags;
  * ZDO_COORD to use this value as its PAN ID and
  * Routers and end devices to join PAN with this ID
  */
-#define DEFAULT_PANID		MAC_INVALID_PANID
+
+//PDS: changing this had not affect :-(.
+// #define DEFAULT_PANID		MAC_INVALID_PANID
+#define DEFAULT_PANID		0x104f
 u16 TL_ZB_ASSOCJOIN_PERMIT_PANID = DEFAULT_PANID;
 
 /*
  * Setting this to a value other than MAC_INVALID_PANID (0xFFFF) causes
  * Routers and end devices to filter the PAN ID when associate join a network
  */
-#define FILTER_PANID		MAC_INVALID_PANID
+//PDS
+// #define FILTER_PANID		MAC_INVALID_PANID
+#define FILTER_PANID		0x104f
 u16 TL_ZB_ASSOCJOIN_FILTER_PANID = FILTER_PANID;
 
 /* APS data fragmentation setting */

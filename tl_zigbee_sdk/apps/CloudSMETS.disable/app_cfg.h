@@ -157,10 +157,10 @@ extern "C" {
 	#define ZBHCI_EN								1
 #endif
 
-
 /**********************************************************************
  * ZCL cluster support setting
  */
+//PDS: Try enabling this.
 #define ZCL_ON_OFF_SUPPORT							1
 #define ZCL_LEVEL_CTRL_SUPPORT						1
 #define ZCL_LIGHT_COLOR_CONTROL_SUPPORT				1
@@ -173,6 +173,8 @@ extern "C" {
 #define ZCL_SCENE_SUPPORT							1
 #define ZCL_OTA_SUPPORT								1
 #define ZCL_GP_SUPPORT								1
+
+#define ZCL_METERING_SUPPORT						1
 
 #define AF_TEST_ENABLE								0
 

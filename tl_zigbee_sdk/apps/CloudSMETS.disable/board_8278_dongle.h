@@ -1,7 +1,7 @@
 /********************************************************************************************************
- * @file    board_8258_dongle.h
+ * @file    board_8278_dongle.h
  *
- * @brief   This is the header file for board_8258_dongle
+ * @brief   This is the header file for board_8278_dongle
  *
  * @author  Zigbee Group
  * @date    2021
@@ -31,64 +31,8 @@ extern "C" {
 #endif
 
 
-#define DONGLE_8258_32				1
-#define	DONGLE_8258_48				0
-
-#if defined DONGLE_8258_32 && (DONGLE_8258_32 == 1)
 /*******************************************************************************************************
-*********************8258Dongle with 32 Pins: Start*****************************************************
-*******************************************************************************************************/
-//KEY
-#define	BUTTON1 					GPIO_PD7
-#define PD7_FUNC					AS_GPIO
-#define PD7_OUTPUT_ENABLE			0
-#define PD7_INPUT_ENABLE			1
-#define	PULL_WAKEUP_SRC_PD7			PM_PIN_PULLUP_10K
-
-#define	BUTTON2 					GPIO_PA1
-#define PA1_FUNC					AS_GPIO
-#define PA1_OUTPUT_ENABLE			0
-#define PA1_INPUT_ENABLE			1
-#define	PULL_WAKEUP_SRC_PA1			PM_PIN_PULLUP_10K
-
-//LED
-#define LED_G						GPIO_PA0
-#define PA0_FUNC					AS_GPIO
-#define PA0_OUTPUT_ENABLE			1
-#define PA0_INPUT_ENABLE			0
-
-#define LED_R						GPIO_PD4
-#define PD4_FUNC					AS_GPIO
-#define PD4_OUTPUT_ENABLE			1
-#define PD4_INPUT_ENABLE			0
-
-#define LED_POWER					LED_R
-#define LED_PERMIT					LED_G
-
-// UART
-#if ZBHCI_UART
-#define LILYGO
-#ifdef LILYGO
-#define UART_TX_PIN         	UART_TX_PC2
-#define UART_RX_PIN         	UART_RX_PC3
-#else
-#define UART_TX_PIN         	UART_TX_PB1
-#define UART_RX_PIN         	UART_RX_PB7
-#endif
-
-	#define UART_PIN_CFG()			uart_gpio_set(UART_TX_PIN, UART_RX_PIN);// uart tx/rx pin set
-#endif
-
-// DEBUG
-#if UART_PRINTF_MODE
-	#define	DEBUG_INFO_TX_PIN	    GPIO_PC4//print
-#endif
-/*******************************************************************************************************
-*********************8258Dongle with 32 Pins: End*****************************************************
-*******************************************************************************************************/
-#elif defined DONGLE_8258_48 && (DONGLE_8258_48 == 1)
-/*******************************************************************************************************
-*********************8258Dongle with 48 Pins: Start*****************************************************
+*********************8278Dongle with 48 Pins: Start*****************************************************
 *******************************************************************************************************/
 //KEY
 #define	BUTTON1 					GPIO_PD6
@@ -119,14 +63,8 @@ extern "C" {
 
 // UART
 #if ZBHCI_UART
-#define LILYGO
-#ifdef LILYGO
-	#define UART_TX_PIN         	UART_TX_PC2
-	#define UART_RX_PIN         	UART_RX_PC3
-#else
 	#define UART_TX_PIN         	UART_TX_PD7
 	#define UART_RX_PIN         	UART_RX_PA0
-#endif
 
 	#define UART_PIN_CFG()			uart_gpio_set(UART_TX_PIN, UART_RX_PIN);// uart tx/rx pin set
 #endif
@@ -134,12 +72,6 @@ extern "C" {
 // DEBUG
 #if UART_PRINTF_MODE
 	#define	DEBUG_INFO_TX_PIN	    GPIO_PC6//print
-#endif
-/*******************************************************************************************************
-*********************8258Dongle with 48 Pins: End*****************************************************
-*******************************************************************************************************/
-#else
-	#error "Board defined error!"
 #endif
 
 // USB

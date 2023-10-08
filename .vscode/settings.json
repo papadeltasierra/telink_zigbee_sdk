@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "usb_common.h": "c",
+        "board_8258_evk.h": "c",
+        "aps_api.h": "c"
+    }
+}

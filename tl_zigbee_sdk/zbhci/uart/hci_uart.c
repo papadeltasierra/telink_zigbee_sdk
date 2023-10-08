@@ -43,7 +43,6 @@ __attribute__((aligned(4))) u8 uartTxBuf[UART_TX_BUF_SIZE] = {0};
 __attribute__((aligned(4))) u8 uartRxBuf[UART_RX_BUF_SIZE] = {0};
 
 void uart_data_handler(void *arg){
-
 	 /*
 	 * the format of the uart rx data: length(4 Bytes) + payload
 	 *
@@ -86,7 +85,7 @@ void uart_data_handler(void *arg){
 
 	u16 pktLen = (msg->msgLen16H << 8) | msg->msgLen16L;
 	u16 msgType = (msg->msgType16H<<8) + msg->msgType16L;
-	
+
 	if(st == SUCCESS){
 	    u8 crc8 = crc8Calculate(msgType, pktLen, msg->pData);
 	    if((msgType == ZBHCI_CMD_OTA_START_REQUEST) || (msgType == ZBHCI_CMD_OTA_BLOCK_RESPONSE)){
@@ -118,7 +117,6 @@ void uart_data_handler(void *arg){
 }
 
 void uartRcvHandler(void){
-
 	TL_SCHEDULE_TASK(uart_data_handler, uartRxBuf);
 }
 
@@ -148,7 +146,6 @@ zbhciTx_e uart_txMsg(u16 u16Type, u16 u16Length, u8 *pu8Data)
 
     return ZBHCI_TX_SUCCESS;
 }
-
 
 void hci_uart_init(void){
 	UART_PIN_CFG();

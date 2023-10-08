@@ -47,6 +47,8 @@
  */
 #ifdef ZCL_METERING
 
+// !!PDS: See ZigBee Cluster Library, section 1.4, Metering.
+
 //Reading Information Set
 #ifdef ZCL_ATTRID_CURRENT_SUMMATION_DELIVERD_ENABLE
 u8 zcl_attr_currentSummationDelivered[6] = {0};
@@ -445,6 +447,14 @@ u16 zcl_attr_heatAndCoolingSpecificAlarmMask = 0xFFFF;
 #ifdef ZCL_ATTRID_GAS_SPEC_ALARM_MASK_ENABLE
 u16 zcl_attr_gasSpecificAlarmMask = 0xFFFF;
 #endif
+
+/*
+ * !!PDS: Missing are...
+ * - 0x09, Block information
+ * - 0x0A, Meter Billing Attribute Set
+ * - 0x0B, Supply Control Attribute Set
+ * - 0x0C, Alternative Historical Consumption
+ */
 
 /* Attribute record list */
 const zclAttrInfo_t metering_attrTbl[] =

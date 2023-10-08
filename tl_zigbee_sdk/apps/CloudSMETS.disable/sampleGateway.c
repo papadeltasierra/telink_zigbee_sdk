@@ -177,14 +177,9 @@ void led_init(void)
 void app_task(void)
 {
 	static bool assocPermit = 0;
-	// Checking whether the logic is somehow wrong.
-#if 0
+
 	if(assocPermit != zb_getMacAssocPermit()){
 		assocPermit = zb_getMacAssocPermit();
-#else
-	if (assocPermit != (g_zbInfo.macPib.associationPermit == 1)) {
-		assocPermit = (g_zbInfo.macPib.associationPermit == 1);
-#endif
 		if(assocPermit){
 			led_on(LED_PERMIT);
 		}else{
@@ -192,9 +187,11 @@ void app_task(void)
 		}
 	}
 
+#if 0 // PDS: LilyGo board has no keys.
 	if(BDB_STATE_GET() == BDB_STATE_IDLE){
 		app_key_handler();
 	}
+#endif
 }
 
 static void sampleGwSysException(void)
@@ -247,7 +244,6 @@ void user_init(bool isRetention)
 	/* Initialize user application */
 	user_app_init();
 
-	/* User's Task */
 #if ZBHCI_EN
     /*
      * define ZBHCI_USB_PRINT, ZBHCI_USB_CDC or ZBHCI_UART as 1 in app_cfg.h

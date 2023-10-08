@@ -8615,7 +8615,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="apps/bootLoader|apps/sampleSwitch|apps/sampleContactSensor|platform/chip_826x|apps/sampleLight|platform/chip_8278" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="apps/CloudSMETS|zigbee_library|apps/bootLoader|apps/sampleSwitch|apps/sampleContactSensor|platform/chip_826x|apps/sampleLight|platform/chip_8278" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -42733,7 +42733,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="apps/sampleGW|apps/bootLoader|apps/sampleSwitch|apps/sampleContactSensor|platform/chip_826x|apps/sampleLight|platform/chip_8278" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="zigbee_library|apps/sampleGW|apps/bootLoader|apps/sampleSwitch|apps/sampleContactSensor|platform/chip_826x|apps/sampleLight|platform/chip_8278" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

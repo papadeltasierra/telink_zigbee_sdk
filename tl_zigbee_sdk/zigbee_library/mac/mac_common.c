@@ -32,6 +32,64 @@ u8 tl_zbMacHdrSize(u16 frameCtrl)
   return uVar1;
 }
 
+// WARNING: Unknown calling convention -- yet parameter storage is locked
+
+undefined *tl_zbMacHdrBuilder(void)
+
+{
+  undefined *in_r0;
+  uint uVar1;
+  ushort *in_r1;
+  uint uVar2;
+  uint uVar3;
+  undefined *out;
+
+  uVar3 = (uint)*in_r1;
+  uVar1 = (uVar3 << 0x14) >> 0x1e;
+  uVar2 = (uVar3 << 0x10) >> 0x1e;
+  *in_r0 = (char)*in_r1;
+  in_r0[1] = (char)(uVar3 >> 8);
+  in_r0[2] = g_zbInfo.macPib.seqNum;
+  out = in_r0 + 3;
+  g_zbInfo.macPib.seqNum = g_zbInfo.macPib.seqNum + '\x01';
+  if (uVar1 != 0)
+  {
+    in_r0[3] = *(undefined *)(in_r1 + 3);
+    in_r0[4] = *(undefined *)((int)in_r1 + 7);
+    if (uVar1 == 3)
+    {
+      memcpy(in_r0 + 5, in_r1 + 4, 8);
+      out = in_r0 + 0xd;
+    }
+    else
+    {
+      in_r0[5] = *(undefined *)(in_r1 + 4);
+      in_r0[6] = *(undefined *)((int)in_r1 + 9);
+      out = in_r0 + 7;
+    }
+  }
+  if (uVar2 != 0)
+  {
+    if (-1 < (int)(uVar3 << 0x19))
+    {
+      *out = *(undefined *)(in_r1 + 8);
+      out[1] = *(undefined *)((int)in_r1 + 0x11);
+      out = out + 2;
+    }
+    if (uVar2 == 3)
+    {
+      memcpy(out, in_r1 + 9, 8);
+      out = out + 8;
+    }
+    else
+    {
+      *out = *(undefined *)(in_r1 + 9);
+      out[1] = *(undefined *)((int)in_r1 + 0x13);
+      out = out + 2;
+    }
+  }
+  return out;
+}
 
 uint tl_zbMacHdrParse(tl_mac_hdr_t *macHdr,u8 *rxBuf)
 

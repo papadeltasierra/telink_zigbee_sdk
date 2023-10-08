@@ -96,3 +96,12 @@ struct {
     u16 destPanAgain;                   // 16
     extAddr_t srcAddr;                  // 18
 } tl_mac_hdr_t;
+
+/**********************************************************************
+ * FALSE/TRUE enum to help Ghidra decompiling.
+ */
+// PDS: probably better elsewhere...
+enum {
+    FALSE;
+    TRUE;
+} bool_t;

@@ -1,3 +1,4 @@
+
 void mac_pibNvInit(char param_1)
 
 {
@@ -64,7 +65,7 @@ void tl_zbMacInit(u8 coldReset)
 {
   mac_pibNvInit(coldReset);
   mac_trxInit();
-  g_zbInfo.macPib.associationPermit = '\0';
+  g_zbInfo.macPib.associationPermit = 0;
   g_zbMacCtx.txRawDataBuf = (u8 *)c1();
   return;
 }
@@ -72,7 +73,7 @@ void tl_zbMacReset(void)
 
 {
   mac_pibNvInit(1);
-  g_zbInfo.macPib.associationPermit = '\0';
+  g_zbInfo.macPib.associationPermit = 0;
   return;
 }
 void tl_zbMacTaskProc(void)
