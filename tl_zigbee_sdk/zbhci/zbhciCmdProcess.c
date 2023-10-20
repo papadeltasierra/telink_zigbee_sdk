@@ -434,9 +434,7 @@ void zbhciAfDataCnfPush(void *arg){
 void zbhciAppDataSendConfirmPush(void *arg){
 #if ZB_COORDINATOR_ROLE
 	apsdeDataConf_t *pApsDataCnf = (apsdeDataConf_t *)arg;
-#endif
 
-#if ZB_COORDINATOR_ROLE
 #if 0
 	if(g_nodeTestTimer){
 		g_afTestReq.sendTotalCnt++;
@@ -729,6 +727,7 @@ static void zbhci_bindCmdHandler(void *arg){
 	ev_buf_free(arg);
 }
 
+#if ZB_COORDINATOR_ROLE
 #ifdef ZCL_ON_OFF
 s32 node_toggle_unicast_test(void *arg){
 	u32 mode = (u32)arg;
@@ -786,7 +785,9 @@ s32 node_toggle_unicast_test(void *arg){
 	return 0;
 }
 #endif
+#endif
 
+#if ZB_COORDINATOR_ROLE
 #ifdef ZCL_ON_OFF
 s32 node_toggle_broadcast_test(void *arg){
 	//u32 onOff = (u32)arg;
@@ -812,6 +813,7 @@ s32 node_toggle_broadcast_test(void *arg){
 	onOff ^= 1;
 	return 0;
 }
+#endif
 #endif
 
 
@@ -917,6 +919,7 @@ s32 zbhci_nodeManageCmdHandler(void *arg){
 #endif
 	}else if(cmdID == ZBHCI_CMD_NODES_TOGGLE_TEST_REQ){
 #if ZB_COORDINATOR_ROLE
+#ifdef ZCL_ON_OFF
 		u32 mode = *p;
 		u8 interval = *(p+1);
 
