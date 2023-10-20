@@ -139,6 +139,16 @@ enum ha_device_id {
 	HA_DEV_IAS_WD                           = 0x0403,
 };
 
+
+enum se_device_id {
+	SE_DEV_ENERY_SERVICE_INTERFACE          = 0x0500,
+	SE_DEV_METERING_DEVICE                  = 0x0501,
+	SE_DEV_IHD                              = 0x0502,
+	SE_DEV_PRG_COMM_THERMOSTAT              = 0x0503,
+	SE_DEV_LOAD_CONTROL_DEVICE              = 0x0504,
+	SE_DEV_SMART_APPLIANCE                  = 0x0505,
+};
+
 /** @addtogroup zb_bdb_tc_key_exchange_method TCLinkKeyExchangeMethod
  *  Definition for trust center key exchange method
  * @{

@@ -206,6 +206,40 @@
 #define ZCL_METERING
 #endif
 
+/******************* Metering Cluster Configuration *****************/
+#if ZCL_PRICE_SUPPORT
+#define ZCL_PRICE
+#endif
+
+/******************* Metering Cluster Configuration *****************/
+#if ZCL_Demand_RSP_AND_LOAD_CONTROL_SUPPORT
+#define ZCL_Demand_RSP_AND_LOAD_CONTROL
+#endif
+
+/******************* Messaging Cluster Configuration *****************/
+#if ZCL_MESSAGING_SUPPORT
+#define ZCL_MESSAGING
+#endif
+
+/******************* SE Tunneling Cluster Configuration **************/
+#if ZCL_TUNNELING_SUPPORT
+#define ZCL_TUNNELING
+#endif
+
+/******************* Prepayment Cluster Configuration ****************/
+#if ZCL_PREPAYMENT_SUPPORT
+#define ZCL_PREPAYMENT
+#endif
+
+/******************* Calendar Cluster Configuration ******************/
+#if ZCL_CALENDAR_SUPPORT
+#define ZCL_CALENDAR
+#endif
+
+/******************* Device Managment Cluster Configuration **********/
+#if ZCL_DEVICE_MANAGEMENT_SUPPORT
+#define ZCL_DEVICE_MANAGEMENT
+#endif
 
 /************************************************* OTA Upgrading ************************************************/
 /********************* OTA Configuration **********************/

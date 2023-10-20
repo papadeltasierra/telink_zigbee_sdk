@@ -29,6 +29,7 @@
 
 #define ZDO_PROFILE_ID        					0x0000
 #define HA_PROFILE_ID         					0x0104
+#define SE_PROFILE_ID         					0x0109
 #define LL_PROFILE_ID         					0xC05E
 #define GP_PROFILE_ID							0xA1E0
 #define WILDCARD_PROFILE_ID						0xFFFF

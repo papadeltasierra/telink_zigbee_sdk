@@ -35,7 +35,7 @@
 /** @addtogroup  ZCL_Module ZCL
  *  @{
  */
- 
+
 /** @addtogroup  ZCL_Constant ZCL Constants
  *  @{
  */
@@ -138,8 +138,13 @@
 #define ZCL_CLUSTER_SE_Demand_RSP_AND_LOAD_CONTROL        0x0701
 #define ZCL_CLUSTER_SE_METERING                    		  0x0702
 #define ZCL_CLUSTER_SE_MESSAGING                          0x0703
-#define ZCL_CLUSTER_SE_SE_TUNNELING                       0x0704
+#define ZCL_CLUSTER_SE_TUNNELING                          0x0704
 #define ZCL_CLUSTER_SE_PREPAYMENT                         0x0705
+#define ZCL_CLUSTER_SE_ENERGY_MANAGEMENT                  0x0706
+#define ZCL_CLUSTER_SE_CALENDAR                           0x0707
+#define ZCL_CLUSTER_SE_DEVICE_MANAGEMENT                  0x0708
+#define ZCL_CLUSTER_SE_EVENTS                             0x0709
+#define ZCL_CLUSTER_SE_MDU_PAIRING                        0x070A
 #define ZCL_CLUSTER_GEN_KEY_ESTABLISHMENT                 0x0800
 
 // Light Link cluster
