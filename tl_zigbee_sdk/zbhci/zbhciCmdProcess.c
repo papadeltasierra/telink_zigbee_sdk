@@ -432,7 +432,9 @@ void zbhciAfDataCnfPush(void *arg){
 
 
 void zbhciAppDataSendConfirmPush(void *arg){
+#if ZB_COORDINATOR_ROLE
 	apsdeDataConf_t *pApsDataCnf = (apsdeDataConf_t *)arg;
+#endif
 
 #if ZB_COORDINATOR_ROLE
 #if 0

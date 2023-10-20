@@ -37,18 +37,24 @@ sys_diagnostics_t g_sysDiags;
  * Routers and end devices to join PAN with this ID
  */
 
-//PDS: changing this had not affect :-(.
-// #define DEFAULT_PANID		MAC_INVALID_PANID
-#define DEFAULT_PANID		0x104f
+/*
+ * PDS: Setting this explcitly seems to stop any joins happening.
+ *      Rebuilding sampleGW and sampleLight to see if now we can join.
+ */
+#define DEFAULT_PANID		MAC_INVALID_PANID
 u16 TL_ZB_ASSOCJOIN_PERMIT_PANID = DEFAULT_PANID;
 
 /*
  * Setting this to a value other than MAC_INVALID_PANID (0xFFFF) causes
  * Routers and end devices to filter the PAN ID when associate join a network
  */
-//PDS
-// #define FILTER_PANID		MAC_INVALID_PANID
-#define FILTER_PANID		0x104f
+
+/*
+ * PDS: Setting this explcitly seems to stop any joins happening.
+ *      Rebuilding sampleGW and sampleLight to see if now we can join.
+ */
+#define FILTER_PANID		MAC_INVALID_PANID
+// #define FILTER_PANID		0x104f
 u16 TL_ZB_ASSOCJOIN_FILTER_PANID = FILTER_PANID;
 
 /* APS data fragmentation setting */

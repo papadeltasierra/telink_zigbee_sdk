@@ -44,14 +44,14 @@ extern "C" {
 #define USB_PRINTF_MODE         		0
 
 /* PM */
-#define PM_ENABLE						1
+#define PM_ENABLE						0
 
 /* PA */
 #define PA_ENABLE						0
 
 /* BDB */
-#define TOUCHLINK_SUPPORT				1
-#define FIND_AND_BIND_SUPPORT			0
+#define TOUCHLINK_SUPPORT				0
+#define FIND_AND_BIND_SUPPORT			1
 
 /* Board ID */
 #define BOARD_826x_EVK					0

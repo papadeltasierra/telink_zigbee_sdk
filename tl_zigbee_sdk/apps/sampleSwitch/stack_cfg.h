@@ -30,7 +30,7 @@
  *  @brief  Working channel
  *          Valid value: 11 ~ 26
  */
-#define DEFAULT_CHANNEL                         11
+#define DEFAULT_CHANNEL                         17
 
 /**
  *  @brief  NVRAM
