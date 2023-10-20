@@ -1,0 +1,32 @@
+# .gitignore files
+
+# Ignore all built libraries (*.a)
+/*.a
+
+# But allow the library files that the SDK itself provides.
+!/tl_zigbee_sdk/platform/chip_b91/lib/libaxon_driver_lib.a
+!/tl_zigbee_sdk/platform/lib/libdrivers_8258.a
+!/tl_zigbee_sdk/platform/lib/libdrivers_826x.a
+!/tl_zigbee_sdk/platform/lib/libdrivers_8278.a
+!/tl_zigbee_sdk/platform/lib/libdrivers_b91.a
+!/tl_zigbee_sdk/platform/riscv/libfirmware_encrypt.a
+!/tl_zigbee_sdk/platform/tc32/libfirmware_encrypt.a
+!/tl_zigbee_sdk/platform/tc32/libsoft-fp.a
+!/tl_zigbee_sdk/zigbee/lib/riscv/libzb_coordinator.a
+!/tl_zigbee_sdk/zigbee/lib/riscv/libzb_ed.a
+!/tl_zigbee_sdk/zigbee/lib/riscv/libzb_router.a
+!/tl_zigbee_sdk/zigbee/lib/tc32/libzb_coordinator.a
+!/tl_zigbee_sdk/zigbee/lib/tc32/libzb_ed.a
+!/tl_zigbee_sdk/zigbee/lib/tc32/libzb_router.a
+
+# Ignore all files built during the build processes.
+/*.o
+/tl_zigbee_sdk/.metadata/
+/tl_zigbee_sdk/build/
+
+# Ignore all Python compiled files
+/*.pyc
+__pycache__/
+
+# Ignore Zigbee Gateway Controller tool logging files
+Tools/ZGC_NEW/zgc_tool_src/userdata/
