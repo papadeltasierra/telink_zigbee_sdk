@@ -12,5 +12,9 @@ The interesting branches will be named:
 |Patch-V3.6.8.5|Patches as identified by [Paul D.Smith]|
 |. . . |. . .|
 
+When Telink release a new version of the SDK, patches will be applied forward and development will continue using that version of the SDK.
+
+> New patches applied to the current version of the Telink SDK will not be back-applied to earlier releases.
+
 [TLSR825x ZigBee SDK]: https://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/#software-development-kit
 [Paul D.Smith]: https://github.com/papadeltasierra
