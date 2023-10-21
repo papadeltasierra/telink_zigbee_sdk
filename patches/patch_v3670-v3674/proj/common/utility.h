@@ -52,7 +52,7 @@
 #define ROUND_INT(x, r)         (((x) + (r) - 1) / (r) * (r))
 #define ROUND_TO_POW2(x, r)     (((x) + (r) - 1) & ~((r) - 1))
 
-//  direct memory access 
+//  direct memory access
 #define U8_GET(addr)			(*(volatile unsigned char  *)(addr))
 #define U16_GET(addr)			(*(volatile unsigned short *)(addr))
 #define U32_GET(addr)			(*(volatile unsigned int  *)(addr))
@@ -82,7 +82,7 @@
 								}while(0)
 
 #define IS_POWER_OF_2(x)		(!(x & (x-1)))
-#define IS_LITTLE_ENDIAN 		(*(unsigned short*)"\0\xff" > 0x100) 
+#define IS_LITTLE_ENDIAN 		(*(unsigned short*)"\0\xff" > 0x100)
 
 #define IMPLIES(x, y) 			(!(x) || (y))
 
@@ -107,6 +107,9 @@
 
 #define HI_UINT16(a) 			(((a) >> 8) & 0xFF)
 #define LO_UINT16(a) 			((a) & 0xFF)
+
+#define U16_BYTE0(a) 			LO_UINT16(a)
+#define U16_BYTE1(a) 			HI_UINT16(a)
 
 #define U24_BYTE0(a) 			((a) & 0xFF)
 #define U24_BYTE1(a) 			(((a) >> 8) & 0xFF)

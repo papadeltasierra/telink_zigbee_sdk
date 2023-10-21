@@ -56,6 +56,13 @@ typedef void (*fn_ptr)(u8*);
 typedef u32  u24;
 typedef s32	 s24;
 
+/*
+ * How we actually store 48 bits internally is irrelevant.  What matters is how
+ * we then encode/decode it to send over the wire.
+ */
+typedef u64  u48;
+typedef s64	 s48;
+
 // Generic Status return
 typedef u8 status_t;
 typedef u32 UTCTime;
@@ -166,7 +173,7 @@ typedef struct {
 // There is no way to directly recognise whether a typedef is defined
 // http://stackoverflow.com/questions/3517174/how-to-check-if-a-datatype-is-defined-with-typedef
 #ifdef __GNUC__
-typedef	u16	wchar_t;		
+typedef	u16	wchar_t;
 #endif
 
 #ifndef WIN32

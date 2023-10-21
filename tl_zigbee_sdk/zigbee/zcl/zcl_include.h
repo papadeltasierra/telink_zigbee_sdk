@@ -71,6 +71,8 @@
 
 /* Smart Energy */
 #include "smart_energy/zcl_metering.h"
+#include "smart_energy/zcl_price.h"
+#include "smart_energy/zcl_prepayment.h"
 
 /* ZCL Commissioning */
 #include "commissioning/zcl_commissioning.h"
