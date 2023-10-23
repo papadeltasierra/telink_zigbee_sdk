@@ -101,6 +101,7 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         # - New tabs can be explicitly added.
         parser = QCommandLineParser()
         parser.setApplicationDescription("Description")
+        parser.addHelpOption()
         groupDisabled = QCommandLineOption(options.NO_GROUP, "Disable Group support")
         parser.addOption(groupDisabled)
         onOffDisabled = QCommandLineOption(options.NO_ONOFF, "Disable OnOff support")
