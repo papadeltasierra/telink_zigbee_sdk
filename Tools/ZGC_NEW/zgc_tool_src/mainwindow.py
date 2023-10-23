@@ -146,7 +146,11 @@ class Ui_MainWindow(object):
         self.tabWidget.setElideMode(QtCore.Qt.ElideNone)
         self.tabWidget.setDocumentMode(False)
         self.tabWidget.setObjectName("tabWidget")
-        # bdb
+
+        # To improve look for CloudSMETS mode, row is a variable.
+        row = 0
+
+        # BDB
         self.bdb = QtWidgets.QWidget()
         self.bdb.setObjectName("bdb")
         self.gridLayout_5 = QtWidgets.QGridLayout(self.bdb)
@@ -174,12 +178,15 @@ class Ui_MainWindow(object):
         self.gridLayout.setContentsMargins(11, 11, 11, 11)
         self.gridLayout.setSpacing(6)
         self.gridLayout.setObjectName("gridLayout")
+
+        # BDB: set channel
         self.horizontalLayout_setChannel = QtWidgets.QHBoxLayout()
         self.horizontalLayout_setChannel.setSpacing(6)
         self.horizontalLayout_setChannel.setObjectName("horizontalLayout_setChannel")
         self.pushButton_BDBsetCh = QtWidgets.QPushButton(self.scrollAreaWidgetContents_5)
         self.pushButton_BDBsetCh.setObjectName("pushButton_BDBsetCh")
         self.horizontalLayout_setChannel.addWidget(self.pushButton_BDBsetCh)
+
         self.comboBox_channelList = QtWidgets.QComboBox(self.scrollAreaWidgetContents_5)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -210,7 +217,10 @@ class Ui_MainWindow(object):
         self.horizontalLayout_setChannel.addWidget(self.comboBox_channelList)
         spacerItem = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_setChannel.addItem(spacerItem)
-        self.gridLayout.addLayout(self.horizontalLayout_setChannel, 0, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_setChannel, row, 0, 1, 1)
+        row = row + 1
+
+        # BDB: start network
         self.horizontalLayout_startNetwork = QtWidgets.QHBoxLayout()
         self.horizontalLayout_startNetwork.setSpacing(6)
         self.horizontalLayout_startNetwork.setObjectName("horizontalLayout_startNetwork")
@@ -219,7 +229,9 @@ class Ui_MainWindow(object):
         self.horizontalLayout_startNetwork.addWidget(self.pushButton_BDBstartNet)
         spacerItem1 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_startNetwork.addItem(spacerItem1)
-        self.gridLayout.addLayout(self.horizontalLayout_startNetwork, 1, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_startNetwork, row, 0, 1, 1)
+        row = row + 1
+
         self.horizontalLayout_factoryReset = QtWidgets.QHBoxLayout()
         self.horizontalLayout_factoryReset.setSpacing(6)
         self.horizontalLayout_factoryReset.setObjectName("horizontalLayout_factoryReset")
@@ -228,13 +240,17 @@ class Ui_MainWindow(object):
         self.horizontalLayout_factoryReset.addWidget(self.pushButton_BDBfactoryRst)
         spacerItem2 = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_factoryReset.addItem(spacerItem2)
-        self.gridLayout.addLayout(self.horizontalLayout_factoryReset, 2, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_factoryReset, row, 0, 1, 1)
+        row = row + 1
+
         self.horizontalLayout_preInstall = QtWidgets.QHBoxLayout()
         self.horizontalLayout_preInstall.setSpacing(6)
         self.horizontalLayout_preInstall.setObjectName("horizontalLayout_preInstall")
+
         self.pushButton_BDBpreinstallCode = QtWidgets.QPushButton(self.scrollAreaWidgetContents_5)
         self.pushButton_BDBpreinstallCode.setObjectName("pushButton_BDBpreinstallCode")
         self.horizontalLayout_preInstall.addWidget(self.pushButton_BDBpreinstallCode)
+
         self.lineEdit_dstAddr = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_5)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -248,18 +264,23 @@ class Ui_MainWindow(object):
         self.lineEdit_dstAddr.setText("")
         self.lineEdit_dstAddr.setObjectName("lineEdit_dstAddr")
         self.horizontalLayout_preInstall.addWidget(self.lineEdit_dstAddr)
+
         self.lineEdit_installcode = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_5)
         self.lineEdit_installcode.setMinimumSize(QtCore.QSize(360, 0))
         self.lineEdit_installcode.setMaximumSize(QtCore.QSize(60, 16777215))
         self.lineEdit_installcode.setText("")
         self.lineEdit_installcode.setObjectName("lineEdit_installcode")
         self.horizontalLayout_preInstall.addWidget(self.lineEdit_installcode)
+
         spacerItem3 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_preInstall.addItem(spacerItem3)
-        self.gridLayout.addLayout(self.horizontalLayout_preInstall, 3, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_preInstall, row, 0, 1, 1)
+        row = row + 1
+
         self.horizontalLayout_setWorkingMode = QtWidgets.QHBoxLayout()
         self.horizontalLayout_setWorkingMode.setSpacing(6)
         self.horizontalLayout_setWorkingMode.setObjectName("horizontalLayout_setWorkingMode")
+
         self.pushButton_BDBdongleMode = QtWidgets.QPushButton(self.scrollAreaWidgetContents_5)
         self.pushButton_BDBdongleMode.setObjectName("pushButton_BDBdongleMode")
         self.horizontalLayout_setWorkingMode.addWidget(self.pushButton_BDBdongleMode)
@@ -271,9 +292,13 @@ class Ui_MainWindow(object):
         self.comboBox_mode.addItem("")
         self.comboBox_mode.addItem("")
         self.horizontalLayout_setWorkingMode.addWidget(self.comboBox_mode)
+
         spacerItem4 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_setWorkingMode.addItem(spacerItem4)
-        self.gridLayout.addLayout(self.horizontalLayout_setWorkingMode, 4, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_setWorkingMode, row, 0, 1, 1)
+        row = row + 1
+
+        # BDB: node delete
         self.horizontalLayout_nodeDelete = QtWidgets.QHBoxLayout()
         self.horizontalLayout_nodeDelete.setSpacing(6)
         self.horizontalLayout_nodeDelete.setObjectName("horizontalLayout_nodeDelete")
@@ -292,10 +317,14 @@ class Ui_MainWindow(object):
         self.lineEdit_macAddr.setInputMask("")
         self.lineEdit_macAddr.setText("")
         self.lineEdit_macAddr.setObjectName("lineEdit_macAddr")
+
         self.horizontalLayout_nodeDelete.addWidget(self.lineEdit_macAddr)
         spacerItem5 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_nodeDelete.addItem(spacerItem5)
-        self.gridLayout.addLayout(self.horizontalLayout_nodeDelete, 5, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_nodeDelete, row, 0, 1, 1)
+        row = row + 1
+
+        # BDB: set TX power
         self.horizontalLayout_setTxPower = QtWidgets.QHBoxLayout()
         self.horizontalLayout_setTxPower.setSpacing(6)
         self.horizontalLayout_setTxPower.setObjectName("horizontalLayout_setTxPower")
@@ -309,7 +338,40 @@ class Ui_MainWindow(object):
         self.horizontalLayout_setTxPower.addWidget(self.lineEdit_TxIndex)
         spacerItem6 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_setTxPower.addItem(spacerItem6)
-        self.gridLayout.addLayout(self.horizontalLayout_setTxPower, 6, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_setTxPower, row, 0, 1, 1)
+        row = row + 1
+
+        # BDB: get/set link key
+        if parser.isSet(options.CLOUDSMETS):
+            self.horizontalLayout_getLinkKey = QtWidgets.QHBoxLayout()
+            self.horizontalLayout_getLinkKey.setSpacing(6)
+            self.horizontalLayout_getLinkKey.setObjectName("horizontalLayout_getLinkKey")
+            self.pushButton_BDBgetLinkKey = QtWidgets.QPushButton(self.scrollAreaWidgetContents_5)
+            self.pushButton_BDBgetLinkKey.setObjectName("pushButton_BDBgetLinkKey")
+            self.horizontalLayout_getLinkKey.addWidget(self.pushButton_BDBgetLinkKey)
+
+            spacerItem8 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+            self.horizontalLayout_getLinkKey.addItem(spacerItem8)
+            self.gridLayout.addLayout(self.horizontalLayout_getLinkKey, row, 0, 1, 1)
+            row = row + 1
+
+            self.horizontalLayout_setLinkKey = QtWidgets.QHBoxLayout()
+            self.horizontalLayout_setLinkKey.setSpacing(6)
+            self.horizontalLayout_setLinkKey.setObjectName("horizontalLayout_getLinkKey")
+            self.pushButton_BDBsetLinkKey = QtWidgets.QPushButton(self.scrollAreaWidgetContents_5)
+            self.pushButton_BDBsetLinkKey.setObjectName("pushButton_BDBsetLinkKey")
+            self.horizontalLayout_setLinkKey.addWidget(self.pushButton_BDBsetLinkKey)
+            self.lineEdit_linkKey = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_5)
+            self.lineEdit_linkKey.setMinimumSize(QtCore.QSize(360, 0))
+            self.lineEdit_linkKey.setMaximumSize(QtCore.QSize(60, 16777215))
+            self.lineEdit_linkKey.setObjectName("link_key")
+            self.horizontalLayout_setLinkKey.addWidget(self.lineEdit_linkKey)
+
+            spacerItem9 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+            self.horizontalLayout_setLinkKey.addItem(spacerItem9)
+            self.gridLayout.addLayout(self.horizontalLayout_setLinkKey, row, 0, 1, 1)
+            row = row + 1
+
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setSpacing(6)
         self.horizontalLayout_7.setObjectName("horizontalLayout_7")
@@ -326,9 +388,11 @@ class Ui_MainWindow(object):
         self.lineEdit_dstEp.setMaximumSize(QtCore.QSize(60, 16777215))
         self.lineEdit_dstEp.setObjectName("lineEdit_dstEp")
         self.horizontalLayout_7.addWidget(self.lineEdit_dstEp)
+
         self.checkBox_autobind = QtWidgets.QCheckBox(self.scrollAreaWidgetContents_5)
         self.checkBox_autobind.setObjectName("checkBox_autobind")
         self.horizontalLayout_7.addWidget(self.checkBox_autobind)
+
         self.label_bindConfigState = QtWidgets.QLabel(self.scrollAreaWidgetContents_5)
         self.label_bindConfigState.setEnabled(True)
         self.label_bindConfigState.setText("")
@@ -337,15 +401,21 @@ class Ui_MainWindow(object):
         self.horizontalLayout_7.addWidget(self.label_bindConfigState)
         spacerItem7 = QtWidgets.QSpacerItem(258, 17, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         self.horizontalLayout_7.addItem(spacerItem7)
-        self.gridLayout.addLayout(self.horizontalLayout_7, 7, 0, 1, 1)
+        self.gridLayout.addLayout(self.horizontalLayout_7, row, 0, 1, 1)
+        row = row + 1
+
         self.label_bindFailList = QtWidgets.QLabel(self.scrollAreaWidgetContents_5)
         self.label_bindFailList.setText("")
         self.label_bindFailList.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignTop)
         self.label_bindFailList.setObjectName("label_bindFailList")
-        self.gridLayout.addWidget(self.label_bindFailList, 8, 0, 1, 1)
+        self.gridLayout.addWidget(self.label_bindFailList, row, 0, 1, 1)
+        row = row + 1
+
         self.scrollArea_bdb.setWidget(self.scrollAreaWidgetContents_5)
         self.gridLayout_5.addWidget(self.scrollArea_bdb, 0, 0, 1, 1)
+
         self.tabWidget.addTab(self.bdb, "")
+
         # nodeMGMT
         self.nodesMgmt = QtWidgets.QWidget()
         self.nodesMgmt.setObjectName("nodesMgmt")
@@ -1511,7 +1581,7 @@ class Ui_MainWindow(object):
         self.gridLayout_3.addWidget(self.scrollArea_general, 0, 0, 1, 1)
         self.tabWidget.addTab(self.general, "")
 
-        if not parser.isSet(options.NO_GROUP):
+        if not parser.isSet(options.NO_GROUP) and not parser.isSet(options.CLOUDSMETS):
             # group
             self.tab_group = QtWidgets.QWidget()
             self.tab_group.setObjectName("tab_group")
@@ -1851,7 +1921,7 @@ class Ui_MainWindow(object):
             self.gridLayout_10.addWidget(self.scrollArea_group, 0, 0, 1, 1)
             self.tabWidget.addTab(self.tab_group, "")
 
-        if not parser.isSet(options.NO_ONOFF):
+        if not parser.isSet(options.NO_ONOFF) and not parser.isSet(options.CLOUDSMETS):
             # OnOff
             self.on_off = QtWidgets.QWidget()
             self.on_off.setObjectName("on_off")
@@ -1937,7 +2007,7 @@ class Ui_MainWindow(object):
             self.gridLayout_13.addWidget(self.scrollArea_5, 0, 0, 1, 1)
             self.tabWidget.addTab(self.on_off, "")
 
-        if not parser.isSet(options.NO_LEVEL):
+        if not parser.isSet(options.NO_LEVEL) and not parser.isSet(options.CLOUDSMETS):
             # level
             self.level = QtWidgets.QWidget()
             self.level.setObjectName("level")
@@ -2217,7 +2287,7 @@ class Ui_MainWindow(object):
             self.gridLayout_15.addWidget(self.scrollArea_6, 0, 0, 1, 1)
             self.tabWidget.addTab(self.level, "")
 
-        if not parser.isSet(options.NO_COLOR):
+        if not parser.isSet(options.NO_COLOR) and not parser.isSet(options.CLOUDSMETS):
             # color
             self.color = QtWidgets.QWidget()
             self.color.setObjectName("color")
@@ -2624,7 +2694,7 @@ class Ui_MainWindow(object):
         self.gridLayout_19.addWidget(self.scrollArea_8, 0, 0, 1, 1)
         self.tabWidget.addTab(self.identify, "")
 
-        if not parser.isSet(options.NO_SCENE):
+        if not parser.isSet(options.NO_SCENE) and not parser.isSet(options.CLOUDSMETS):
             # scene
             self.scene = QtWidgets.QWidget()
             self.scene.setObjectName("scene")
@@ -3084,7 +3154,7 @@ class Ui_MainWindow(object):
             self.gridLayout_21.addWidget(self.scrollArea_9, 0, 0, 1, 1)
             self.tabWidget.addTab(self.scene, "")
 
-        if not parser.isSet(options.NO_HCI_OTA):
+        if not parser.isSet(options.NO_OTA) and not parser.isSet(options.CLOUDSMETS):
             self.ota = QtWidgets.QWidget()
             self.ota.setObjectName("ota")
             self.gridLayout_22 = QtWidgets.QGridLayout(self.ota)
@@ -3164,7 +3234,7 @@ class Ui_MainWindow(object):
             self.gridLayout_22.addLayout(self.verticalLayout_4, 0, 0, 1, 1)
             self.tabWidget.addTab(self.ota, "")
 
-        if not parser.isSet(options.NO_AF):
+        if not parser.isSet(options.NO_AF) and not parser.isSet(options.CLOUDSMETS):
             # AF
             self.AF = QtWidgets.QWidget()
             self.AF.setObjectName("AF")
@@ -3323,7 +3393,7 @@ class Ui_MainWindow(object):
             self.gridLayout_23.addWidget(self.scrollArea_10, 0, 0, 1, 1)
             self.tabWidget.addTab(self.AF, "")
 
-        if not parser.isSet(options.NO_HCI_OTA):
+        if not parser.isSet(options.NO_HCI_OTA) and not parser.isSet(options.CLOUDSMETS):
             # HCI OTA
             self.hciOta = QtWidgets.QWidget()
             self.hciOta.setObjectName("hciOta")
@@ -3360,7 +3430,7 @@ class Ui_MainWindow(object):
             self.gridLayout_24.addItem(spacerItem71, 2, 0, 1, 1)
             self.tabWidget.addTab(self.hciOta, "")
 
-        if not parser.isSet(options.NO_ANALYZE):
+        if not parser.isSet(options.NO_ANALYZE) and not parser.isSet(options.CLOUDSMETS):
             # analyze
             self.analyze = QtWidgets.QWidget()
             self.analyze.setObjectName("analyze")
@@ -3533,7 +3603,7 @@ class Ui_MainWindow(object):
         self.comboBox_resetDstMode.setCurrentIndex(2)
         self.comboBox_configReportDstMode.setCurrentIndex(2)
 
-        if not parser.isSet(options.NO_GROUP):
+        if not parser.isSet(options.NO_GROUP) and not parser.isSet(options.CLOUDSMETS):
             self.comboBox_addGroupDstmode.setCurrentIndex(2)
             self.comboBox_rmGroupDstMode.setCurrentIndex(2)
             self.comboBox_getGroupDstMode.setCurrentIndex(2)
@@ -3541,11 +3611,11 @@ class Ui_MainWindow(object):
             self.comboBox_addIdenDstMode.setCurrentIndex(2)
             self.comboBox_removeAllDstMode.setCurrentIndex(2)
 
-        if not parser.isSet(options.NO_ONOFF):
+        if not parser.isSet(options.NO_ONOFF) and not parser.isSet(options.CLOUDSMETS):
             self.comboBox_onoffDstMode.setCurrentIndex(2)
 
 
-        if not parser.isSet(options.NO_LEVEL):
+        if not parser.isSet(options.NO_LEVEL) and not parser.isSet(options.CLOUDSMETS):
             self.comboBox_toLevelDstMode.setCurrentIndex(2)
             self.comboBox_stopDstMode.setCurrentIndex(2)
             self.comboBox_moveDstMode.setCurrentIndex(2)
@@ -3557,7 +3627,7 @@ class Ui_MainWindow(object):
             self.comboBox_identifyQueryDstMode.setCurrentIndex(2)
             self.comboBox_identifyDstMode.setCurrentIndex(2)
 
-        if not parser.isSet(options.NO_SCENE):
+        if not parser.isSet(options.NO_SCENE) and not parser.isSet(options.CLOUDSMETS):
             self.comboBox_addSceneDstMode.setCurrentIndex(2)
             self.comboBox_storeSceneDstMode.setCurrentIndex(2)
             self.comboBox_viewSceneDstMode.setCurrentIndex(2)
@@ -3566,7 +3636,7 @@ class Ui_MainWindow(object):
             self.comboBox_removeSceneDstMode.setCurrentIndex(2)
             self.comboBox_getSceneDstMode.setCurrentIndex(2)
 
-        if not parser.isSet(options.NO_HCI_OTA):
+        if not parser.isSet(options.NO_OTA) and not parser.isSet(options.CLOUDSMETS):
             self.comboBox_otaDstMode.setCurrentIndex(2)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -3639,6 +3709,12 @@ class Ui_MainWindow(object):
         self.lineEdit_clusterId.setPlaceholderText(_translate("MainWindow", "clusterID"))
         self.lineEdit_dstEp.setPlaceholderText(_translate("MainWindow", "dstEp"))
         self.checkBox_autobind.setText(_translate("MainWindow", "auto bind when recv devannce"))
+
+        if parser.isSet(options.CLOUDSMETS):
+            self.pushButton_BDBgetLinkKey.setText(_translate("MainWindow", "get link key"))
+            self.pushButton_BDBsetLinkKey.setText(_translate("MainWindow", "set link key"))
+            self.lineEdit_linkKey.setPlaceholderText(_translate("MainWindow", "link key"))
+
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.bdb), _translate("MainWindow", "BDB"))
         self.pushButton_getJoinedNodes.setText(_translate("MainWindow", "get joined nodes"))
         self.pushButton_on.setText(_translate("MainWindow", "on"))
@@ -3918,7 +3994,7 @@ class Ui_MainWindow(object):
         self.lineEdit_configReportTimeOut.setPlaceholderText(_translate("MainWindow", "timeout period"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.general), _translate("MainWindow", "general"))
 
-        if not parser.isSet(options.NO_GROUP):
+        if not parser.isSet(options.NO_GROUP) and not parser.isSet(options.CLOUDSMETS):
             self.pushButton_addGroup.setText(_translate("MainWindow", "add group"))
             self.comboBox_addGroupDstmode.setCurrentText(_translate("MainWindow", "short"))
             self.comboBox_addGroupDstmode.setItemText(0, _translate("MainWindow", "bound"))
@@ -4006,7 +4082,7 @@ class Ui_MainWindow(object):
             self.lineEdit_removeAllDstEp.setPlaceholderText(_translate("MainWindow", "DstEp"))
             self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_group), _translate("MainWindow", "group"))
 
-        if not parser.isSet(options.NO_ONOFF):
+        if not parser.isSet(options.NO_ONOFF) and not parser.isSet(options.CLOUDSMETS):
             self.pushButton_onOff.setText(_translate("MainWindow", "onOff"))
             self.comboBox_onoffDstMode.setCurrentText(_translate("MainWindow", "short"))
             self.comboBox_onoffDstMode.setItemText(0, _translate("MainWindow", "bound"))
@@ -4025,7 +4101,7 @@ class Ui_MainWindow(object):
             self.comboBox_onOff.setItemText(2, _translate("MainWindow", "toggle"))
             self.tabWidget.setTabText(self.tabWidget.indexOf(self.on_off), _translate("MainWindow", "onOff"))
 
-        if not parser.isSet(options.NO_LEVEL):
+        if not parser.isSet(options.NO_LEVEL) and not parser.isSet(options.CLOUDSMETS):
             self.pushButton_moveToLevel.setText(_translate("MainWindow", "move to level"))
             self.comboBox_toLevelDstMode.setCurrentText(_translate("MainWindow", "short"))
             self.comboBox_toLevelDstMode.setItemText(0, _translate("MainWindow", "bound"))
@@ -4183,7 +4259,7 @@ class Ui_MainWindow(object):
         self.lineEdit_identifyTime.setPlaceholderText(_translate("MainWindow", "time(u16 s)"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.identify), _translate("MainWindow", "identify"))
 
-        if not parser.isSet(options.NO_SCENE):
+        if not parser.isSet(options.NO_SCENE) and not parser.isSet(options.CLOUDSMETS):
             self.pushButton_addScene.setText(_translate("MainWindow", "add scene"))
             self.comboBox_addSceneDstMode.setItemText(0, _translate("MainWindow", "bound"))
             self.comboBox_addSceneDstMode.setItemText(1, _translate("MainWindow", "group"))
@@ -4287,7 +4363,7 @@ class Ui_MainWindow(object):
             self.lineEdit_getSceneGroupId.setPlaceholderText(_translate("MainWindow", "groupID"))
             self.tabWidget.setTabText(self.tabWidget.indexOf(self.scene), _translate("MainWindow", "scene"))
 
-        if not parser.isSet(options.NO_HCI_OTA):
+        if not parser.isSet(options.NO_OTA) and not parser.isSet(options.CLOUDSMETS):
             self.pushButton_imageNotify.setText(_translate("MainWindow", "image notify"))
             self.comboBox_otaDstMode.setCurrentText(_translate("MainWindow", "short"))
             self.comboBox_otaDstMode.setItemText(0, _translate("MainWindow", "bound"))
@@ -4308,7 +4384,7 @@ class Ui_MainWindow(object):
             self.lineEdit_jitter.setPlaceholderText(_translate("MainWindow", "QueryJitter"))
             self.tabWidget.setTabText(self.tabWidget.indexOf(self.ota), _translate("MainWindow", "OTA"))
 
-        if not parser.isSet(options.NO_AF):
+        if not parser.isSet(options.NO_AF) and not parser.isSet(options.CLOUDSMETS):
             self.label_afTestNotes.setText(_translate("MainWindow", "Notes: The unicast addr defaults to short addr."))
             self.pushButton_txrxTest.setText(_translate("MainWindow", "txrx test"))
             self.lineEdit_txrxTestDstAddr.setPlaceholderText(_translate("MainWindow", "DstAddr:broadcast or unicast"))
@@ -4329,14 +4405,14 @@ class Ui_MainWindow(object):
             self.lineEdit_toggleInterval.setPlaceholderText(_translate("MainWindow", "interval, set the interval to 0 to stop, unit: 1/100s."))
             self.tabWidget.setTabText(self.tabWidget.indexOf(self.AF), _translate("MainWindow", "AF"))
 
-        if not parser.isSet(options.NO_HCI_OTA):
+        if not parser.isSet(options.NO_HCI_OTA) and not parser.isSet(options.CLOUDSMETS):
             self.pushButton_hciOtaFileChoose.setText(_translate("MainWindow", "OTA file path"))
             self.lineEdit_hciOtaFilePath.setPlaceholderText(_translate("MainWindow", "HCI OTA file path"))
             self.pushButton_hciOtaStart.setText(_translate("MainWindow", "Start OTA"))
             self.label_hciotaPercent.setText(_translate("MainWindow", "OTA Progress Bar"))
             self.tabWidget.setTabText(self.tabWidget.indexOf(self.hciOta), _translate("MainWindow", "HCI OTA"))
 
-        if not parser.isSet(options.NO_ANALYZE):
+        if not parser.isSet(options.NO_ANALYZE) and not parser.isSet(options.CLOUDSMETS):
             self.pushButton_startAnalyze.setText(_translate("MainWindow", "Start Analyze"))
             self.label_analyzeAddr.setText(_translate("MainWindow", "Address:"))
             self.lineEdit_analyzeAddr.setPlaceholderText(_translate("MainWindow", "dev_addr"))

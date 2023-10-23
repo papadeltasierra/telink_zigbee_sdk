@@ -112,12 +112,16 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         parser.addOption(colorDisabled)
         sceneDisabled = QCommandLineOption(options.NO_SCENE, "Disable Scene support")
         parser.addOption(sceneDisabled)
+        otaDisabled = QCommandLineOption(options.NO_OTA, "Disable OTA support")
+        parser.addOption(otaDisabled)
         afDisabled = QCommandLineOption(options.NO_AF, "Disable AF support")
         parser.addOption(afDisabled)
-        hciOTADisabled = QCommandLineOption(options.NO_HCI_OTA, "Disable HCI OTA support")
-        parser.addOption(hciOTADisabled)
+        hciOtaDisabled = QCommandLineOption(options.NO_HCI_OTA, "Disable HCI OTA support")
+        parser.addOption(hciOtaDisabled)
         analysisDisabled = QCommandLineOption(options.NO_ANALYZE, "Disable Network Analysis support")
         parser.addOption(analysisDisabled)
+        cloudSmetsEnabled = QCommandLineOption(options.CLOUDSMETS, "Run in CloudSMETS mode (implicity sets all 'no-...' options)")
+        parser.addOption(cloudSmetsEnabled)
         parser.process(app)
 
         self.setupUi(self, parser)  # 初始化UI到主窗口，主要是建立代码到UI之间的signal和slot
@@ -142,39 +146,38 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def init(self, parser):
         self.serial_init()
-        self.bdb_init()
+        self.bdb_init(parser)
         self.nodes_mgmt_init()
         self.mgmt_init()
         self.zcl_general_init()
 
-        if not parser.isSet(options.NO_GROUP):
+        if not parser.isSet(options.NO_GROUP) and not parser.isSet(options.CLOUDSMETS):
             self.zcl_group_init()
 
-        if not parser.isSet(options.NO_ONOFF):
+        if not parser.isSet(options.NO_ONOFF) and not parser.isSet(options.CLOUDSMETS):
             self.zcl_onoff_init()
 
-        if not parser.isSet(options.NO_LEVEL):
+        if not parser.isSet(options.NO_LEVEL) and not parser.isSet(options.CLOUDSMETS):
             self.zcl_level_init()
 
-        if not parser.isSet(options.NO_COLOR):
+        if not parser.isSet(options.NO_COLOR) and not parser.isSet(options.CLOUDSMETS):
             self.zcl_color_init()
 
         self.zcl_identify_init()
 
-        if not parser.isSet(options.NO_SCENE):
+        if not parser.isSet(options.NO_SCENE) and not parser.isSet(options.CLOUDSMETS):
             self.zcl_scene_init()
 
-        # PDS: Is this the same????
-        if not parser.isSet(options.NO_HCI_OTA):
+        if not parser.isSet(options.NO_OTA) and not parser.isSet(options.CLOUDSMETS):
             self.ota_init()
 
-        if not parser.isSet(options.NO_AF):
+        if not parser.isSet(options.NO_AF) and not parser.isSet(options.CLOUDSMETS):
             self.af_test_init()
 
-        if not parser.isSet(options.NO_HCI_OTA):
+        if not parser.isSet(options.NO_HCI_OTA) and not parser.isSet(options.CLOUDSMETS):
             self.hci_ota_init()
 
-        if not parser.isSet(options.NO_ANALYZE):
+        if not parser.isSet(options.NO_ANALYZE) and not parser.isSet(options.CLOUDSMETS):
             self.command_analyze_init()
 
     def serial_init(self):
@@ -572,7 +575,7 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
                         percent = 100
                     self.progressBar_hciOta.setValue(percent)
 
-    def bdb_init(self):
+    def bdb_init(self, parser):
         self.pushButton_BDBsetCh.clicked.connect(self.set_working_channel)
         self.pushButton_BDBstartNet.clicked.connect(self.start_network)
         self.pushButton_BDBfactoryRst.clicked.connect(self.factory_reset)
@@ -580,6 +583,9 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_BDBdongleMode.clicked.connect(self.working_mode_set)
         self.pushButton_BDBnodeDelete.clicked.connect(self.node_delete)
         self.pushButton_BDBsetTXPower.clicked.connect(self.set_tx_power)
+        if parser.isSet(options.CLOUDSMETS):
+            self.pushButton_BDBgetLinkKey.clicked.connect(self.get_link_key)
+            self.pushButton_BDBsetLinkKey.clicked.connect(self.set_link_key)
 
     def set_working_channel(self):
         channel = int(self.comboBox_channelList.currentText())
@@ -626,6 +632,15 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         tx_power = line_edit_str2int(1, tx_power_s)
         payload = struct.pack("!%dB" % len(tx_power), *tx_power)
         self.send_hci_command(0x000a, len(payload), payload)
+
+    def get_link_key(self):
+        self.send_hci_command(0x4001, 0, None)
+
+    def set_link_key(self):
+        link_key_s = self.lineEdit_linkKey.text()
+        link_key = line_edit_str2int(16, link_key_s)
+        payload = struct.pack("!%dB" % len(link_key), *link_key)
+        self.send_hci_command(0x4002, len(payload), payload)
 
     def nodes_mgmt_init(self):
         self.pushButton_getJoinedNodes.clicked.connect(self.get_joined_nodes)
