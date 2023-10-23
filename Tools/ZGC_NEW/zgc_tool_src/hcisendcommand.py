@@ -1,11 +1,12 @@
 import struct
 import os
+import sys
 import copy
 import serial
 import serial.tools.list_ports
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
-from PyQt5.QtCore import QTimer, QThread, pyqtSignal
+from PyQt5.QtCore import QTimer, QThread, pyqtSignal, QCommandLineParser, QCommandLineOption
 from mainwindow import Ui_MainWindow
 
 from datetime import datetime
@@ -14,6 +15,7 @@ from txtFiles import TxtFiles
 from settings import Settings
 from ringbuffer import RingBuffer
 from hcicommandparse import parse_packet_detail_show, SetAutoBindPara, hci_mgmt_bind_req_send, hci_bind_req_send
+import options
 
 
 def crc8_calculate(datatype, length, data):
@@ -90,9 +92,34 @@ def line_edit_str2hex_result(input_s):
 
 
 class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
-    def __init__(self):
+    def __init__(self, app):
         super(Pyqt5Serial, self).__init__()
-        self.setupUi(self)  # 初始化UI到主窗口，主要是建立代码到UI之间的signal和slot
+
+        # Parse arguments here and remove/add tabs that we don't/do want.
+        # The manner in which this done is:
+        # - Tabs in the orignal code are defaulted present until removed
+        # - New tabs can be explicitly added.
+        parser = QCommandLineParser()
+        parser.setApplicationDescription("Description")
+        groupDisabled = QCommandLineOption(options.NO_GROUP, "Disable Group support")
+        parser.addOption(groupDisabled)
+        onOffDisabled = QCommandLineOption(options.NO_ONOFF, "Disable OnOff support")
+        parser.addOption(onOffDisabled)
+        levelDisabled = QCommandLineOption(options.NO_LEVEL, "Disable Level support")
+        parser.addOption(levelDisabled)
+        colorDisabled = QCommandLineOption(options.NO_COLOR, "Disable Color support")
+        parser.addOption(colorDisabled)
+        sceneDisabled = QCommandLineOption(options.NO_SCENE, "Disable Scene support")
+        parser.addOption(sceneDisabled)
+        afDisabled = QCommandLineOption(options.NO_AF, "Disable AF support")
+        parser.addOption(afDisabled)
+        hciOTADisabled = QCommandLineOption(options.NO_HCI_OTA, "Disable HCI OTA support")
+        parser.addOption(hciOTADisabled)
+        analysisDisabled = QCommandLineOption(options.NO_ANALYZE, "Disable Network Analysis support")
+        parser.addOption(analysisDisabled)
+        parser.process(app)
+
+        self.setupUi(self, parser)  # 初始化UI到主窗口，主要是建立代码到UI之间的signal和slot
         self.setWindowTitle("ZGC TOOL")
         self.ser = serial.Serial()
         self.portisopen = 0
@@ -110,24 +137,44 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         self.recv_interval = 5
         self.recv_interval_pre = 5
         self.clearRecvFlag = 0
-        self.init()
+        self.init(parser)
 
-    def init(self):
+    def init(self, parser):
         self.serial_init()
         self.bdb_init()
         self.nodes_mgmt_init()
         self.mgmt_init()
         self.zcl_general_init()
-        self.zcl_group_init()
-        self.zcl_onoff_init()
-        self.zcl_level_init()
-        self.zcl_color_init()
+
+        if not parser.isSet(options.NO_GROUP):
+            self.zcl_group_init()
+
+        if not parser.isSet(options.NO_ONOFF):
+            self.zcl_onoff_init()
+
+        if not parser.isSet(options.NO_LEVEL):
+            self.zcl_level_init()
+
+        if not parser.isSet(options.NO_COLOR):
+            self.zcl_color_init()
+
         self.zcl_identify_init()
-        self.zcl_scene_init()
-        self.ota_init()
-        self.af_test_init()
-        self.hci_ota_init()
-        self.command_analyze_init()
+
+        if not parser.isSet(options.NO_SCENE):
+            self.zcl_scene_init()
+
+        # PDS: Is this the same????
+        if not parser.isSet(options.NO_HCI_OTA):
+            self.ota_init()
+
+        if not parser.isSet(options.NO_AF):
+            self.af_test_init()
+
+        if not parser.isSet(options.NO_HCI_OTA):
+            self.hci_ota_init()
+
+        if not parser.isSet(options.NO_ANALYZE):
+            self.command_analyze_init()
 
     def serial_init(self):
         self.port_detect()
@@ -397,7 +444,7 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.get_joined_list[node] == 0xfffe:
                 find_to_search = True
                 payload = struct.pack("!H", 0xffff)
-                # payload += struct.pack("!%dB" % len(node), *node)
+                # payload += struct.pack("!%dB" % len(options.NOde), *node)
                 payload += struct.pack("!Q", node)
                 payload += struct.pack("!B", 0)
                 payload += struct.pack("!B", 0)
@@ -411,7 +458,7 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
             for node in self.CsvFiles.joined_nodes_info:
                 index += 1
                 if node in self.CsvFiles.nodes_info:
-                    self.getJoindNodeListWidget.addItem('%04d:' % index + '  ' + hex(node) +
+                    self.getJoindNodeListWidget.addItem('%04d:' % index + '  ' + hex(options.NOde) +
                                                         ' (0x%04x)' % self.CsvFiles.nodes_info[node]['nwk_addr'])
             self.CsvFiles.joined_nodes_info = {}
             self.getNwkAddrTimer.stop()
@@ -498,7 +545,7 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
                             # print("self.CsvFiles.joined_nodes_info:" + str(len(self.CsvFiles.joined_nodes_info)))
                             for node in self.CsvFiles.joined_nodes_info:
                                 index += 1
-                                self.getJoindNodeListWidget.addItem('%04d:' % index + '  ' + hex(node) +
+                                self.getJoindNodeListWidget.addItem('%04d:' % index + '  ' + hex(options.NOde) +
                                                                     ' (0x%04x)' % self.CsvFiles.joined_nodes_info[node])
                                 if self.CsvFiles.joined_nodes_info[node] == 0xfffe:
                                     has_no_nwkaddr = True
