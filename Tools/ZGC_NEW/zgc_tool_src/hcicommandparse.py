@@ -1,5 +1,5 @@
 import struct
-
+from datetime import datetime
 # import os
 
 send_list = {}
@@ -1384,6 +1384,10 @@ class ParseSendCommand:
                 self.hci_ota_start_req_parse(payload)
             elif command_id == 0x0211:  # 'ZBHCI_CMD_OTA_BLOCK_RESPONSE',
                 self.hci_ota_block_response_parse(ai_setting, payload)
+            elif command_id == 0x0211:  # 'ZBHCI_CMD_OTA_BLOCK_RESPONSE',
+                self.hci_ota_block_response_parse(ai_setting, payload)
+            elif command_id == 0x0711:  # 'ZBHCI_CMD_ZCL_PRICE_PUBLISH_PRICE',
+                self.hci_price_publish_price_parse(ai_setting, payload)
             else:
                 self.parse_items.append('command not support!')
                 self.description = 'command not support!'
@@ -2129,6 +2133,69 @@ class ParseSendCommand:
             self.parse_items.append('\tsend_offset:' + hex(send_offset))
             self.parse_items.append('\tblock_len:' + hex(block_len))
             self.description += ' send_offset:' + hex(send_offset) + ' block_len:' + hex(block_len)
+
+    def hci_price_publish_price_parse(self, payload):
+        bytes_data = bytearray(payload)
+
+        # Potentially we could interpret the enumerations but we won't for now.
+        (providerId, rateLabel, issuerEventId,
+            currentTime, unitsOfMeasure, currency, priceTrailingDigitAndPriceTier,
+            numPriceTiersAndRegisterTier, startTime, durationInMins, price,
+            priceRatio, generationPrice, generationpriceRatio,
+            alternateCostDelivered, alternateCostUnit, alternateCostTrailingDigit,
+            numBlockThresholds, priceControl, numGenerationTiers, generationTier,
+            extendedNumPriceTiers, extendedPriceTiers,
+            extendedRegisterTier) = struct.unpack("!LB12sLLBHBBLHLBLBL9B", bytes_data)
+
+        self.description += ' providerId: ' + hex(providerId)
+        self.description += ' rateLabel: ' + str(rateLabel)
+        self.description += ' issuerEventId: ' + hex(issuerEventId)
+        self.description += ' currentTime: ' + datetime.utcfromtimestamp(int(currentTime)).strftime('%Y-%m-%d %H:%M:%S')
+        self.description += ' unitsOfMeasure: ' + hex(unitsOfMeasure)
+        self.description += ' currency: ' + hex(currency)
+        self.description += ' priceTrailingDigitAndPriceTier: ' + hex(priceTrailingDigitAndPriceTier)
+        self.description += ' numPriceTiersAndRegisterTier: ' + hex(numPriceTiersAndRegisterTier)
+        self.description += ' startTime: ' + datetime.utcfromtimestamp(int(startTime)).strftime('%Y-%m-%d %H:%M:%S')
+        self.description += ' durationInMins: ' + hex(durationInMins)
+        self.description += ' price: ' + str(price)
+        self.description += ' priceRatio: ' + str(priceRatio)
+        self.description += ' generationPrice: ' + hex(generationPrice)
+        self.description += ' generationpriceRatio: ' + hex(generationpriceRatio)
+        self.description += ' alternateCostDelivered: ' + hex(alternateCostDelivered)
+        self.description += ' alternateCostUnit: ' + hex(alternateCostUnit)
+        self.description += ' alternateCostTrailingDigit: ' + hex(alternateCostTrailingDigit)
+        self.description += ' numBlockThresholds: ' + str(numBlockThresholds)
+        self.description += ' priceControl: ' + hex(priceControl)
+        self.description += ' numGenerationTiers: ' + str(numGenerationTiers)
+        self.description += ' generationTier: ' + str(generationTier)
+        self.description += ' extendedNumPriceTiers: ' + str(extendedNumPriceTiers)
+        self.description += ' extendedPriceTiers: ' + str(extendedPriceTiers)
+        self.description += ' extendedRegisterTier: ' + str(extendedRegisterTier)
+
+        self.parse_items.append('\tproviderId: ' + hex(providerId))
+        self.parse_items.append('\trateLabel: ' + str(rateLabel))
+        self.parse_items.append('\tissuerEventId: ' + hex(issuerEventId))
+        self.parse_items.append('\tcurrentTime: ' + datetime.utcfromtimestamp(int(currentTime)).strftime('%Y-%m-%d %H:%M:%S'))
+        self.parse_items.append('\tunitsOfMeasure: ' + hex(unitsOfMeasure))
+        self.parse_items.append('\tcurrency: ' + hex(currency))
+        self.parse_items.append('\tpriceTrailingDigitAndPriceTier: ' + hex(priceTrailingDigitAndPriceTier))
+        self.parse_items.append('\tnumPriceTiersAndRegisterTier: ' + hex(numPriceTiersAndRegisterTier))
+        self.parse_items.append('\tstartTime: ' + datetime.utcfromtimestamp(int(startTime)).strftime('%Y-%m-%d %H:%M:%S'))
+        self.parse_items.append('\tdurationInMins: ' + hex(durationInMins))
+        self.parse_items.append('\tprice: ' + str(price))
+        self.parse_items.append('\tpriceRatio: ' + str(priceRatio))
+        self.parse_items.append('\tgenerationPrice: ' + hex(generationPrice))
+        self.parse_items.append('\tgenerationpriceRatio: ' + hex(generationpriceRatio))
+        self.parse_items.append('\talternateCostDelivered: ' + hex(alternateCostDelivered))
+        self.parse_items.append('\talternateCostUnit: ' + hex(alternateCostUnit))
+        self.parse_items.append('\talternateCostTrailingDigit: ' + hex(alternateCostTrailingDigit))
+        self.parse_items.append('\tnumBlockThresholds: ' + str(numBlockThresholds))
+        self.parse_items.append('\tpriceControl: ' + hex(priceControl))
+        self.parse_items.append('\tnumGenerationTiers: ' + str(numGenerationTiers))
+        self.parse_items.append('\tgenerationTier: ' + str(generationTier))
+        self.parse_items.append('\textendedNumPriceTiers: ' + str(extendedNumPriceTiers))
+        self.parse_items.append('\textendedPriceTiers: ' + str(extendedPriceTiers))
+        self.parse_items.append('\textendedRegisterTier: ' + str(extendedRegisterTier))
 
 
 def crc8_calculate(datatype, length, data):

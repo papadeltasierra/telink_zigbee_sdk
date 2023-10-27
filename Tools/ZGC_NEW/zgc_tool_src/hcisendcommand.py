@@ -6,7 +6,7 @@ import serial
 import serial.tools.list_ports
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox, QFileDialog
-from PyQt5.QtCore import QTimer, QThread, pyqtSignal, QCommandLineParser, QCommandLineOption
+from PyQt5.QtCore import QTimer, QThread, pyqtSignal
 from mainwindow import Ui_MainWindow
 
 from datetime import datetime
@@ -15,7 +15,7 @@ from txtFiles import TxtFiles
 from settings import Settings
 from ringbuffer import RingBuffer
 from hcicommandparse import parse_packet_detail_show, SetAutoBindPara, hci_mgmt_bind_req_send, hci_bind_req_send
-import options
+from options import ZgcOptions
 
 
 def crc8_calculate(datatype, length, data):
@@ -99,32 +99,9 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         # The manner in which this done is:
         # - Tabs in the orignal code are defaulted present until removed
         # - New tabs can be explicitly added.
-        parser = QCommandLineParser()
-        parser.setApplicationDescription("Description")
-        parser.addHelpOption()
-        groupDisabled = QCommandLineOption(options.NO_GROUP, "Disable Group support")
-        parser.addOption(groupDisabled)
-        onOffDisabled = QCommandLineOption(options.NO_ONOFF, "Disable OnOff support")
-        parser.addOption(onOffDisabled)
-        levelDisabled = QCommandLineOption(options.NO_LEVEL, "Disable Level support")
-        parser.addOption(levelDisabled)
-        colorDisabled = QCommandLineOption(options.NO_COLOR, "Disable Color support")
-        parser.addOption(colorDisabled)
-        sceneDisabled = QCommandLineOption(options.NO_SCENE, "Disable Scene support")
-        parser.addOption(sceneDisabled)
-        otaDisabled = QCommandLineOption(options.NO_OTA, "Disable OTA support")
-        parser.addOption(otaDisabled)
-        afDisabled = QCommandLineOption(options.NO_AF, "Disable AF support")
-        parser.addOption(afDisabled)
-        hciOtaDisabled = QCommandLineOption(options.NO_HCI_OTA, "Disable HCI OTA support")
-        parser.addOption(hciOtaDisabled)
-        analysisDisabled = QCommandLineOption(options.NO_ANALYZE, "Disable Network Analysis support")
-        parser.addOption(analysisDisabled)
-        cloudSmetsEnabled = QCommandLineOption(options.CLOUDSMETS, "Run in CloudSMETS mode (implicity sets all 'no-...' options)")
-        parser.addOption(cloudSmetsEnabled)
-        parser.process(app)
+        options = ZgcOptions(app)
 
-        self.setupUi(self, parser)  # 初始化UI到主窗口，主要是建立代码到UI之间的signal和slot
+        self.setupUi(self, options)  # 初始化UI到主窗口，主要是建立代码到UI之间的signal和slot
         self.setWindowTitle("ZGC TOOL")
         self.ser = serial.Serial()
         self.portisopen = 0
@@ -142,43 +119,47 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         self.recv_interval = 5
         self.recv_interval_pre = 5
         self.clearRecvFlag = 0
-        self.init(parser)
+        self.init(options)
 
-    def init(self, parser):
+    def init(self, options):
         self.serial_init()
-        self.bdb_init(parser)
+        self.bdb_init(options)
         self.nodes_mgmt_init()
         self.mgmt_init()
         self.zcl_general_init()
 
-        if not parser.isSet(options.NO_GROUP) and not parser.isSet(options.CLOUDSMETS):
+        if options.group:
             self.zcl_group_init()
 
-        if not parser.isSet(options.NO_ONOFF) and not parser.isSet(options.CLOUDSMETS):
+        if options.onoff:
             self.zcl_onoff_init()
 
-        if not parser.isSet(options.NO_LEVEL) and not parser.isSet(options.CLOUDSMETS):
+        if options.level:
             self.zcl_level_init()
 
-        if not parser.isSet(options.NO_COLOR) and not parser.isSet(options.CLOUDSMETS):
+        if options.color:
             self.zcl_color_init()
 
         self.zcl_identify_init()
 
-        if not parser.isSet(options.NO_SCENE) and not parser.isSet(options.CLOUDSMETS):
+        if options.scene:
             self.zcl_scene_init()
 
-        if not parser.isSet(options.NO_OTA) and not parser.isSet(options.CLOUDSMETS):
+        if options.ota:
             self.ota_init()
 
-        if not parser.isSet(options.NO_AF) and not parser.isSet(options.CLOUDSMETS):
+        if options.af:
             self.af_test_init()
 
-        if not parser.isSet(options.NO_HCI_OTA) and not parser.isSet(options.CLOUDSMETS):
+        if options.hci_ota:
             self.hci_ota_init()
 
-        if not parser.isSet(options.NO_ANALYZE) and not parser.isSet(options.CLOUDSMETS):
+        if options.analyze:
             self.command_analyze_init()
+
+        if options.price:
+            self.price_init()
+
 
     def serial_init(self):
         self.port_detect()
@@ -575,7 +556,7 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
                         percent = 100
                     self.progressBar_hciOta.setValue(percent)
 
-    def bdb_init(self, parser):
+    def bdb_init(self, options):
         self.pushButton_BDBsetCh.clicked.connect(self.set_working_channel)
         self.pushButton_BDBstartNet.clicked.connect(self.start_network)
         self.pushButton_BDBfactoryRst.clicked.connect(self.factory_reset)
@@ -583,9 +564,9 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         self.pushButton_BDBdongleMode.clicked.connect(self.working_mode_set)
         self.pushButton_BDBnodeDelete.clicked.connect(self.node_delete)
         self.pushButton_BDBsetTXPower.clicked.connect(self.set_tx_power)
-        if parser.isSet(options.CLOUDSMETS):
+        if options.link_keys:
             self.pushButton_BDBgetLinkKey.clicked.connect(self.get_link_key)
-            self.pushButton_BDBsetLinkKey.clicked.connect(self.set_link_key)
+            # self.pushButton_BDBsetLinkKey.clicked.connect(self.set_link_key)
 
     def set_working_channel(self):
         channel = int(self.comboBox_channelList.currentText())
@@ -936,6 +917,12 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         scan_count = line_edit_str2int(1, scan_count_s)
         payload += struct.pack("!%dB" % len(scan_count), *scan_count)
         self.send_hci_command(0x0035, len(payload), payload)
+
+    def get_current_price(self):
+        dst_ieee_addr_s = self.lineEdit_macAddr.text()
+        ieee_addr = line_edit_str2int(8, dst_ieee_addr_s)
+        payload = struct.pack("!%dB" % len(ieee_addr), *ieee_addr)
+        self.send_hci_command(0x0710, len(payload), payload)
 
     def zcl_general_init(self):
         self.pushButton_genRead.clicked.connect(self.zcl_general_attr_read)
@@ -1748,6 +1735,9 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
             QMessageBox.warning(self, 'Result', "Wrong input message！")
         else:
             pass
+
+    def price_init(self):
+        self.pushButton_getCurrentPrice.clicked.connect(self.get_current_price)
 
     def send_hci_command(self, command_id, payload_len, payload):
         command_start = self.ai_setting.command_start
