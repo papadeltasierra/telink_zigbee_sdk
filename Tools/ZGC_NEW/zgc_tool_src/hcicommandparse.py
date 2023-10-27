@@ -148,6 +148,8 @@ class ParseRecvCommand:
         try:
             if command_id == 0x8000:  # acknowledge
                 self.hci_acknowledge_handle(ai_setting, payload)
+            elif command_id == 0xC002:  # get_link_key
+                self.hci_get_link_key_handle(payload)
             elif command_id == 0x8010 or command_id == 0x8011:  # nwk_addr_rep ieee_addr_rsp
                 self.hci_addr_rsp_handle(ai_setting, payload_len, payload, nodes_info)
             elif command_id == 0x8012:  # node_desc_rsp
@@ -256,6 +258,17 @@ class ParseRecvCommand:
         msgtype_str = ai_setting.get_command_id_str(msgtype)
         self.payload_items.append('\tmsgtype:' + hex(msgtype) + '(' + msgtype_str + ')')
         self.payload_items.append('\tstatus:' + hex(status) + '(' + self.recv_status + ')')
+
+    def hci_get_link_key_handle(self, payload):
+        bytes_data = bytearray(payload)
+        link_key = struct.unpack("!16s", bytes_data)
+        link_key_str = '0x'
+        for a in range(16):
+            hvol = link_key[a]
+            hhex = '%02x' % hvol
+            link_key_str += hhex
+        self.description += ' link_key: ' + link_key_str
+        self.parse_items.append('\tlink_key: ' + link_key_str)
 
     def hci_addr_rsp_handle(self, ai_setting, payload_len, payload, nodes_info):
         bytes_data = bytearray(payload)
