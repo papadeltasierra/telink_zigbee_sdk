@@ -1,5 +1,8 @@
 # .gitignore files
 
+# Ignore VSCode files.
+.vscode
+
 # Ignore all built libraries (*.a)
 /*.a
 
