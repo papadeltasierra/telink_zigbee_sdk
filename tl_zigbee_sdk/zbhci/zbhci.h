@@ -26,8 +26,6 @@
 #ifndef ZBHCI_H
 #define	ZBHCI_H
 
-
-
 /** Macro to send a log message to the host machine
  *  First byte of the message is the level (0-7).
  *  Remainder of message is char buffer containing ascii message
@@ -68,6 +66,11 @@ typedef enum{
 	ZBHCI_CMD_BDB_DONGLE_WORKING_MODE_SET,
 	ZBHCI_CMD_BDB_NODE_DELETE,
 	ZBHCI_CMD_BDB_TX_POWER_SET,
+	ZBHCI_CMD_BDB_GET_INFO_KEY_REQ          = 0x4001,
+#if 0 // !!PDS:
+	ZBHCI_CMD_BDB_SET_INFO_KEY_REQ          = 0x4002,
+#endif
+	ZBHCI_CMD_BDB_GET_INFO_KEY_RSP          = 0xC001,
 	ZBHCI_CMD_ACKNOWLEDGE					= 0x8000,
 
 	ZBHCI_CMD_DISCOVERY_NWK_ADDR_REQ		= 0x0010,

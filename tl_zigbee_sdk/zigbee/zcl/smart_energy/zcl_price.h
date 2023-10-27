@@ -304,7 +304,7 @@ typedef struct {
     u32         generationPrice;
     u8          generationpriceRatio;
     u32         alternateCostDelivered;
-    u8          alternateCodeUnit;
+    u8          alternateCostUnit;
     u8          alternateCostTrailingDigit;
     u8          numBlockThresholds;
     u8          priceControl;
@@ -315,36 +315,6 @@ typedef struct {
     u8          extendedRegisterTier;
 } zcl_price_publishPriceCmd_t;
 
-#if 0
-typedef status_t (*zcl_metering_getProfileCb_t)(apsdeDataInd_t *pInd, zcl_metering_getProfileCmd_t *pCmd);
-typedef status_t (*zcl_metering_requestMirrorRspCb_t)(apsdeDataInd_t *pInd, zcl_metering_requestMirrorRspCmd_t *pCmd);
-typedef status_t (*zcl_metering_mirrorRemovedCb_t)(apsdeDataInd_t *pInd, zcl_metering_mirrorRemovedCmd_t *pCmd);
-typedef status_t (*zcl_metering_requestFastPollModeCb_t)(apsdeDataInd_t *pInd, zcl_metering_requestFastPollModeCmd_t *pCmd);
-typedef status_t (*zcl_metering_getProfileRspCb_t)(apsdeDataInd_t *pInd, zcl_metering_getProfileRspCmd_t *pCmd);
-typedef status_t (*zcl_metering_requestMirrorCb_t)(apsdeDataInd_t *pInd);
-typedef status_t (*zcl_metering_removeMirrorCb_t)(apsdeDataInd_t *pInd);
-typedef status_t (*zcl_metering_requestFastPollModeRspCb_t)(apsdeDataInd_t *pInd, zcl_metering_requestFastPollModeRspCmd_t *pCmd);
-
-/**
- *  @brief  Structure definition for commands callBack functions in metering cluster
- */
-typedef struct
-{
-	zcl_metering_getProfileCb_t                     		getProfileCbFunc;
-	zcl_metering_requestMirrorRspCb_t                     	requestMirrorRspCbFunc;
-	zcl_metering_mirrorRemovedCb_t							mirrorRemovedCbFunc;
-	zcl_metering_requestFastPollModeCb_t                    requestFastPollModeCbFunc;
-	zcl_metering_getProfileRspCb_t							getProfileRspCbFunc;
-	zcl_metering_requestMirrorCb_t							requestMirrorCbFunc;
-	zcl_metering_removeMirrorCb_t							removeMirrorCbFunc;
-	zcl_metering_requestFastPollModeRspCb_t					requestFastPollModeRspCbFunc;
-}zcl_metering_AppCallbacks_t;
-
-
-
-extern const zclAttrInfo_t metering_attrTbl[];
-extern const u8 zcl_metering_attrNum;
-#endif
 
 status_t zcl_price_register(u8 endpoint, u16 manuCode, u8 attrNum, const zclAttrInfo_t attrTbl[], cluster_forAppCb_t cb);
 

@@ -114,7 +114,7 @@ _CODE_ZCL_ status_t zcl_price_publishPrice(u8 srcEp, epInfo_t *pDstEpInfo, u8 di
     *pBuf++ = U32_BYTE1(pReq->alternateCostDelivered);
     *pBuf++ = U32_BYTE2(pReq->alternateCostDelivered);
     *pBuf++ = U32_BYTE3(pReq->alternateCostDelivered);
-    *pBuf++ = pReq->alternateCodeUnit;
+    *pBuf++ = pReq->alternateCostUnit;
     *pBuf++ = pReq->alternateCostTrailingDigit;
     *pBuf++ = pReq->numBlockThresholds;
     *pBuf++ = pReq->priceControl;
@@ -182,7 +182,7 @@ _CODE_ZCL_ static status_t zcl_price_publishPricePrc(zclIncoming_t *pInMsg)
         publishPriceCmd.generationpriceRatio = *pData++;
         publishPriceCmd.alternateCostDelivered = BUILD_U32(pData[0], pData[1], pData[2], pData[3]);
 	    pData += 4;
-        publishPriceCmd.alternateCodeUnit = *pData++;
+        publishPriceCmd.alternateCostUnit = *pData++;
         publishPriceCmd.alternateCostTrailingDigit = *pData++;
         publishPriceCmd.numBlockThresholds = *pData++;
         publishPriceCmd.priceControl = *pData++;

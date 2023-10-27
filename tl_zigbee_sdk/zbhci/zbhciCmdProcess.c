@@ -578,6 +578,11 @@ static void zbhci_bdbCmdHandler(void *arg){
 	}else if(cmdID == ZBHCI_CMD_BDB_TX_POWER_SET){
 		/* Set TX power, value is index of the RF power. */
 		rf_setTxPower(p[0]);
+#if 0 // !!PDS:
+	}else if(cmdID == ZBHCI_CMD_BDB_SET_LINK_KEY){
+		/* Set TX power, value is index of the RF power. */
+		zdo_ssInfoKeySet(p);
+#endif
 	}
 
 	ev_buf_free(arg);
@@ -787,7 +792,11 @@ s32 node_toggle_unicast_test(void *arg){
 #endif
 #endif
 
-#if ZB_COORDINATOR_ROLE
+// !!PDS: Add the Get/Set Link Key commands.  Do we need a ZCL option?
+
+#ifdef ZCL_PREPAYMENT
+#endif
+
 #ifdef ZCL_ON_OFF
 s32 node_toggle_broadcast_test(void *arg){
 	//u32 onOff = (u32)arg;
@@ -813,7 +822,6 @@ s32 node_toggle_broadcast_test(void *arg){
 	onOff ^= 1;
 	return 0;
 }
-#endif
 #endif
 
 
@@ -861,6 +869,51 @@ s32 rxtx_performance_test(void *arg){
 	}
 
 	return (txrxTest->interval * 10);
+}
+
+s32 zbhci_bdbCmdAsyncHandler(void *arg){
+	zbhci_cmdHandler_t *cmdInfo = arg;
+	u16 cmdID = cmdInfo->cmdId;
+	u8 rsp[2 * CCM_KEY_SIZE + 4];
+	u8 *p;
+
+	if(cmdID == ZBHCI_CMD_BDB_INFO_GET_KEY_REQ) {
+
+		p = &rsp[0];
+		*p++ = SS_IB().nwkSecurMaterialSet[0].keyType;
+		*p++ = SS_IB().nwkSecurMaterialSet[0].keySeqNum;
+		memcpy(p, SS_IB().nwkSecurMaterialSet[0].key, CCM_KEY_SIZE);
+		p += CCM_KEY_SIZE;
+		*p++ = SS_IB().nwkSecurMaterialSet[1].keyType;
+		*p++ = SS_IB().nwkSecurMaterialSet[1].keySeqNum;
+		memcpy(p, SS_IB().nwkSecurMaterialSet[1].key, CCM_KEY_SIZE);
+
+		// Now we need to send back a ZBHCI_CMD_BDB_INFO_GET_KEY_RSP.
+		zbhciTx(ZBHCI_CMD_NODES_JOINED_GET_RSP, (u16)sizeof(rsp), rsp);
+
+#if 0 // !!PDS
+	} else if(cmdID == ZBHCI_CMD_BDB_INFO_SET_KEY_REQ) {
+		// We need to update the key and then write back to NV.
+		keySeqNum0 = SS_IB().nwkSecurMaterialSet[0].keySeqNum;
+		keySeqNum1 = SS_IB().nwkSecurMaterialSet[1].keySeqNum;
+		if (keySeqNum1 == (keySeqNum0 + 1))
+		{
+			key = SS_IB().nwkSecurMaterialSet[0].key[0];
+			SS_IB().nwkSecurMaterialSet[0].keySeqNum =
+				SS_IB().nwkSecurMaterialSet[1].keySeqNum + 1;
+		}
+		else
+		{
+			key = SS_IB().nwkSecurMaterialSet[1].key[0];
+			SS_IB().nwkSecurMaterialSet[1].keySeqNum =
+				SS_IB().nwkSecurMaterialSet[0].keySeqNum + 1;
+		}
+		memcpy(key, p, CCM_KEY_SIZE);
+		zdo_ssInfoSaveToFlash();
+#endif
+	}
+
+	return -1;
 }
 
 s32 zbhci_nodeManageCmdHandler(void *arg){
@@ -1166,6 +1219,12 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 				TL_SCHEDULE_TASK(zbhci_bdbCmdHandler, cmdInfo);
 				break;
 
+			case ZBHCI_CMD_BDB_INFO_GET_KEY_REQ:
+#if 0 // !!PDS:
+			case ZBHCI_CMD_BDB_INFO_SET_KEY_REQ:
+#endif
+				TL_ZB_TIMER_SCHEDULE(zbhci_bdbCmdAsyncHandler, cmdInfo, 100);
+				break;
 
 			case ZBHCI_CMD_DISCOVERY_NWK_ADDR_REQ:
 			case ZBHCI_CMD_DISCOVERY_IEEE_ADDR_REQ:
