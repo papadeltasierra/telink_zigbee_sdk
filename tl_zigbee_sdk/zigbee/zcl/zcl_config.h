@@ -248,6 +248,13 @@
 #define ZCL_OTA
 #endif
 
+/***************************************************** OTA over HCI Upgrading ***********************************/
+/********************* OTA over HCI Configuration **************/
+/* OTA over HCI upgrading */
+#if ZCL_OTA_HCI_SUPPORT
+#define ZCL_OTA_HCI
+#endif
+
 /************************************************* Commissioning ************************************************/
 /********************* Commissioning *************************/
 //#define ZCL_COMMISSIONING

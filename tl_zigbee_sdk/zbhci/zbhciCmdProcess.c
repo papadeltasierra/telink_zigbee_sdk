@@ -1333,7 +1333,9 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 			case ZBHCI_CMD_ZCL_OTA_IMAGE_NOTIFY:
 				TL_SCHEDULE_TASK(zbhci_clusterOTAHandle, cmdInfo);
 				break;
+#endif
 
+#ifdef ZCL_HCI_OTA
 			case ZBHCI_CMD_OTA_START_REQUEST:
 			case ZBHCI_CMD_OTA_BLOCK_RESPONSE:
 				TL_SCHEDULE_TASK(zbhci_uartOTAHandle, cmdInfo);
