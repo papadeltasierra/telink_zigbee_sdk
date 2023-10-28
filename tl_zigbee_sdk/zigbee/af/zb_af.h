@@ -1,7 +1,7 @@
 /********************************************************************************************************
  * @file    zb_af.h
  *
- * @brief   This is the header file for zb_af
+ * @brief   This is the header file for zbp_af
  *
  * @author  Zigbee Group
  * @date    2021
@@ -33,6 +33,15 @@
 #define LL_PROFILE_ID         					0xC05E
 #define GP_PROFILE_ID							0xA1E0
 #define WILDCARD_PROFILE_ID						0xFFFF
+
+/*
+ * The profile that this library assumes.  this should really be a parameter
+ * somehow.
+ *
+ * TODO: Maybe replace this with an interface call to set a global, accessible
+ *       via a macro?
+ */
+#define ACTIVE_PROFILE_ID						SE_PROFILE_ID
 
 #define	ZDO_EP			      					0
 #define	AF_BROADCAST_EP							0xFF

@@ -340,7 +340,7 @@ void ota_wwah_useTrustCenter(u8 endpoint)
 		memset((u8 *)pInfo, 0, sizeof(ota_updateInfo_t));
 
 		pInfo->otaServerAddrInfo.endpoint = endpoint;
-		pInfo->otaServerAddrInfo.profileId = HA_PROFILE_ID;
+		pInfo->otaServerAddrInfo.profileId = ACTIVE_PROFILE_ID;
 		ZB_IEEE_ADDR_COPY(pInfo->otaServerAddrInfo.extAddr, ss_ib.trust_center_address);
 
 		nv_flashWriteNew(1, NV_MODULE_OTA, NV_ITEM_OTA_HDR_SERVERINFO, sizeof(ota_updateInfo_t), (u8 *)pInfo);
@@ -567,7 +567,7 @@ void ota_upgradeComplete(u8 status)
 		/*
 		 * if the image is invalid, all the information shall be reset,
 		 * so that the OTA will restart from address of 0
-		 * 
+		 *
         */
 		if(status == ZCL_STA_INVALID_IMAGE){
 			nv_resetModule(NV_MODULE_OTA);
@@ -1042,7 +1042,7 @@ u8 ota_imageDataProcess(u8 len, u8 *pData)
 					if(flash_writeWithCheck(baseAddr + otaClientInfo.otaElementPos, copyLen, &pData[i]) != TRUE){
 						return ZCL_STA_INVALID_IMAGE;
 					}
-					
+
 					otaClientInfo.otaElementPos += copyLen;
 					zcl_attr_fileOffset += copyLen;
 

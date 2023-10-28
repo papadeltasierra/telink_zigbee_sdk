@@ -53,7 +53,7 @@ void zbhciTxClusterCmdAddrResolve(epInfo_t *dstEpInfo, u8 *srcEp, u8 **payload){
 	if((apsTxMode < ZBHCI_ADDRMODE_BRC) && (apsTxMode != ZBHCI_ADDRMODE_GROUP)){
 		dstEpInfo->txOptions |= APS_TX_OPT_ACK_TX;
 	}
-	dstEpInfo->profileId = 0x0104;//HA_PROFILE_ID
+	dstEpInfo->profileId = ACTIVE_PROFILE_ID;
 	dstEpInfo->dstAddrMode = zbhciConvertSet[apsTxMode];
 	if(dstEpInfo->dstAddrMode == APS_LONG_DSTADDR_WITHEP){
 		ZB_IEEE_ADDR_REVERT(dstEpInfo->dstAddr.extAddr,*payload);
@@ -561,6 +561,24 @@ void zbhci_clusterOTAHandle(void *arg){ //u16 cmdId, u8 *pCmd){
 	ev_buf_free(arg);
 }
 #endif
+
+#ifdef ZCL_PRICE
+void zbhci_zclGetCurrentPriceCmdHandle(void *arg){
+	zbhci_cmdHandler_t *cmdInfo = arg;
+	u8 *pCmd = cmdInfo->payload;
+	epInfo_t dstEpInfo;
+	u8 srcEp;
+	zcl_price_getCurrentPriceCmd_t req;
+
+	TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+
+	zbhciTxClusterCmdAddrResolve(&dstEpInfo,&srcEp,&pCmd);
+
+	req.commandOptions = CMD_OPT_REQUESTOR_RX_ON_IDLE;
+
+	zcl_price_getCurrentPriceCmd(srcEp, &dstEpInfo, TRUE, &req);
+}
+#endif /* ZCL_PRICE */
 
 volatile status_t basic_status = 0;
 void zbhci_clusterBasicHandle(void *arg){

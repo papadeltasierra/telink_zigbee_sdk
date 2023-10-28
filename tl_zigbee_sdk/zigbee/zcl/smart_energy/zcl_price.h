@@ -61,6 +61,10 @@
  *  @brief	Format of the Get Current Price command
  */
 
+enum {
+    CMD_OPT_REQUESTOR_RX_ON_IDLE = 0x01
+} zcl_commandOptions_t;
+
 typedef struct
 {
     u8          commandOptions;

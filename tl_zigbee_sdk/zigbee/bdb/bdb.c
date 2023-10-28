@@ -442,7 +442,7 @@ _CODE_BDB_ static void bdb_findingAndBinding(findBindDst_t *pDstInfo)
 		dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
 		dstEpInfo.dstEp = pDstInfo->endpoint;
 		dstEpInfo.dstAddr.shortAddr = pDstInfo->addr;
-		dstEpInfo.profileId = HA_PROFILE_ID;
+		dstEpInfo.profileId = ACTIVE_PROFILE_ID;
 		dstEpInfo.txOptions = 0;//APS_TX_OPT_ACK_TX;
 		dstEpInfo.radius = 0;
 
@@ -705,7 +705,7 @@ _CODE_BDB_ static u8 bdb_commissioningFindBind(void)
 				dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
 				dstEpInfo.dstAddr.shortAddr = 0xffff;
 				dstEpInfo.dstEp = 0xff;
-				dstEpInfo.profileId = HA_PROFILE_ID;
+				dstEpInfo.profileId = SE_PROFILE_ID;
 
 				zcl_identify_identifyQueryCmd(g_bdbCtx.simpleDesc->endpoint, &dstEpInfo, TRUE);
 
@@ -1678,7 +1678,7 @@ _CODE_BDB_ u8 bdb_join_direct(u8 channel, u16 panId, u16 shortAddr, u8 *extPanId
         ss_securityModeSet(type);
 		zb_joinAFixedNetwork(channel,  panId, shortAddr, extPanId, nwkKey, tcAddr);
 
-		if(inited){			
+		if(inited){
 			aps_ib.aps_authenticated = 1;
 			aps_ib.aps_use_insecure_join = FALSE; /* AIB */
 

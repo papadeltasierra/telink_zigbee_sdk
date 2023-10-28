@@ -73,6 +73,7 @@ extern void zbhci_zclColorCtrlCmdHandle(void *arg);
 extern void zbhci_clusterGroupHandle(void *arg);
 extern void zbhci_clusterSceneHandle(void *arg);
 extern void zbhci_clusterOTAHandle(void *arg);
+extern void zbhci_zclGetCurrentPriceCmdHandle(void *arg);
 extern void zbhci_clusterBasicHandle(void *arg);
 extern void zbhci_clusterCommonCmdHandle(void *arg);
 
@@ -755,7 +756,7 @@ s32 node_toggle_unicast_test(void *arg){
 
 	dstEpInfo.dstAddrMode = APS_LONG_DSTADDR_WITHEP;
 	dstEpInfo.dstEp = 1;
-	dstEpInfo.profileId = HA_PROFILE_ID;
+	dstEpInfo.profileId = ACTIVE_PROFILE_ID;
 	dstEpInfo.txOptions |= APS_TX_OPT_ACK_TX;
 
 	u16 i = 0;
@@ -809,7 +810,7 @@ s32 node_toggle_broadcast_test(void *arg){
 	dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
 	dstEpInfo.dstEp = 1;
 	dstEpInfo.dstAddr.shortAddr = 0xffff;
-	dstEpInfo.profileId = HA_PROFILE_ID;
+	dstEpInfo.profileId = ACTIVE_PROFILE_ID;
 	dstEpInfo.txOptions = 0;
 	dstEpInfo.radius = 0;
 	//dstEpInfo.txOptions |= APS_TX_OPT_ACK_TX;
@@ -851,7 +852,7 @@ s32 rxtx_performance_test(void *arg){
 		dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
 		dstEpInfo.dstAddr.shortAddr = dstAddr;
 		dstEpInfo.dstEp = txrxTest->dstEp;
-		dstEpInfo.profileId = HA_PROFILE_ID;
+		dstEpInfo.profileId = ACTIVE_PROFILE_ID;
 		dstEpInfo.radius = 0;
 
 		u8 *pData = pBuf;
@@ -877,7 +878,7 @@ s32 zbhci_bdbCmdAsyncHandler(void *arg){
 	u8 rsp[2 * CCM_KEY_SIZE + 4];
 	u8 *p;
 
-	if(cmdID == ZBHCI_CMD_BDB_INFO_GET_KEY_REQ) {
+	if(cmdID == ZBHCI_CMD_BDB_GET_LINK_KEY_REQ) {
 
 		p = &rsp[0];
 		*p++ = SS_IB().nwkSecurMaterialSet[0].keyType;
@@ -1014,7 +1015,7 @@ s32 zbhci_nodeManageCmdHandler(void *arg){
 			TL_SETSTRUCTCONTENT(dstEpInfo, 0);
 
 			dstEpInfo.dstEp = pAfDataSendReq->dstEp;
-			dstEpInfo.profileId = HA_PROFILE_ID;
+			dstEpInfo.profileId = ACTIVE_PROFILE_ID;
 			dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
 			COPY_BUFFERTOU16_BE(dstEpInfo.dstAddr.shortAddr, (u8 *)&(pAfDataSendReq->dstAddr));
 			COPY_BUFFERTOU16_BE(clusterId, (u8 *)&(pAfDataSendReq->clusterId));
@@ -1219,9 +1220,9 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 				TL_SCHEDULE_TASK(zbhci_bdbCmdHandler, cmdInfo);
 				break;
 
-			case ZBHCI_CMD_BDB_INFO_GET_KEY_REQ:
+			case ZBHCI_CMD_BDB_GET_LINK_KEY_REQ:
 #if 0 // !!PDS:
-			case ZBHCI_CMD_BDB_INFO_SET_KEY_REQ:
+			case ZBHCI_CMD_BDB_SET_LINK_KEY_REQ:
 #endif
 				TL_ZB_TIMER_SCHEDULE(zbhci_bdbCmdAsyncHandler, cmdInfo, 100);
 				break;
@@ -1336,6 +1337,12 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 			case ZBHCI_CMD_OTA_START_REQUEST:
 			case ZBHCI_CMD_OTA_BLOCK_RESPONSE:
 				TL_SCHEDULE_TASK(zbhci_uartOTAHandle, cmdInfo);
+				break;
+#endif
+
+#ifdef ZCL_PRICE
+			case ZBHCI_CMD_ZCL_PRICE_GET_CURRENT_PRICE:
+				TL_SCHEDULE_TASK(zbhci_zclGetCurrentPriceCmdHandle, cmdInfo);
 				break;
 #endif
 

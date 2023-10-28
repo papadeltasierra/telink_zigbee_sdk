@@ -354,7 +354,7 @@ transTabEntry_t *gp_transTabReportUpdate(u8 appId, gpdId_t gpdId, u8 endpoint,
 
 	transTabEntry_t *pTransEntry = gp_transTabEntryFind(appId, gpdId, endpoint,
 														GPDF_CMD_ID_COMPACT_ATTR_REPORT, 0xFF,
-														clusterId, HA_PROFILE_ID,
+														clusterId, ACTIVE_PROFILE_ID,
 														reportId, pAttrRecord->attrId);
 	if(!pTransEntry){
 		pTransEntry = gp_transTabEntryFreeGet();
@@ -375,7 +375,7 @@ transTabEntry_t *gp_transTabReportUpdate(u8 appId, gpdId_t gpdId, u8 endpoint,
 		}
 		pTransEntry->gpdCommand = GPDF_CMD_ID_COMPACT_ATTR_REPORT;
 		pTransEntry->endpoint = 0xFF;
-		pTransEntry->profileId = HA_PROFILE_ID;
+		pTransEntry->profileId = ACTIVE_PROFILE_ID;
 		pTransEntry->clusterId = 0xFFFF;
 		pTransEntry->zbCommandId = ZCL_CMD_REPORT;
 		pTransEntry->zbCmdPayloadLen = 0;
@@ -411,7 +411,7 @@ transTabEntry_t *gp_transTabGenSwitchUpdate(u8 appId, gpdId_t gpdId, u8 endpoint
 
 	transTabEntry_t *pTransEntry = gp_transTabEntryFind(appId, gpdId, endpoint,
 														GPDF_CMD_ID_8BIT_VECTOR_PRESS, 0xFF,
-														0xFFFF, HA_PROFILE_ID,
+														0xFFFF, ACTIVE_PROFILE_ID,
 														0xFF, 0xFFFF);
 	if(!pTransEntry){
 		pTransEntry = gp_transTabEntryFreeGet();
@@ -431,7 +431,7 @@ transTabEntry_t *gp_transTabGenSwitchUpdate(u8 appId, gpdId_t gpdId, u8 endpoint
 		//TODO: right?
 		pTransEntry->gpdCommand = GPDF_CMD_ID_8BIT_VECTOR_PRESS;
 		pTransEntry->endpoint = 0xFF;
-		pTransEntry->profileId = HA_PROFILE_ID;
+		pTransEntry->profileId = ACTIVE_PROFILE_ID;
 		pTransEntry->clusterId = 0xFFFF;
 		pTransEntry->zbCommandId = 0xFF;
 		pTransEntry->zbCmdPayloadLen = 0;
@@ -571,13 +571,13 @@ void gp_transTabUpdateWithCfg(u8 appId, gpdId_t gpdId, u8 endpoint,
 						(cmdId >= GPDF_CMD_ID_ATTR_REPORT) && (cmdId <= GPDF_CMD_ID_MANU_MULTI_CLUSTER_REPORT)))){
 						pTransEntry = gp_transTabEntryFind(appId, gpdId, endpoint,
 														   pTransCfg->gpdCmdId, 0xFF,
-														   clusterId, HA_PROFILE_ID,
+														   clusterId, ACTIVE_PROFILE_ID,
 														   0xFF, 0xFFFF);
 						if(!pTransEntry){
 							translation.index = 0xFF;
 							translation.gpdCmdId = pTransCfg->gpdCmdId;
 							translation.endpoint = g_gpsCtx.gpsAppEndpoint;//0xFF;
-							translation.profile = HA_PROFILE_ID;
+							translation.profile = ACTIVE_PROFILE_ID;
 							translation.cluster = 0xFFFF;
 							translation.zbCmdId = pTransCfg->zbCmdId;
 							translation.zbCmdPayloadLen = pTransCfg->zbCmdPayloadLen;
@@ -599,13 +599,13 @@ void gp_transTabUpdateWithCfg(u8 appId, gpdId_t gpdId, u8 endpoint,
 			if(devId == pTransCfg->gpdDevId){
 				pTransEntry = gp_transTabEntryFind(appId, gpdId, endpoint,
 												   pTransCfg->gpdCmdId, 0xFF,
-												   pTransCfg->zbClusterId, HA_PROFILE_ID,
+												   pTransCfg->zbClusterId, ACTIVE_PROFILE_ID,
 												   0xFF, 0xFFFF);
 				if(!pTransEntry){
 					translation.index = 0xFF;
 					translation.gpdCmdId = pTransCfg->gpdCmdId;
 					translation.endpoint = g_gpsCtx.gpsAppEndpoint;//0xFF;
-					translation.profile = HA_PROFILE_ID;
+					translation.profile = ACTIVE_PROFILE_ID;
 					translation.cluster = 0xFFFF;
 					translation.zbCmdId = pTransCfg->zbCmdId;
 					translation.zbCmdPayloadLen = pTransCfg->zbCmdPayloadLen;
@@ -643,7 +643,7 @@ void gp_gpdfTranslate(u8 appId, gpdId_t gpdId, u8 endpoint,
 
 	dstEpInfo.dstAddrMode = APS_SHORT_GROUPADDR_NOEP;
 	dstEpInfo.dstAddr.shortAddr = 0x0001;//TODO: group id
-	dstEpInfo.profileId = HA_PROFILE_ID;
+	dstEpInfo.profileId = ACTIVE_PROFILE_ID;
 
 	switch(pTransEntry->gpdCommand){
 		case GPDF_CMD_ID_ZCL_TUNNELING:
