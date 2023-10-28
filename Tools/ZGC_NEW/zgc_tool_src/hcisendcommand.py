@@ -919,9 +919,13 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         self.send_hci_command(0x0035, len(payload), payload)
 
     def get_current_price(self):
-        dst_ieee_addr_s = self.lineEdit_macAddr.text()
-        ieee_addr = line_edit_str2int(8, dst_ieee_addr_s)
-        payload = struct.pack("!%dB" % len(ieee_addr), *ieee_addr)
+        dst_mode_s = self.comboBox_getCurPrcDstMode.currentText()
+        dst_addr_s = self.lineEdit_getCurPrcDstAddr.text()
+        src_ep_s = self.lineEdit_getCurPrcSrcEp.text()
+        dst_ep_s = self.lineEdit_getCurPrcDstEp.text()
+        payload = self.zcl_cluster_addr_handle(dst_mode_s, dst_addr_s, src_ep_s, dst_ep_s)
+
+        # No payload beyond the addressing.
         self.send_hci_command(0x0710, len(payload), payload)
 
     def zcl_general_init(self):

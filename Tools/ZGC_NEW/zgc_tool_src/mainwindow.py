@@ -3504,34 +3504,79 @@ class Ui_MainWindow(object):
             # !!PDS: Maybe add scroll area here to get grey background?
             self.price = QtWidgets.QWidget()
             self.price.setObjectName("price")
-            self.gridLayout_25 = QtWidgets.QGridLayout(self.price)
-            self.gridLayout_25.setContentsMargins(11, 11, 11, 11)
-            self.gridLayout_25.setSpacing(6)
-            self.gridLayout_25.setObjectName("gridLayout_2")
-            self.horizontalLayout_56 = QtWidgets.QHBoxLayout()
-            self.horizontalLayout_56.setSpacing(6)
-            self.horizontalLayout_56.setObjectName("horizontalLayout_56")
+            self.gridLayout_getCurrentPrice = QtWidgets.QGridLayout(self.price)
+            self.gridLayout_getCurrentPrice.setContentsMargins(11, 11, 11, 11)
+            self.gridLayout_getCurrentPrice.setSpacing(6)
+            self.gridLayout_getCurrentPrice.setObjectName("gridLayout_2")
+            self.horizontalLayout_getCurrentPrice = QtWidgets.QHBoxLayout()
+            self.horizontalLayout_getCurrentPrice.setSpacing(6)
+            self.horizontalLayout_getCurrentPrice.setObjectName("horizontalLayout_getCurrentPrice")
             self.pushButton_getCurrentPrice = QtWidgets.QPushButton(self.price)
             self.pushButton_getCurrentPrice.setObjectName("pushButton_getCurrentPrice")
-            self.horizontalLayout_56.addWidget(self.pushButton_getCurrentPrice)
-            self.lineEdit_dstAddr2 = QtWidgets.QLineEdit(self.price)
+            self.horizontalLayout_getCurrentPrice.addWidget(self.pushButton_getCurrentPrice)
+            self.comboBox_getCurPrcDstMode = QtWidgets.QComboBox(self.price)
+            self.comboBox_getCurPrcDstMode.setMinimumContentsLength(0)
+            self.comboBox_getCurPrcDstMode.setObjectName("comboBox_getCurPrcDstMode")
+            self.comboBox_getCurPrcDstMode.addItem("")
+            self.comboBox_getCurPrcDstMode.addItem("")
+            self.comboBox_getCurPrcDstMode.addItem("")
+            self.comboBox_getCurPrcDstMode.addItem("")
+            self.comboBox_getCurPrcDstMode.addItem("")
+            self.comboBox_getCurPrcDstMode.addItem("")
+            self.comboBox_getCurPrcDstMode.addItem("")
+            self.comboBox_getCurPrcDstMode.addItem("")
+            self.horizontalLayout_getCurrentPrice.addWidget(self.comboBox_getCurPrcDstMode)
+            self.lineEdit_getCurPrcDstAddr = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_10)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.lineEdit_dstAddr2.sizePolicy().hasHeightForWidth())
-            self.lineEdit_dstAddr2.setSizePolicy(sizePolicy)
-            self.lineEdit_dstAddr2.setMinimumSize(QtCore.QSize(0, 0))
-            self.lineEdit_dstAddr2.setMaximumSize(QtCore.QSize(160, 16777215))
-            self.lineEdit_dstAddr2.setAccessibleName("")
-            self.lineEdit_dstAddr2.setInputMask("")
-            self.lineEdit_dstAddr2.setText("")
-            self.lineEdit_dstAddr2.setObjectName("lineEdit_dstAddr2")
-            self.horizontalLayout_56.addWidget(self.lineEdit_dstAddr2)
+            sizePolicy.setHeightForWidth(self.lineEdit_getCurPrcDstAddr.sizePolicy().hasHeightForWidth())
+            self.lineEdit_getCurPrcDstAddr.setSizePolicy(sizePolicy)
+            self.lineEdit_getCurPrcDstAddr.setMinimumSize(QtCore.QSize(160, 0))
+            self.lineEdit_getCurPrcDstAddr.setMaximumSize(QtCore.QSize(160, 16777215))
+            self.lineEdit_getCurPrcDstAddr.setAccessibleName("")
+            self.lineEdit_getCurPrcDstAddr.setInputMask("")
+            self.lineEdit_getCurPrcDstAddr.setText("")
+            self.lineEdit_getCurPrcDstAddr.setObjectName("lineEdit_getCurPrcDstAddr")
+            self.horizontalLayout_getCurrentPrice.addWidget(self.lineEdit_getCurPrcDstAddr)
+            self.lineEdit_getCurPrcSrcEp = QtWidgets.QLineEdit(self.price)
+            self.lineEdit_getCurPrcSrcEp.setMaximumSize(QtCore.QSize(60, 16777215))
+            self.lineEdit_getCurPrcSrcEp.setInputMask("")
+            self.lineEdit_getCurPrcSrcEp.setText("")
+            self.lineEdit_getCurPrcSrcEp.setObjectName("lineEdit_getCurPrcSrcEp")
+            self.horizontalLayout_getCurrentPrice.addWidget(self.lineEdit_getCurPrcSrcEp)
+            self.lineEdit_getCurPrcDstEp = QtWidgets.QLineEdit(self.price)
+            self.lineEdit_getCurPrcDstEp.setMaximumSize(QtCore.QSize(60, 16777215))
+            self.lineEdit_getCurPrcDstEp.setObjectName("lineEdit_getCurPrcDstEp")
+            self.horizontalLayout_getCurrentPrice.addWidget(self.lineEdit_getCurPrcDstEp)
+
+
+
+
+
+
+
+
+
+            # self.lineEdit_dstAddr2 = QtWidgets.QLineEdit(self.price)
+            # sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+            # sizePolicy.setHorizontalStretch(0)
+            # sizePolicy.setVerticalStretch(0)
+            # sizePolicy.setHeightForWidth(self.lineEdit_dstAddr2.sizePolicy().hasHeightForWidth())
+            # self.lineEdit_dstAddr2.setSizePolicy(sizePolicy)
+            # self.lineEdit_dstAddr2.setMinimumSize(QtCore.QSize(0, 0))
+            # self.lineEdit_dstAddr2.setMaximumSize(QtCore.QSize(160, 16777215))
+            # self.lineEdit_dstAddr2.setAccessibleName("")
+            # self.lineEdit_dstAddr2.setInputMask("")
+            # self.lineEdit_dstAddr2.setText("")
+            # self.lineEdit_dstAddr2.setObjectName("lineEdit_dstAddr2")
+            # self.horizontalLayout_getCurrentPrice.addWidget(self.lineEdit_dstAddr2)
             spacerItem75 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-            self.horizontalLayout_56.addItem(spacerItem75)
-            self.gridLayout_25.addLayout(self.horizontalLayout_56, 0, 0, 1, 1)
+
+            self.horizontalLayout_getCurrentPrice.addItem(spacerItem75)
+            self.gridLayout_getCurrentPrice.addLayout(self.horizontalLayout_getCurrentPrice, 0, 0, 1, 1)
             spacerItem76 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-            self.gridLayout_25.addItem(spacerItem76, 2, 0, 1, 1)
+            self.gridLayout_getCurrentPrice.addItem(spacerItem76, 2, 0, 1, 1)
             self.tabWidget.addTab(self.price, "")
             row = row + 1
 
@@ -3676,6 +3721,9 @@ class Ui_MainWindow(object):
 
         if options.ota:
             self.comboBox_otaDstMode.setCurrentIndex(2)
+
+        if options.price:
+            self.comboBox_getCurPrcDstMode.setCurrentIndex(2)
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
         MainWindow.setTabOrder(self.comboBox_portName, self.comboBox_baudrate)
@@ -4140,6 +4188,7 @@ class Ui_MainWindow(object):
             self.tabWidget.setTabText(self.tabWidget.indexOf(self.on_off), _translate("MainWindow", "onOff"))
 
         if options.level:
+            # move to level
             self.pushButton_moveToLevel.setText(_translate("MainWindow", "move to level"))
             self.comboBox_toLevelDstMode.setCurrentText(_translate("MainWindow", "short"))
             self.comboBox_toLevelDstMode.setItemText(0, _translate("MainWindow", "bound"))
@@ -4157,6 +4206,7 @@ class Ui_MainWindow(object):
             self.lineEdit_toLevelTime.setPlaceholderText(_translate("MainWindow", "Time(u16 0.1s)"))
             self.comboBox_withOnOff.setItemText(0, _translate("MainWindow", "with onOff"))
             self.comboBox_withOnOff.setItemText(1, _translate("MainWindow", "without onOff"))
+
             self.pushButton_stop.setText(_translate("MainWindow", "stop"))
             self.comboBox_stopDstMode.setItemText(0, _translate("MainWindow", "bound"))
             self.comboBox_stopDstMode.setItemText(1, _translate("MainWindow", "group"))
@@ -4171,6 +4221,7 @@ class Ui_MainWindow(object):
             self.lineEdit_stopSrcEp_2.setPlaceholderText(_translate("MainWindow", "DstEp"))
             self.comboBox_stopWithOnoff.setItemText(0, _translate("MainWindow", "with onOff"))
             self.comboBox_stopWithOnoff.setItemText(1, _translate("MainWindow", "without onOff"))
+
             self.pushButton_move.setText(_translate("MainWindow", "move"))
             self.comboBox_moveDstMode.setCurrentText(_translate("MainWindow", "short"))
             self.comboBox_moveDstMode.setItemText(0, _translate("MainWindow", "bound"))
@@ -4188,6 +4239,7 @@ class Ui_MainWindow(object):
             self.lineEdit_moveRate.setPlaceholderText(_translate("MainWindow", "rate"))
             self.comboBox_moveWithOnoff.setItemText(0, _translate("MainWindow", "with onOff"))
             self.comboBox_moveWithOnoff.setItemText(1, _translate("MainWindow", "without onOff"))
+
             self.pushButton_step.setText(_translate("MainWindow", "step"))
             self.comboBox_stepDstMode.setItemText(0, _translate("MainWindow", "bound"))
             self.comboBox_stepDstMode.setItemText(1, _translate("MainWindow", "group"))
@@ -4206,6 +4258,9 @@ class Ui_MainWindow(object):
             self.comboBox_stepWithOnoff.setItemText(0, _translate("MainWindow", "with onOff"))
             self.comboBox_stepWithOnoff.setItemText(1, _translate("MainWindow", "without onOff"))
             self.tabWidget.setTabText(self.tabWidget.indexOf(self.level), _translate("MainWindow", "level"))
+
+        if options.color:
+            # color
             self.pushButton_moveHue.setText(_translate("MainWindow", "move to hue"))
             self.comboBox_moveHueDstMode.setCurrentText(_translate("MainWindow", "short"))
             self.comboBox_moveHueDstMode.setItemText(0, _translate("MainWindow", "bound"))
@@ -4465,7 +4520,18 @@ class Ui_MainWindow(object):
 
         if options.price:
             self.pushButton_getCurrentPrice.setText(_translate("MainWindow", "Get Current Price"))
-            self.lineEdit_dstAddr2.setPlaceholderText(_translate("MainWindow", "DstAddr"))
+            self.comboBox_getCurPrcDstMode.setItemText(0, _translate("MainWindow", "bound"))
+            self.comboBox_getCurPrcDstMode.setItemText(1, _translate("MainWindow", "group"))
+            self.comboBox_getCurPrcDstMode.setItemText(2, _translate("MainWindow", "short"))
+            self.comboBox_getCurPrcDstMode.setItemText(3, _translate("MainWindow", "ieee"))
+            self.comboBox_getCurPrcDstMode.setItemText(4, _translate("MainWindow", "broadcast"))
+            self.comboBox_getCurPrcDstMode.setItemText(5, _translate("MainWindow", "bound_no_ack"))
+            self.comboBox_getCurPrcDstMode.setItemText(6, _translate("MainWindow", "short_no_ack"))
+            self.comboBox_getCurPrcDstMode.setItemText(7, _translate("MainWindow", "ieee_no_ack"))
+
+            self.lineEdit_getCurPrcDstAddr.setPlaceholderText(_translate("MainWindow", "DstAddr"))
+            self.lineEdit_getCurPrcDstEp.setPlaceholderText(_translate("MainWindow", "DstEp"))
+            self.lineEdit_getCurPrcSrcEp.setPlaceholderText(_translate("MainWindow", "SrcEp"))
             self.tabWidget.setTabText(self.tabWidget.indexOf(self.price), _translate("MainWindow", "price"))
 
         self.pushButton_send.setText(_translate("MainWindow", "Send"))
