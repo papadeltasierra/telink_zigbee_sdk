@@ -29,6 +29,7 @@
 #include "../zcl_include.h"
 
 #if 0
+// TODO: what is th point of this file?
 /**********************************************************************
  * LOCAL CONSTANTS
  */
@@ -42,7 +43,8 @@
 /**********************************************************************
  * LOCAL VARIABLES
  */
-#ifdef ZCL_OTA
+#if defined (ZCL_OTA) || defined(ZCL_HCI_OTA)
+// TODO: Can we split these between OTA and HCI_OTA?
 
 /* Attribute default */
 addrExt_t zcl_attr_upgradeServerID = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff};

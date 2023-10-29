@@ -1075,7 +1075,7 @@ s32 zbhci_nodeManageCmdHandler(void *arg){
 	return -1;
 }
 
-#ifdef ZCL_OTA
+#ifdef ZCL_HCI_OTA
 void hci_send_ota_start_rsponse(u8 status){
 	u8 array[16] = {0};
 	u8 *pBuf = array;

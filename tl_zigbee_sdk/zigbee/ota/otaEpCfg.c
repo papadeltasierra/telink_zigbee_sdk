@@ -29,7 +29,7 @@
 #include "../zcl/zcl_include.h"
 #include "ota.h"
 
-#ifdef ZCL_OTA
+#if defined(ZCL_OTA) || defined(ZCL_HCI_OTA)
 /**********************************************************************
  * LOCAL CONSTANTS
  */
