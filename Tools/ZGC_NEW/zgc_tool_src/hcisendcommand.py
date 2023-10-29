@@ -429,7 +429,7 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
             if self.get_joined_list[node] == 0xfffe:
                 find_to_search = True
                 payload = struct.pack("!H", 0xffff)
-                # payload += struct.pack("!%dB" % len(options.NOde), *node)
+                # payload += struct.pack("!%dB" % len(node), *node)
                 payload += struct.pack("!Q", node)
                 payload += struct.pack("!B", 0)
                 payload += struct.pack("!B", 0)
@@ -443,7 +443,7 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
             for node in self.CsvFiles.joined_nodes_info:
                 index += 1
                 if node in self.CsvFiles.nodes_info:
-                    self.getJoindNodeListWidget.addItem('%04d:' % index + '  ' + hex(options.NOde) +
+                    self.getJoindNodeListWidget.addItem('%04d:' % index + '  ' + hex(node) +
                                                         ' (0x%04x)' % self.CsvFiles.nodes_info[node]['nwk_addr'])
             self.CsvFiles.joined_nodes_info = {}
             self.getNwkAddrTimer.stop()
@@ -530,7 +530,7 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
                             # print("self.CsvFiles.joined_nodes_info:" + str(len(self.CsvFiles.joined_nodes_info)))
                             for node in self.CsvFiles.joined_nodes_info:
                                 index += 1
-                                self.getJoindNodeListWidget.addItem('%04d:' % index + '  ' + hex(options.NOde) +
+                                self.getJoindNodeListWidget.addItem('%04d:' % index + '  ' + hex(node) +
                                                                     ' (0x%04x)' % self.CsvFiles.joined_nodes_info[node])
                                 if self.CsvFiles.joined_nodes_info[node] == 0xfffe:
                                     has_no_nwkaddr = True
