@@ -148,7 +148,7 @@ class ParseRecvCommand:
         try:
             if command_id == 0x8000:  # acknowledge
                 self.hci_acknowledge_handle(ai_setting, payload)
-            elif command_id == 0xC002:  # get_link_key
+            elif command_id == 0xC001:  # get_link_key
                 self.hci_get_link_key_handle(payload)
             elif command_id == 0x8045:  # get_local_network
                 self.hci_get_local_network_handle(payload)
@@ -263,19 +263,25 @@ class ParseRecvCommand:
 
     def hci_get_link_key_handle(self, payload):
         bytes_data = bytearray(payload)
-        link_key = struct.unpack("!16s", bytes_data)
-        link_key_str = '0x'
-        for a in range(16):
-            hvol = link_key[a]
-            hhex = '%02x' % hvol
-            link_key_str += hhex
-        self.description += ' link_key: ' + link_key_str
-        self.parse_items.append('\tlink_key: ' + link_key_str)
+        for b in range(0, 2):
+            key_type, key_seq_num, link_key = struct.unpack("!2B16s", bytes_data[:18])
+            bytes_data = bytes_data[18:]
+            link_key_str = ''
+            for a in range(16):
+                hvol = link_key[a]
+                hhex = '%02x' % hvol
+                link_key_str += hhex
+            self.description += ' key_type[%d]: %2.2X' % (b, key_type)
+            self.description += ' key_seq_num[%d]: %2.2X' % (b, key_seq_num)
+            self.description += ' link_key[%d]: %s' % (b, link_key_str)
+            self.payload_items.append('\tkey_type[%d]: %2.2X' % (b, key_type))
+            self.payload_items.append('\tkey_seq_num[%d]: %2.2X' % (b, key_seq_num))
+            self.payload_items.append('\tlink_key[%d]: %s'  % (b, link_key_str))
 
     def hci_get_local_network_handle(self, payload):
         bytes_data = bytearray(payload)
         (dev_type, capability, node_is_in_a_network,
-         panid, ext_panid, nwk_addr, eu164) = struct.unpack("!3bH8BH8B", bytes_data)
+         panid, ext_panid, nwk_addr, eu164) = struct.unpack("!3BH8sH8s", bytes_data)
         ext_panid_str = ""
         for a in range(8):
             ext_panid_byte = ext_panid[a]
@@ -287,14 +293,14 @@ class ParseRecvCommand:
             hhex = '%02x' % eu164_byte
             eu164_str += hhex
         self.description += ' dev_type: %2.2X, capability: %2.2X, in_Network: %2.2X, panid: %4.4X, ext_panid: %s, netwk_addr: %4.4X, eu164: %s' % (
-            dev_type, capability, node_is_in_a_network, panid, ext_panid_str, nwk_addr, eu164)
-        self.parse_items.append('\tdev_type:   %2.2X' % dev_type)
-        self.parse_items.append('\tcapability: %2.2X' % capability)
-        self.parse_items.append('\tin_network: %2.2X' % node_is_in_a_network)
-        self.parse_items.append('\tpanid:      %4.4X' % panid)
-        self.parse_items.append('\text_panid:  %s' % ext_panid)
-        self.parse_items.append('\tnetwk_addr: %4.4X' % nwk_addr)
-        self.parse_items.append('\teu164:      %s' % eu164_str)
+            dev_type, capability, node_is_in_a_network, panid, ext_panid_str, nwk_addr, eu164_str)
+        self.payload_items.append('\tdev_type:   %2.2X' % dev_type)
+        self.payload_items.append('\tcapability: %2.2X' % capability)
+        self.payload_items.append('\tin_network: %2.2X' % node_is_in_a_network)
+        self.payload_items.append('\tpanid:      %4.4X' % panid)
+        self.payload_items.append('\text_panid:  %s' % ext_panid)
+        self.payload_items.append('\tnetwk_addr: %4.4X' % nwk_addr)
+        self.payload_items.append('\teu164:      %s' % eu164_str)
 
     def hci_addr_rsp_handle(self, ai_setting, payload_len, payload, nodes_info):
         bytes_data = bytearray(payload)
@@ -1294,6 +1300,8 @@ class ParseSendCommand:
                 self.hci_bdb_bdb_node_delete_parse(payload)
             elif command_id == 0x000a:  # ZBHCI_CMD_BDB_TX_POWER_SET
                 self.hci_bdb_bdb_txpower_set_parse(payload)
+            elif command_id == 0x4001:  # ZBHCI_CMD_BDB_GET_LINK_KEY_REQ
+                self.hci_get_link_key_parse(payload)
             elif command_id == 0x0010:  # 'DISCOVERY_NWK_ADDR_REQ',
                 self.hci_nwk_addr_req_parse(payload)
             elif command_id == 0x0011:  # 'DISCOVERY_IEEE_ADDR_REQ',
@@ -1484,6 +1492,9 @@ class ParseSendCommand:
         tx_power, = struct.unpack("!B", bytes_data)
         self.description += 'tx_power: ' + hex(tx_power)
         self.parse_items.append('\ttx_power: ' + hex(tx_power))
+
+    def hci_get_link_key_parse(self, payload):
+        pass
 
     def hci_nwk_addr_req_parse(self, payload):
         bytes_data = bytearray(payload)

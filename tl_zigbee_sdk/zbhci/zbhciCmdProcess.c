@@ -889,8 +889,8 @@ s32 zbhci_bdbCmdAsyncHandler(void *arg){
 		*p++ = SS_IB().nwkSecurMaterialSet[1].keySeqNum;
 		memcpy(p, SS_IB().nwkSecurMaterialSet[1].key, CCM_KEY_SIZE);
 
-		// Now we need to send back a ZBHCI_CMD_BDB_INFO_GET_KEY_RSP.
-		zbhciTx(ZBHCI_CMD_NODES_JOINED_GET_RSP, (u16)sizeof(rsp), rsp);
+		// Now we need to send back a ZBHCI_CMD_BDB_GET_LINK_KEY_RSP.
+		zbhciTx(ZBHCI_CMD_BDB_GET_LINK_KEY_RSP, (u16)sizeof(rsp), rsp);
 
 #if 0 // !!PDS
 	} else if(cmdID == ZBHCI_CMD_BDB_INFO_SET_KEY_REQ) {
