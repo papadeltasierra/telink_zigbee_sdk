@@ -357,22 +357,19 @@ class Ui_MainWindow(object):
             self.gridLayout.addLayout(self.horizontalLayout_getLinkKey, row, 0, 1, 1)
             row = row + 1
 
-            # self.horizontalLayout_setLinkKey = QtWidgets.QHBoxLayout()
-            # self.horizontalLayout_setLinkKey.setSpacing(6)
-            # self.horizontalLayout_setLinkKey.setObjectName("horizontalLayout_getLinkKey")
-            # self.pushButton_BDBsetLinkKey = QtWidgets.QPushButton(self.scrollAreaWidgetContents_5)
-            # self.pushButton_BDBsetLinkKey.setObjectName("pushButton_BDBsetLinkKey")
-            # self.horizontalLayout_setLinkKey.addWidget(self.pushButton_BDBsetLinkKey)
-            # self.lineEdit_linkKey = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_5)
-            # self.lineEdit_linkKey.setMinimumSize(QtCore.QSize(360, 0))
-            # self.lineEdit_linkKey.setMaximumSize(QtCore.QSize(60, 16777215))
-            # self.lineEdit_linkKey.setObjectName("link_key")
-            # self.horizontalLayout_setLinkKey.addWidget(self.lineEdit_linkKey)
-            #
-            # spacerItem9 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
-            # self.horizontalLayout_setLinkKey.addItem(spacerItem9)
-            # self.gridLayout.addLayout(self.horizontalLayout_setLinkKey, row, 0, 1, 1)
-            # row = row + 1
+        # BDB: get local network
+        if options.local_network:
+            self.horizontalLayout_getLocalNetwork= QtWidgets.QHBoxLayout()
+            self.horizontalLayout_getLocalNetwork.setSpacing(6)
+            self.horizontalLayout_getLocalNetwork.setObjectName("horizontalLayout_getLocalNetwork")
+            self.pushButton_BDBgetLocalNetwork = QtWidgets.QPushButton(self.scrollAreaWidgetContents_5)
+            self.pushButton_BDBgetLocalNetwork.setObjectName("pushButton_BDBgetLocalNetwork")
+            self.horizontalLayout_getLocalNetwork.addWidget(self.pushButton_BDBgetLocalNetwork)
+
+            spacerItem9 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+            self.horizontalLayout_getLocalNetwork.addItem(spacerItem9)
+            self.gridLayout.addLayout(self.horizontalLayout_getLocalNetwork, row, 0, 1, 1)
+            row = row + 1
 
         self.horizontalLayout_7 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_7.setSpacing(6)
@@ -3800,6 +3797,9 @@ class Ui_MainWindow(object):
             self.pushButton_BDBgetLinkKey.setText(_translate("MainWindow", "get link key"))
             # self.pushButton_BDBsetLinkKey.setText(_translate("MainWindow", "set link key"))
             # self.lineEdit_linkKey.setPlaceholderText(_translate("MainWindow", "link key"))
+
+        if options.local_network:
+            self.pushButton_BDBgetLocalNetwork.setText(_translate("MainWindow", "get local network"))
 
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.bdb), _translate("MainWindow", "BDB"))
         self.pushButton_getJoinedNodes.setText(_translate("MainWindow", "get joined nodes"))

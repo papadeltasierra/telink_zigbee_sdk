@@ -150,6 +150,8 @@ class ParseRecvCommand:
                 self.hci_acknowledge_handle(ai_setting, payload)
             elif command_id == 0xC002:  # get_link_key
                 self.hci_get_link_key_handle(payload)
+            elif command_id == 0x8045:  # get_local_network
+                self.hci_get_local_network_handle(payload)
             elif command_id == 0x8010 or command_id == 0x8011:  # nwk_addr_rep ieee_addr_rsp
                 self.hci_addr_rsp_handle(ai_setting, payload_len, payload, nodes_info)
             elif command_id == 0x8012:  # node_desc_rsp
@@ -269,6 +271,30 @@ class ParseRecvCommand:
             link_key_str += hhex
         self.description += ' link_key: ' + link_key_str
         self.parse_items.append('\tlink_key: ' + link_key_str)
+
+    def hci_get_local_network_handle(self, payload):
+        bytes_data = bytearray(payload)
+        (dev_type, capability, node_is_in_a_network,
+         panid, ext_panid, nwk_addr, eu164) = struct.unpack("!3bH8BH8B", bytes_data)
+        ext_panid_str = ""
+        for a in range(8):
+            ext_panid_byte = ext_panid[a]
+            hhex = '%02x' % ext_panid_byte
+            ext_panid_str += hhex
+        eu164_str = ""
+        for a in range(8):
+            eu164_byte = eu164[a]
+            hhex = '%02x' % eu164_byte
+            eu164_str += hhex
+        self.description += ' dev_type: %2.2X, capability: %2.2X, in_Network: %2.2X, panid: %4.4X, ext_panid: %s, netwk_addr: %4.4X, eu164: %s' % (
+            dev_type, capability, node_is_in_a_network, panid, ext_panid_str, nwk_addr, eu164)
+        self.parse_items.append('\tdev_type:   %2.2X' % dev_type)
+        self.parse_items.append('\tcapability: %2.2X' % capability)
+        self.parse_items.append('\tin_network: %2.2X' % node_is_in_a_network)
+        self.parse_items.append('\tpanid:      %4.4X' % panid)
+        self.parse_items.append('\text_panid:  %s' % ext_panid)
+        self.parse_items.append('\tnetwk_addr: %4.4X' % nwk_addr)
+        self.parse_items.append('\teu164:      %s' % eu164_str)
 
     def hci_addr_rsp_handle(self, ai_setting, payload_len, payload, nodes_info):
         bytes_data = bytearray(payload)

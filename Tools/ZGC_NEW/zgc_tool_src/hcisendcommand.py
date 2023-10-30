@@ -567,6 +567,8 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
         if options.link_keys:
             self.pushButton_BDBgetLinkKey.clicked.connect(self.get_link_key)
             # self.pushButton_BDBsetLinkKey.clicked.connect(self.set_link_key)
+        if options.local_network:
+            self.pushButton_BDBgetLocalNetwork.clicked.connect(self.get_local_network)
 
     def set_working_channel(self):
         channel = int(self.comboBox_channelList.currentText())
@@ -616,6 +618,9 @@ class Pyqt5Serial(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def get_link_key(self):
         self.send_hci_command(0x4001, 0, None)
+
+    def get_local_network(self):
+        self.send_hci_command(0x0045, 0, None)
 
     def set_link_key(self):
         link_key_s = self.lineEdit_linkKey.text()
