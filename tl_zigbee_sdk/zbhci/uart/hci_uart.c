@@ -32,6 +32,10 @@
 #define UART_TX_BUF_SIZE    128
 #define UART_RX_BUF_SIZE    128
 
+/* Set this macro in your app to change the HCI baudrate. */
+#ifndef HCI_BAUDRATE
+#define HCI_BAUDRATE 115200
+#endif
 
 //begin
 typedef struct{
@@ -86,7 +90,7 @@ void uart_data_handler(void *arg){
 
 	u16 pktLen = (msg->msgLen16H << 8) | msg->msgLen16L;
 	u16 msgType = (msg->msgType16H<<8) + msg->msgType16L;
-	
+
 	if(st == SUCCESS){
 	    u8 crc8 = crc8Calculate(msgType, pktLen, msg->pData);
 	    if((msgType == ZBHCI_CMD_OTA_START_REQUEST) || (msgType == ZBHCI_CMD_OTA_BLOCK_RESPONSE)){
@@ -152,7 +156,7 @@ zbhciTx_e uart_txMsg(u16 u16Type, u16 u16Length, u8 *pu8Data)
 
 void hci_uart_init(void){
 	UART_PIN_CFG();
-	drv_uart_init(115200, uartRxBuf, UART_RX_BUF_SIZE, uartRcvHandler);
+	drv_uart_init(HCI_BAUDRATE, uartRxBuf, UART_RX_BUF_SIZE, uartRcvHandler);
 }
 
 #endif
