@@ -3581,15 +3581,19 @@ class Ui_MainWindow(object):
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
         self.verticalLayout_2.setSpacing(6)
         self.verticalLayout_2.setObjectName("verticalLayout_2")
+
         self.splitter_2 = QtWidgets.QSplitter(self.centralWidget)
         self.splitter_2.setOrientation(QtCore.Qt.Horizontal)
         self.splitter_2.setObjectName("splitter_2")
+
         self.layoutWidget = QtWidgets.QWidget(self.splitter_2)
         self.layoutWidget.setObjectName("layoutWidget")
+
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(11, 11, 11, 11)
         self.verticalLayout.setSpacing(6)
         self.verticalLayout.setObjectName("verticalLayout")
+
         self.listWidget_commandData = QtWidgets.QListWidget(self.layoutWidget)
         self.listWidget_commandData.setEnabled(True)
         self.listWidget_commandData.setLineWidth(4)
@@ -3600,11 +3604,13 @@ class Ui_MainWindow(object):
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setSpacing(6)
         self.horizontalLayout.setObjectName("horizontalLayout")
+
         self.plainTextEdit_sendData = QtWidgets.QPlainTextEdit(self.layoutWidget)
         self.plainTextEdit_sendData.setEnabled(True)
         self.plainTextEdit_sendData.setLineWidth(4)
         self.plainTextEdit_sendData.setObjectName("plainTextEdit_sendData")
         self.horizontalLayout.addWidget(self.plainTextEdit_sendData)
+
         self.pushButton_send = QtWidgets.QPushButton(self.layoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
@@ -3614,6 +3620,7 @@ class Ui_MainWindow(object):
         self.pushButton_send.setIconSize(QtCore.QSize(20, 20))
         self.pushButton_send.setObjectName("pushButton_send")
         self.horizontalLayout.addWidget(self.pushButton_send)
+
         self.verticalLayout.addLayout(self.horizontalLayout)
         self.listWidget_commandDataParse = QtWidgets.QListWidget(self.splitter_2)
         self.listWidget_commandDataParse.setLineWidth(4)
@@ -3657,13 +3664,16 @@ class Ui_MainWindow(object):
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.formLayout.setLayout(1, QtWidgets.QFormLayout.SpanningRole, self.verticalLayout_2)
         MainWindow.setCentralWidget(self.centralWidget)
+
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
         self.menuBar.setGeometry(QtCore.QRect(0, 0, 1173, 26))
         self.menuBar.setObjectName("menuBar")
         MainWindow.setMenuBar(self.menuBar)
+
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setObjectName("statusBar")
         MainWindow.setStatusBar(self.statusBar)
+
         self.toolBar = QtWidgets.QToolBar(MainWindow)
         self.toolBar.setObjectName("toolBar")
         MainWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
@@ -3731,7 +3741,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow, options):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "ZGC"))
-        self.label_portName.setText(_translate("MainWindow", "Port    "))
+        self.label_portName.setText(_translate("MainWindow", "Port"))
         self.label_baudrate.setText(_translate("MainWindow", "BaudRate"))
         self.comboBox_baudrate.setCurrentText(_translate("MainWindow", "115200"))
         self.comboBox_baudrate.setItemText(0, _translate("MainWindow", "9600"))
