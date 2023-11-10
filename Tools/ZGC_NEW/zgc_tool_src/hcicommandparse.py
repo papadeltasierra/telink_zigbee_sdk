@@ -1420,8 +1420,8 @@ class ParseSendCommand:
                 self.hci_ota_block_response_parse(ai_setting, payload)
             elif command_id == 0x0211:  # 'ZBHCI_CMD_OTA_BLOCK_RESPONSE',
                 self.hci_ota_block_response_parse(ai_setting, payload)
-            elif command_id == 0x0711:  # 'ZBHCI_CMD_ZCL_PRICE_PUBLISH_PRICE',
-                self.hci_price_publish_price_parse(ai_setting, payload)
+            elif command_id == 0x0710:  # 'ZBHCI_CMD_ZCL_PRICE_GET_PRICE',
+                self.hci_price_get_price_parse(ai_setting, payload)
             else:
                 self.parse_items.append('command not support!')
                 self.description = 'command not support!'
@@ -2171,6 +2171,10 @@ class ParseSendCommand:
             self.parse_items.append('\tblock_len:' + hex(block_len))
             self.description += ' send_offset:' + hex(send_offset) + ' block_len:' + hex(block_len)
 
+    def hci_price_get_price_parse(self, ai_setting, payload):
+        bytes_data = bytearray(payload)
+        ptr = self.hci_zcl_addr_resolve(ai_setting, bytes_data)
+
     def hci_price_publish_price_parse(self, payload):
         bytes_data = bytearray(payload)
 
@@ -2233,6 +2237,7 @@ class ParseSendCommand:
         self.parse_items.append('\textendedNumPriceTiers: ' + str(extendedNumPriceTiers))
         self.parse_items.append('\textendedPriceTiers: ' + str(extendedPriceTiers))
         self.parse_items.append('\textendedRegisterTier: ' + str(extendedRegisterTier))
+
 
 
 def crc8_calculate(datatype, length, data):

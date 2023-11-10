@@ -297,6 +297,9 @@ class Settings:
             0x8210: 'ZBHCI_CMD_OTA_START_RESPONSE',
             0x8211: 'ZBHCI_CMD_OTA_BLOCK_REQUEST',
             0x8212: 'ZBHCI_CMD_OTA_END_STATUS',
+
+	        0x0710: 'ZBHCI_CMD_ZCL_PRICE_GET_CURRENT_PRICE',
+	        0x0711: 'ZBHCI_CMD_ZCL_PRICE_PUBLISH_PRICE'
         }
 
         self.zcl_cluster_id = {
