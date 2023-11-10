@@ -205,8 +205,8 @@ _CODE_ZCL_ static status_t zcl_price_clientCmdHandler(zclIncoming_t *pInMsg)
 	u8 status = ZCL_STA_SUCCESS;
 
 	switch(pInMsg->hdr.cmd){
-		case ZCL_CMD_PUBLISH_PRICE:
-			status = zcl_price_publishPricePrc(pInMsg);
+		case ZCL_CMD_GET_CURRENT_PRICE:
+			status = zcl_price_getCurrentPricePrc(pInMsg);
 			break;
 		default:
 			status = ZCL_STA_UNSUP_CLUSTER_COMMAND;
@@ -221,8 +221,8 @@ _CODE_ZCL_ static status_t zcl_price_serverCmdHandler(zclIncoming_t *pInMsg)
 	u8 status = ZCL_STA_SUCCESS;
 
 	switch(pInMsg->hdr.cmd){
-		case ZCL_CMD_GET_CURRENT_PRICE:
-			status = zcl_price_getCurrentPricePrc(pInMsg);
+		case ZCL_CMD_PUBLISH_PRICE:
+			status = zcl_price_publishPricePrc(pInMsg);
 			break;
 		default:
 			status = ZCL_STA_UNSUP_CLUSTER_COMMAND;
@@ -234,6 +234,7 @@ _CODE_ZCL_ static status_t zcl_price_serverCmdHandler(zclIncoming_t *pInMsg)
 
 _CODE_ZCL_ static status_t zcl_price_cmdHandler(zclIncoming_t *pInMsg)
 {
+    // Note that this is "client from server".
 	if(pInMsg->hdr.frmCtrl.bf.dir == ZCL_FRAME_CLIENT_SERVER_DIR){
 		return zcl_price_clientCmdHandler(pInMsg);
 	}else{
