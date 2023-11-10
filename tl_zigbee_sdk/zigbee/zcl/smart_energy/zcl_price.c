@@ -72,15 +72,16 @@ _CODE_ZCL_ status_t zcl_price_getCurrentPrice(u8 srcEp, epInfo_t *pDstEpInfo, u8
 
 _CODE_ZCL_ status_t zcl_price_publishPrice(u8 srcEp, epInfo_t *pDstEpInfo, u8 disableDefaultRsp, u8 seqNo, zcl_price_publishPriceCmd_t *pReq)
 {
-	u8 buf[60];
+	u8 buf[60] = {0};
 	u8 *pBuf = buf;
 
     *pBuf++ = U32_BYTE0(pReq->providerId);
     *pBuf++ = U32_BYTE1(pReq->providerId);
     *pBuf++ = U32_BYTE2(pReq->providerId);
     *pBuf++ = U32_BYTE3(pReq->providerId);
-    memcpy(pBuf, pReq->rateLabel,  pReq->rateLabel[0]);
-    pBuf += ZCL_RATE_LABEL_MAX_LENGTH;
+    // Send "length of string plus 1 byte for the length"
+    memcpy(pBuf, pReq->rateLabel,  pReq->rateLabel[0] + 1);
+    pBuf += pReq->rateLabel[0] + 1;
 	*pBuf++ = U32_BYTE0(pReq->issuerEventId);
 	*pBuf++ = U32_BYTE1(pReq->issuerEventId);
 	*pBuf++ = U32_BYTE2(pReq->issuerEventId);
@@ -94,10 +95,10 @@ _CODE_ZCL_ status_t zcl_price_publishPrice(u8 srcEp, epInfo_t *pDstEpInfo, u8 di
     *pBuf++ = U16_BYTE1(pReq->currency);
     *pBuf++ = pReq->priceTrailingDigitAndPriceTier;
     *pBuf++ = pReq->numPriceTiersAndRegisterTier;
-    *pBuf++ = U32_BYTE0(pReq->startTime);
-    *pBuf++ = U32_BYTE1(pReq->startTime);
-    *pBuf++ = U32_BYTE2(pReq->startTime);
     *pBuf++ = U32_BYTE3(pReq->startTime);
+    *pBuf++ = U32_BYTE2(pReq->startTime);
+    *pBuf++ = U32_BYTE1(pReq->startTime);
+    *pBuf++ = U32_BYTE0(pReq->startTime);
     *pBuf++ = U16_BYTE0(pReq->durationInMins);
     *pBuf++ = U16_BYTE1(pReq->durationInMins);
     *pBuf++ = U32_BYTE0(pReq->price);
@@ -153,7 +154,7 @@ _CODE_ZCL_ static status_t zcl_price_publishPricePrc(zclIncoming_t *pInMsg)
 	u8 *pData = pInMsg->pData;
 
     if(pInMsg->clusterAppCb){
-	    zcl_price_publishPriceCmd_t publishPriceCmd;
+	    zcl_price_publishPriceCmd_t publishPriceCmd = {0};
 
         publishPriceCmd.providerId = BUILD_U32(pData[0], pData[1], pData[2], pData[3]);
 	    pData += 4;

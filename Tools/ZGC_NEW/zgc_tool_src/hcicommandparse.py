@@ -5,6 +5,10 @@ from datetime import datetime
 send_list = {}
 ota_file_addr = ''
 
+# ZigBee times are relative to 2000-01-01 00:00:00 so we have to add/remove an
+# offset for 1970 epoch times that we can convert.
+ZIGBEE_TIME_ZERO_EPOCH = 946684800
+
 
 def get_ieee_addr(payload):
     ieee_addr = '%02x' % payload[0] + '%02x' % payload[1] + '%02x' % payload[2] + '%02x' % payload[3] + \
@@ -1422,6 +1426,8 @@ class ParseSendCommand:
                 self.hci_ota_block_response_parse(ai_setting, payload)
             elif command_id == 0x0710:  # 'ZBHCI_CMD_ZCL_PRICE_GET_PRICE',
                 self.hci_price_get_price_parse(ai_setting, payload)
+            elif command_id == 0x0711:  # 'ZBHCI_CMD_ZCL_PRICE_PUBLISH_PRICE',
+                self.hci_price_publish_price_parse(payload)
             else:
                 self.parse_items.append('command not support!')
                 self.description = 'command not support!'
@@ -2177,9 +2183,10 @@ class ParseSendCommand:
 
     def hci_price_publish_price_parse(self, payload):
         bytes_data = bytearray(payload)
+        # ptr = self.hci_zcl_addr_resolve(ai_setting, bytes_data)
 
         # Potentially we could interpret the enumerations but we won't for now.
-        (providerId, rateLabel, issuerEventId,
+        (providerId, rateLabelLength, rateLabel, issuerEventId,
             currentTime, unitsOfMeasure, currency, priceTrailingDigitAndPriceTier,
             numPriceTiersAndRegisterTier, startTime, durationInMins, price,
             priceRatio, generationPrice, generationpriceRatio,
@@ -2188,15 +2195,16 @@ class ParseSendCommand:
             extendedNumPriceTiers, extendedPriceTiers,
             extendedRegisterTier) = struct.unpack("!LB12sLLBHBBLHLBLBL9B", bytes_data)
 
+        rateLabel = rateLabel[:rateLabelLength]
         self.description += ' providerId: ' + hex(providerId)
         self.description += ' rateLabel: ' + str(rateLabel)
         self.description += ' issuerEventId: ' + hex(issuerEventId)
-        self.description += ' currentTime: ' + datetime.utcfromtimestamp(int(currentTime)).strftime('%Y-%m-%d %H:%M:%S')
+        self.description += ' currentTime: ' + datetime.utcfromtimestamp(int(currentTime + ZIGBEE_TIME_ZERO_EPOCH)).strftime('%Y-%m-%d %H:%M:%S')
         self.description += ' unitsOfMeasure: ' + hex(unitsOfMeasure)
         self.description += ' currency: ' + hex(currency)
         self.description += ' priceTrailingDigitAndPriceTier: ' + hex(priceTrailingDigitAndPriceTier)
         self.description += ' numPriceTiersAndRegisterTier: ' + hex(numPriceTiersAndRegisterTier)
-        self.description += ' startTime: ' + datetime.utcfromtimestamp(int(startTime)).strftime('%Y-%m-%d %H:%M:%S')
+        self.description += ' startTime: ' + datetime.utcfromtimestamp(int(startTime + ZIGBEE_TIME_ZERO_EPOCH)).strftime('%Y-%m-%d %H:%M:%S')
         self.description += ' durationInMins: ' + hex(durationInMins)
         self.description += ' price: ' + str(price)
         self.description += ' priceRatio: ' + str(priceRatio)
@@ -2216,12 +2224,12 @@ class ParseSendCommand:
         self.parse_items.append('\tproviderId: ' + hex(providerId))
         self.parse_items.append('\trateLabel: ' + str(rateLabel))
         self.parse_items.append('\tissuerEventId: ' + hex(issuerEventId))
-        self.parse_items.append('\tcurrentTime: ' + datetime.utcfromtimestamp(int(currentTime)).strftime('%Y-%m-%d %H:%M:%S'))
+        self.parse_items.append('\tcurrentTime: ' + datetime.utcfromtimestamp(int(currentTime + ZIGBEE_TIME_ZERO_EPOCH)).strftime('%Y-%m-%d %H:%M:%S'))
         self.parse_items.append('\tunitsOfMeasure: ' + hex(unitsOfMeasure))
         self.parse_items.append('\tcurrency: ' + hex(currency))
         self.parse_items.append('\tpriceTrailingDigitAndPriceTier: ' + hex(priceTrailingDigitAndPriceTier))
         self.parse_items.append('\tnumPriceTiersAndRegisterTier: ' + hex(numPriceTiersAndRegisterTier))
-        self.parse_items.append('\tstartTime: ' + datetime.utcfromtimestamp(int(startTime)).strftime('%Y-%m-%d %H:%M:%S'))
+        self.parse_items.append('\tstartTime: ' + datetime.utcfromtimestamp(int(startTime + ZIGBEE_TIME_ZERO_EPOCH)).strftime('%Y-%m-%d %H:%M:%S'))
         self.parse_items.append('\tdurationInMins: ' + hex(durationInMins))
         self.parse_items.append('\tprice: ' + str(price))
         self.parse_items.append('\tpriceRatio: ' + str(priceRatio))
@@ -2237,8 +2245,6 @@ class ParseSendCommand:
         self.parse_items.append('\textendedNumPriceTiers: ' + str(extendedNumPriceTiers))
         self.parse_items.append('\textendedPriceTiers: ' + str(extendedPriceTiers))
         self.parse_items.append('\textendedRegisterTier: ' + str(extendedRegisterTier))
-
-
 
 def crc8_calculate(datatype, length, data):
     crc8 = (datatype >> 0) & 0xff
