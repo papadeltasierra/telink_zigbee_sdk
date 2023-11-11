@@ -238,6 +238,8 @@ class ParseRecvCommand:
                 self.hci_ota_block_request_handle(payload)
             elif command_id == 0x8212:  # ZBHCI_CMD_OTA_END_STATUS
                 self.hci_ota_end_handle(ai_setting, payload)
+            elif command_id == 0x0811:  # 'ZBHCI_CMD_ZCL_PRICE_PUBLISH_PRICE',
+                self.hci_price_publish_price_parse(payload)
             else:
                 self.description = 'command not support!'
                 self.payload_items = ['command not support!']
@@ -1265,6 +1267,70 @@ class ParseRecvCommand:
         self.recv_nwk_addr = ieee_addr
         self.addr_mode = 3
 
+    def hci_price_publish_price_parse(self, payload):
+        bytes_data = bytearray(payload)
+        # ptr = self.hci_zcl_addr_resolve(ai_setting, bytes_data)
+
+        # Potentially we could interpret the enumerations but we won't for now.
+        (providerId, rateLabelLength, rateLabel, issuerEventId,
+            currentTime, unitsOfMeasure, currency, priceTrailingDigitAndPriceTier,
+            numPriceTiersAndRegisterTier, startTime, durationInMins, price,
+            priceRatio, generationPrice, generationpriceRatio,
+            alternateCostDelivered, alternateCostUnit, alternateCostTrailingDigit,
+            numBlockThresholds, priceControl, numGenerationTiers, generationTier,
+            extendedNumPriceTiers, extendedPriceTiers,
+            extendedRegisterTier) = struct.unpack("!LB12sLLBHBBLHLBLBL9B", bytes_data)
+
+        rateLabel = rateLabel[:rateLabelLength]
+        self.description += ' providerId: ' + hex(providerId)
+        self.description += ' rateLabel: ' + str(rateLabel)
+        self.description += ' issuerEventId: ' + hex(issuerEventId)
+        self.description += ' currentTime: ' + datetime.utcfromtimestamp(int(currentTime + ZIGBEE_TIME_ZERO_EPOCH)).strftime('%Y-%m-%d %H:%M:%S')
+        self.description += ' unitsOfMeasure: ' + hex(unitsOfMeasure)
+        self.description += ' currency: ' + hex(currency)
+        self.description += ' priceTrailingDigitAndPriceTier: ' + hex(priceTrailingDigitAndPriceTier)
+        self.description += ' numPriceTiersAndRegisterTier: ' + hex(numPriceTiersAndRegisterTier)
+        self.description += ' startTime: ' + datetime.utcfromtimestamp(int(startTime + ZIGBEE_TIME_ZERO_EPOCH)).strftime('%Y-%m-%d %H:%M:%S')
+        self.description += ' durationInMins: ' + hex(durationInMins)
+        self.description += ' price: ' + str(price)
+        self.description += ' priceRatio: ' + str(priceRatio)
+        self.description += ' generationPrice: ' + hex(generationPrice)
+        self.description += ' generationpriceRatio: ' + hex(generationpriceRatio)
+        self.description += ' alternateCostDelivered: ' + hex(alternateCostDelivered)
+        self.description += ' alternateCostUnit: ' + hex(alternateCostUnit)
+        self.description += ' alternateCostTrailingDigit: ' + hex(alternateCostTrailingDigit)
+        self.description += ' numBlockThresholds: ' + str(numBlockThresholds)
+        self.description += ' priceControl: ' + hex(priceControl)
+        self.description += ' numGenerationTiers: ' + str(numGenerationTiers)
+        self.description += ' generationTier: ' + str(generationTier)
+        self.description += ' extendedNumPriceTiers: ' + str(extendedNumPriceTiers)
+        self.description += ' extendedPriceTiers: ' + str(extendedPriceTiers)
+        self.description += ' extendedRegisterTier: ' + str(extendedRegisterTier)
+
+        self.parse_items.append('\tproviderId: ' + hex(providerId))
+        self.parse_items.append('\trateLabel: ' + str(rateLabel))
+        self.parse_items.append('\tissuerEventId: ' + hex(issuerEventId))
+        self.parse_items.append('\tcurrentTime: ' + datetime.utcfromtimestamp(int(currentTime + ZIGBEE_TIME_ZERO_EPOCH)).strftime('%Y-%m-%d %H:%M:%S'))
+        self.parse_items.append('\tunitsOfMeasure: ' + hex(unitsOfMeasure))
+        self.parse_items.append('\tcurrency: ' + hex(currency))
+        self.parse_items.append('\tpriceTrailingDigitAndPriceTier: ' + hex(priceTrailingDigitAndPriceTier))
+        self.parse_items.append('\tnumPriceTiersAndRegisterTier: ' + hex(numPriceTiersAndRegisterTier))
+        self.parse_items.append('\tstartTime: ' + datetime.utcfromtimestamp(int(startTime + ZIGBEE_TIME_ZERO_EPOCH)).strftime('%Y-%m-%d %H:%M:%S'))
+        self.parse_items.append('\tdurationInMins: ' + hex(durationInMins))
+        self.parse_items.append('\tprice: ' + str(price))
+        self.parse_items.append('\tpriceRatio: ' + str(priceRatio))
+        self.parse_items.append('\tgenerationPrice: ' + hex(generationPrice))
+        self.parse_items.append('\tgenerationpriceRatio: ' + hex(generationpriceRatio))
+        self.parse_items.append('\talternateCostDelivered: ' + hex(alternateCostDelivered))
+        self.parse_items.append('\talternateCostUnit: ' + hex(alternateCostUnit))
+        self.parse_items.append('\talternateCostTrailingDigit: ' + hex(alternateCostTrailingDigit))
+        self.parse_items.append('\tnumBlockThresholds: ' + str(numBlockThresholds))
+        self.parse_items.append('\tpriceControl: ' + hex(priceControl))
+        self.parse_items.append('\tnumGenerationTiers: ' + str(numGenerationTiers))
+        self.parse_items.append('\tgenerationTier: ' + str(generationTier))
+        self.parse_items.append('\textendedNumPriceTiers: ' + str(extendedNumPriceTiers))
+        self.parse_items.append('\textendedPriceTiers: ' + str(extendedPriceTiers))
+        self.parse_items.append('\textendedRegisterTier: ' + str(extendedRegisterTier))
 
 class ParseSendCommand:
     def __init__(self, ai_setting, command_id, payload_len, payload):
@@ -1426,8 +1492,6 @@ class ParseSendCommand:
                 self.hci_ota_block_response_parse(ai_setting, payload)
             elif command_id == 0x0710:  # 'ZBHCI_CMD_ZCL_PRICE_GET_PRICE',
                 self.hci_price_get_price_parse(ai_setting, payload)
-            elif command_id == 0x0711:  # 'ZBHCI_CMD_ZCL_PRICE_PUBLISH_PRICE',
-                self.hci_price_publish_price_parse(payload)
             else:
                 self.parse_items.append('command not support!')
                 self.description = 'command not support!'
