@@ -3523,7 +3523,7 @@ class Ui_MainWindow(object):
             self.comboBox_getCurPrcDstMode.addItem("")
             self.comboBox_getCurPrcDstMode.addItem("")
             self.horizontalLayout_getCurrentPrice.addWidget(self.comboBox_getCurPrcDstMode)
-            self.lineEdit_getCurPrcDstAddr = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_10)
+            self.lineEdit_getCurPrcDstAddr = QtWidgets.QLineEdit(self.price)
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
