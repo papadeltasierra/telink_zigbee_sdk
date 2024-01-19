@@ -875,6 +875,7 @@ s32 rxtx_performance_test(void *arg){
 s32 zbhci_bdbCmdAsyncHandler(void *arg){
 	zbhci_cmdHandler_t *cmdInfo = arg;
 	u16 cmdID = cmdInfo->cmdId;
+	// rsp is big enough for either response here.
 	u8 rsp[2 * CCM_KEY_SIZE + 4];
 	u8 *p;
 
@@ -912,6 +913,14 @@ s32 zbhci_bdbCmdAsyncHandler(void *arg){
 		memcpy(key, p, CCM_KEY_SIZE);
 		zdo_ssInfoSaveToFlash();
 #endif
+	}
+	else if(cmdID == ZBHCI_CMD_BDB_GET_MAC_ADDR_REQ) {
+
+		p = &rsp[0];
+		ZB_IEEE_ADDR_REVERT(p, NIB_IEEE_ADDRESS());
+
+		// Now we need to send back a ZBHCI_CMD_BDB_GET_MAC_ADDR_RSP.
+		zbhciTx(ZBHCI_CMD_BDB_GET_MAC_ADDR_RSP, (u16)EXT_ADDR_LEN, rsp);
 	}
 
 	return -1;
@@ -1224,6 +1233,7 @@ void zbhciCmdHandler(u16 msgType, u16 msgLen, u8 *p){
 #if 0 // !!PDS:
 			case ZBHCI_CMD_BDB_SET_LINK_KEY_REQ:
 #endif
+			case ZBHCI_CMD_BDB_GET_MAC_ADDR_REQ:
 				TL_ZB_TIMER_SCHEDULE(zbhci_bdbCmdAsyncHandler, cmdInfo, 100);
 				break;
 

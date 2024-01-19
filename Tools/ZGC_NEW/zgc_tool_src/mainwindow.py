@@ -357,6 +357,20 @@ class Ui_MainWindow(object):
             self.gridLayout.addLayout(self.horizontalLayout_getLinkKey, row, 0, 1, 1)
             row = row + 1
 
+        # BDB: get MAC address
+        if options.mac_addr:
+            self.horizontalLayout_getMacAddr = QtWidgets.QHBoxLayout()
+            self.horizontalLayout_getMacAddr.setSpacing(6)
+            self.horizontalLayout_getMacAddr.setObjectName("horizontalLayout_getMacAddr")
+            self.pushButton_BDBgetMacAddr = QtWidgets.QPushButton(self.scrollAreaWidgetContents_5)
+            self.pushButton_BDBgetMacAddr.setObjectName("pushButton_BDBgetMacAddr")
+            self.horizontalLayout_getMacAddr.addWidget(self.pushButton_BDBgetMacAddr)
+
+            spacerItem8 = QtWidgets.QSpacerItem(0, 0, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+            self.horizontalLayout_getMacAddr.addItem(spacerItem8)
+            self.gridLayout.addLayout(self.horizontalLayout_getMacAddr, row, 0, 1, 1)
+            row = row + 1
+
         # BDB: get local network
         if options.local_network:
             self.horizontalLayout_getLocalNetwork= QtWidgets.QHBoxLayout()
@@ -3805,6 +3819,11 @@ class Ui_MainWindow(object):
 
         if options.link_keys:
             self.pushButton_BDBgetLinkKey.setText(_translate("MainWindow", "get link key"))
+            # self.pushButton_BDBsetLinkKey.setText(_translate("MainWindow", "set link key"))
+            # self.lineEdit_linkKey.setPlaceholderText(_translate("MainWindow", "link key"))
+
+        if options.mac_addr:
+            self.pushButton_BDBgetMacAddr.setText(_translate("MainWindow", "get MAC address"))
             # self.pushButton_BDBsetLinkKey.setText(_translate("MainWindow", "set link key"))
             # self.lineEdit_linkKey.setPlaceholderText(_translate("MainWindow", "link key"))
 

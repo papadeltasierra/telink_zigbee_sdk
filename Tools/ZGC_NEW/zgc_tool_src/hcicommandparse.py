@@ -154,6 +154,8 @@ class ParseRecvCommand:
                 self.hci_acknowledge_handle(ai_setting, payload)
             elif command_id == 0xC001:  # get_link_key
                 self.hci_get_link_key_handle(payload)
+            elif command_id == 0xC003:  # get_mac_addr
+                self.hci_get_mac_addr_handle(payload)
             elif command_id == 0x8045:  # get_local_network
                 self.hci_get_local_network_handle(payload)
             elif command_id == 0x8010 or command_id == 0x8011:  # nwk_addr_rep ieee_addr_rsp
@@ -272,11 +274,7 @@ class ParseRecvCommand:
         for b in range(0, 2):
             key_type, key_seq_num, link_key = struct.unpack("!2B16s", bytes_data[:18])
             bytes_data = bytes_data[18:]
-            link_key_str = ''
-            for a in range(16):
-                hvol = link_key[a]
-                hhex = '%02x' % hvol
-                link_key_str += hhex
+            link_key_str = self._bytes_to_hex(link_key, 16)
             self.description += ' key_type[%d]: %2.2X' % (b, key_type)
             self.description += ' key_seq_num[%d]: %2.2X' % (b, key_seq_num)
             self.description += ' link_key[%d]: %s' % (b, link_key_str)
@@ -284,28 +282,36 @@ class ParseRecvCommand:
             self.payload_items.append('\tkey_seq_num[%d]: %2.2X' % (b, key_seq_num))
             self.payload_items.append('\tlink_key[%d]: %s'  % (b, link_key_str))
 
+    def hci_get_mac_addr_handle(self, payload):
+        bytes_data = bytearray(payload)
+        # struct.unpack returns a tuple and the "extra" comma ensures that we
+        # split the (single field) tuple correctly.
+        mac_addr, = struct.unpack("!8s", bytes_data[:8])
+        mac_addr_str = self._bytes_to_hex(mac_addr, 8)
+        self.description += ' mac_addr: %s' % mac_addr_str
+        self.payload_items.append('\tmac_addr: %s'  % mac_addr_str)
+
+    def _bytes_to_hex(self, bytes_value, bytes_length):
+        bytes_str = ""
+        for a in range(bytes_length):
+            hhex = '%02x:' % bytes_value[a]
+            bytes_str += hhex
+        return bytes_str[:-1]
+
     def hci_get_local_network_handle(self, payload):
         bytes_data = bytearray(payload)
         (dev_type, capability, node_is_in_a_network,
          panid, ext_panid, nwk_addr, eu164) = struct.unpack("!3BH8sH8s", bytes_data)
-        ext_panid_str = ""
-        for a in range(8):
-            ext_panid_byte = ext_panid[a]
-            hhex = '%02x' % ext_panid_byte
-            ext_panid_str += hhex
-        eu164_str = ""
-        for a in range(8):
-            eu164_byte = eu164[a]
-            hhex = '%02x' % eu164_byte
-            eu164_str += hhex
-        self.description += ' dev_type: %2.2X, capability: %2.2X, in_Network: %2.2X, panid: %4.4X, ext_panid: %s, netwk_addr: %4.4X, eu164: %s' % (
+        ext_panid_str = self._bytes_to_hex(ext_panid, 8)
+        eu164_str = self._bytes_to_hex(eu164, 8)
+        self.description += ' dev_type: %2.2x, capability: %2.2x, in_Network: %2.2x, panid: %4.4x, ext_panid: %s, netwk_addr: %4.4X, eu164: %s' % (
             dev_type, capability, node_is_in_a_network, panid, ext_panid_str, nwk_addr, eu164_str)
-        self.payload_items.append('\tdev_type:   %2.2X' % dev_type)
-        self.payload_items.append('\tcapability: %2.2X' % capability)
-        self.payload_items.append('\tin_network: %2.2X' % node_is_in_a_network)
-        self.payload_items.append('\tpanid:      %4.4X' % panid)
-        self.payload_items.append('\text_panid:  %s' % ext_panid)
-        self.payload_items.append('\tnetwk_addr: %4.4X' % nwk_addr)
+        self.payload_items.append('\tdev_type:   %2.2x' % dev_type)
+        self.payload_items.append('\tcapability: %2.2x' % capability)
+        self.payload_items.append('\tin_network: %2.2x' % node_is_in_a_network)
+        self.payload_items.append('\tpanid:      %4.4x' % panid)
+        self.payload_items.append('\text_panid:  %s' % ext_panid_str)
+        self.payload_items.append('\tnetwk_addr: %4.4x' % nwk_addr)
         self.payload_items.append('\teu164:      %s' % eu164_str)
 
     def hci_addr_rsp_handle(self, ai_setting, payload_len, payload, nodes_info):
@@ -1372,6 +1378,8 @@ class ParseSendCommand:
                 self.hci_bdb_bdb_txpower_set_parse(payload)
             elif command_id == 0x4001:  # ZBHCI_CMD_BDB_GET_LINK_KEY_REQ
                 self.hci_get_link_key_parse(payload)
+            elif command_id == 0x4003:  # ZBHCI_CMD_BDB_GET_MAC_ADDR_REQ
+                self.hci_get_mac_addr_parse(payload)
             elif command_id == 0x0010:  # 'DISCOVERY_NWK_ADDR_REQ',
                 self.hci_nwk_addr_req_parse(payload)
             elif command_id == 0x0011:  # 'DISCOVERY_IEEE_ADDR_REQ',
@@ -1531,11 +1539,7 @@ class ParseSendCommand:
         self.description += 'ieee_addr: ' + hex(ieee_addr)
         self.parse_items.append('\tieee_addr: ' + hex(ieee_addr))
         install_code, = struct.unpack("!16s", bytes_data[8:])
-        install_code_str = '0x'
-        for a in range(16):
-            hvol = install_code[a]
-            hhex = '%02x' % hvol
-            install_code_str += hhex
+        install_code_str = self._bytes_to_hex(install_code, 16)
         self.description += ' install_code: ' + install_code_str
         self.parse_items.append('\tinstall_code: ' + install_code_str)
 
@@ -1564,6 +1568,9 @@ class ParseSendCommand:
         self.parse_items.append('\ttx_power: ' + hex(tx_power))
 
     def hci_get_link_key_parse(self, payload):
+        pass
+
+    def hci_get_mac_addr_parse(self, payload):
         pass
 
     def hci_nwk_addr_req_parse(self, payload):

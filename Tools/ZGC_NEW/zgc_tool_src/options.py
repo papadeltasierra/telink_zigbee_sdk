@@ -21,8 +21,10 @@ AF = "af"
 HCI_OTA = "hci_ota"
 ANALYZE = "analyze"
 OPT_LINK_KEYS = "link-keys"
+OPT_MAC_ADDR = "mac-addr"
 OPT_LOCAL_NETWORK = "local-network"
 LINK_KEYS = "link_keys"
+MAC_ADDR = "mac_addr"
 LOCAL_NETWORK = "local_network"
 PRICE = "price"
 
@@ -58,6 +60,8 @@ class ZgcOptions:
         parser.addOption(analysisDisabled)
         linkKeysEnabled = QCommandLineOption(OPT_LINK_KEYS, "Enable get link key")
         parser.addOption(linkKeysEnabled)
+        macAddrEnabled = QCommandLineOption(OPT_MAC_ADDR, "Enable get MAC address")
+        parser.addOption(macAddrEnabled)
         localNetworkEnabled = QCommandLineOption(OPT_LOCAL_NETWORK, "Enable local network request")
         parser.addOption(localNetworkEnabled)
         priceEnabled = QCommandLineOption(PRICE, "Enable SE Price support")
@@ -78,5 +82,6 @@ class ZgcOptions:
 
         # Set the "<options>"
         setattr(self, LINK_KEYS, True if parser.isSet(OPT_LINK_KEYS) else False)
+        setattr(self, MAC_ADDR, True if parser.isSet(OPT_MAC_ADDR) else False)
         setattr(self, LOCAL_NETWORK, True if parser.isSet(OPT_LOCAL_NETWORK) else False)
         setattr(self, PRICE, True if parser.isSet(PRICE) else False)
